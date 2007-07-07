@@ -1,0 +1,6 @@
+package testinjectee;
+
+class NoIdentifierInjectee 
+{
+	
+}

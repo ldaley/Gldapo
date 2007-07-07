@@ -1,0 +1,9 @@
+ ====================
+ = Gldapwrap Change Log =
+ ====================
+
+-- 0.2 --
+* Improved find method to take a map which allows more flexible argument list
+* Fixed sizelimitexceeded exception
+* Implemented paging
+* Changed name of project to 'Gldapwrap'
