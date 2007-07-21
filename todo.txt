@@ -19,4 +19,4 @@
 
 == DONE ==
 
--- Restrict the fetching of attributes to the ones defined in the schema
+* Restrict the fetching of attributes to the ones defined in the schema
