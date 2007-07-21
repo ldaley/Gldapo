@@ -1,42 +1,33 @@
-package gldapwrap.aspect;
+package gldapwrap.gynamo;
+import gynamo.Gynamo
 import gldapwrap.GldapwrapTypeCoercions
 import gldapwrap.exception.GldapwrapTypeCoercionException
 import gldapwrap.exception.GldapwrapNoAvailableTypeCoercionAvailableException
 import org.apache.commons.lang.WordUtils
 import javax.naming.directory.Attribute
 
-class TypeCoercionAspect
+class TypeCoercionGynamo extends Gynamo
 {
-	static public void inject(Class clazz)
-	{
-		clazz.metaClass."static".coerceLdapToNative << { Class type, String attributeName, Attribute attributeValue ->
-			if (attributeValue == null)
+	static coerceLdapToNative = { Class type, String attributeName, Attribute attributeValue ->
+		if (attributeValue == null) return null
+
+		try
+		{
+			Object coercedValue = null
+			
+			coercedValue = TypeCoercionGynamo.tryAttributeSpecificCoercion(clazz, type, attributeName, attributeValue)
+			
+			if (coercedValue == null)
 			{
-				return null
+				coercedValue = TypeCoercionGynamo.tryGenericCoercion(clazz, type, attributeValue)
+				if (coercedValue == null) throw new GldapwrapNoAvailableTypeCoercionAvailableException()
 			}
 			
-			try
-			{
-				Object coercedValue = null
-				
-				coercedValue = TypeCoercionAspect.tryAttributeSpecificCoercion(clazz, type, attributeName, attributeValue)
-				
-				if (coercedValue == null)
-				{
-					coercedValue = TypeCoercionAspect.tryGenericCoercion(clazz, type, attributeValue)
-					
-					if (coercedValue == null)
-					{
-						throw new GldapwrapNoAvailableTypeCoercionAvailableException()
-					}	
-				}
-				
-				return coercedValue
-			}
-			catch (Exception cause)
-			{
-				throw new GldapwrapTypeCoercionException(clazz, attributeName, attributeValue.class, type, cause)
-			}
+			return coercedValue
+		}
+		catch (Exception cause)
+		{
+			throw new GldapwrapTypeCoercionException(clazz, attributeName, attributeValue.class, type, cause)
 		}
 	}
 	
