@@ -1,0 +1,5 @@
+ ======================
+ = About the Examples =
+ ======================
+
+To run the scripts in this directory you need to make sure the gldapwrap jar is in your classpath as well as the dependencies in the lib directory.

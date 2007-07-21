@@ -1,0 +1,5 @@
+package testinjectee;
+
+class TemplateInjectee {
+	
+}
