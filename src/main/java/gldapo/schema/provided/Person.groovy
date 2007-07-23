@@ -1,9 +1,10 @@
-package gldapo.schema;
+package gldapo.schema.provided;
+import gldapo.schema.annotations.*
+
+@GldapoSchemaFilter("(objectclass=person)")
+@GldapoIdentifyingAttribute("uid")
 class Person 
-{
-	static filter = "(objectclass=person)"
-	static identifier = "uid"
-	
+{	
 	List objectclass
 	String sn
 	String distinguishedName

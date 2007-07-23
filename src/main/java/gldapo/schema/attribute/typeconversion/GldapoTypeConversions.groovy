@@ -1,25 +1,25 @@
-package gldapo;
+package gldapo.schema.typeconversion;
 import java.math.BigInteger
 import javax.naming.directory.Attribute
 
-class GldapwrapTypeCoercions 
+class GldapoConversions 
 {
-	static public String coerceToStringType(Attribute value)
+	static public String convertToString(Attribute value)
 	{
 		return value.get().toString()
 	}
 	
-	static public Integer coerceToIntegerType(Attribute value)
+	static public Integer convertToInteger(Attribute value)
 	{
 		return value.get().toInteger()
 	}
 	
-	static public BigInteger coerceToBigIntegerType(Attribute value)
+	static public BigInteger convertToBigInteger(Attribute value)
 	{
 		return new BigInteger(value.get());
 	}
 	
-	static public List coerceToListType(Attribute value)
+	static public List convertToList(Attribute value)
 	{
 		def list = []
 		0.upto(value.size() - 1) {

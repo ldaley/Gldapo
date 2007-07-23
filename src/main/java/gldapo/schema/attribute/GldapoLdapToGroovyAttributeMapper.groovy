@@ -1,27 +1,28 @@
-package gldapo.mapping;
+package gldapo.schema.attribute;
 import javax.naming.directory.Attributes;
 
-class DefaultGldapwrapAttributeMapper implements GldapwrapAttributeMapper {
-	Class mapToClass
+class GldapoLdapToGroovyAttributeMapper
+{
+	Class schema
 	List attributeMappings
 	
-	void setMapToClass(Class clazz)
+	void setSchema(Class schema)
 	{
-		mapToClass = clazz
-		attributeMappings = clazz.getAttributeMappings()
+		schema = schema
+		attributeMappings = schema.getAttributeMappings()
 	}
 	
 	Object mapFromAttributes(Attributes attributes)
 	{
-		def match = mapToClass.newInstance()
-		attributeMappings.each { GldapwrapAttributeMapping attributeMapping ->
-			def coercedValue = mapToClass.coerceLdapToNative(
+		def object = schema.newInstance()
+		attributeMappings.each { GldapoAttributeMapping attributeMapping ->
+			def coercedValue = schema.coerceLdapAttributeToGroovy(
 				attributeMapping.type, 
 				attributeMapping.name, 
 				attributes.get(attributeMapping.name)
 			)
-			match."${attributeMapping.setter}"(coercedValue)
+			object."${attributeMapping.name}" = coercedValue
 		}
-		return match
+		return object
 	}
 }

@@ -1,6 +1,6 @@
-package gldapo.mapping;
+package gldapo.schema.attribute;
 
-class GldapwrapAttributeMapping
+class GldapoAttributeMapping
 {
 	String name
 	Class type

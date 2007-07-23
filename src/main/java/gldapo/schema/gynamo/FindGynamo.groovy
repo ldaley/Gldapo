@@ -1,4 +1,6 @@
-package gldapo.gynamo;
+package gldapo.schema.gynamo;
+import gldapo.Gldapo;
+import gldapo.GldapoTemplate;
 import gynamo.Gynamo
 import gynamo.GynamoDependencies
 import org.springframework.ldap.filter.Filter
@@ -12,25 +14,23 @@ import org.springframework.ldap.control.PagedResultsRequestControl
 import org.springframework.ldap.core.AttributesMapper
 import org.springframework.ldap.LimitExceededException
 
-@GynamoDependencies([AttributeMappingGynamo, FilterGynamo, SearchControlsGynamo, TemplateGynamo, TypeCoercionGynamo])
+@GynamoDependencies([AttributeMappingGynamo, FilterGynamo, TypeConversionGynamo])
 class FindGynamo
 {
 	static DEFAULT_PAGE_SIZE = 500
 	
 	static find = { Map options ->
-			
-		LdapOperations template = delegate.getLdapTemplateAssert()
-		List attributeMappings = delegate.getAttributeMappings()
 		
-		String filter = delegate.andClassFilterWithFilter(options?.filter)
-		String base = (options?.base == null) ? "" : options.base
-		SearchControls controls = clazz.mergeClassSearchControlsWithOptions(options)
+		def template = Gldapo.getTemplate(options?.template)
+		def attributeMappings = delegate.getAttributeMappings()
+		def filter = delegate.andSchemaFilterWithFilter(options?.filter)
+		def controls = template.mergeSearchControlsWithOptions(options)
 		int pageSize = options?.pageSize == null ? FindGynamo.DEFAULT_PAGE_SIZE : options.pageSize
 		
 		// Restrict the returning attributes to just those specified in the schema
 		controls.returningAttributes = attributeMappings*.name
 		
-		GldapwrapAttributeMapper mapper = new DefaultGldapwrapAttributeMapper(mapToClass: clazz)
+		def mapper = new GldapoLdapToGroovyAttributeMapper(schema: delegate)
 		CollectingNameClassPairCallbackHandler handler = new AttributesMapperCallbackHandler(mapper)
 
 		try
@@ -54,6 +54,5 @@ class FindGynamo
 			
 			return handler.list
 		}
-		
 	}
 }

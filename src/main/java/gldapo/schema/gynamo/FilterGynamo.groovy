@@ -1,32 +1,43 @@
-package gldapo.gynamo;
+package gldapo.schema.gynamo;
+import gldapo.schema.annotations.GldapoSchemaFilter
 import gynamo.Gynamo
+import gynamo.GynamoPropertyStorage
+
 
 class FilterGynamo extends Gynamo
 {
-	static final public NO_FILTER_FILTER = "(distinguishedName=*)"
+	static final public NO_FILTER_FILTER = "(objectclass=*)"
 		
-	static getFilter = { ->
-		// TODO look for annotation
+	static getSchemaFilter = { ->
+		def filterAnnotation = delegate.getAnnotation(GldapoSchemaFilter)
+		if (filterAnnotation)
+		{
+			return filterAnnotation.value()
+		}
+		else
+		{
+			return FilterGynamo.NO_FILTER_FILTER
+		}
 	}
 	
-	static andClassFilterWithFilter = { String filter ->
-		String classFilter = clazz.getFilter()
+	static andSchemaFilterWithFilter = { String filter ->
+		String schemaFilter = delegate.getSchemaFilter()
 		if (filter == null)
 		{
-			if (classFilter == null)
+			if (schemaFilter == null || schemaFilter.equalsString(FilterGynamo.NO_FILTER_FILTER))
 			{
 				filter = FilterGynamo.NO_FILTER_FILTER
 			}
 			else
 			{
-				filter = classFilter
+				filter = schemaFilter
 			}
 		}
 		else
 		{
-			if (classFilter != null)
+			if (schemaFilter != null && schemaFilter.equalsString(FilterGynamo.NO_FILTER_FILTER) == false)
 			{
-				filter = "(&" + classFilter + filter + ")"
+				filter = "(&${schemaFilter}${filter})"
 			}	
 		}
 		

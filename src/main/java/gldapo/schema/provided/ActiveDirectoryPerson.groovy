@@ -1,10 +1,10 @@
-package gldapo.schema;
+package gldapo.schema.provided;
+import gldapo.schema.annotations.*
 
+@GldapoSchemaFilter("(objectclass=person)")
+@GldapoIdentifyingAttribute("samaccountname")
 class ActiveDirectoryPerson 
 {
-	static filter = "(objectclass=person)"
-	static identifier = "samaccountname"
-	
 	List objectclass
 	String sn
 	String samaccountname
