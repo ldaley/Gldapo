@@ -1,6 +1,6 @@
-import gldapwrap.GldapwrapTemplate
-import gldapwrap.GldapwrapInjector
-import gldapwrap.schema.Person
+import gldapo.GldapwrapTemplate
+import gldapo.GldapwrapInjector
+import gldapo.schema.Person
 import javax.naming.directory.SearchControls
 
 def ldapTemplate = new GldapwrapTemplate(

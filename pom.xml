@@ -2,17 +2,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ldaley</groupId>
-	<artifactId>gldapwrap</artifactId>
+	<artifactId>gldapo</artifactId>
 	<packaging>jar</packaging>
 	<version>0.3-SNAPSHOT</version>
-	<name>Gldapwrap</name>
-	<url>http://groovy.codehaus.org/gldapwrap</url>
+	<name>Gldapo</name>
+	<url>http://groovy.codehaus.org/gldapo</url>
 	<organization>
 		<name>Ldaley.com</name>
 		<url>http://www.ldaley.com</url>
 	</organization>
 	<scm>
-		<connection>scm:svn:http://ldaley.com/svn/gldapwrap/trunk</connection>
+		<connection>scm:svn:http://ldaley.com/svn/gldapo/trunk</connection>
 	</scm>
 	<dependencies>
 		<dependency>
