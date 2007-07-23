@@ -1,7 +1,7 @@
-import gldapwrap.aspect.SearchControlsAspect
+import gldapo.aspect.SearchControlsAspect
 import testinjectee.SearchControlsInjectee
 import javax.naming.directory.SearchControls
-import gldapwrap.exception.GldapwrapInjectionException
+import gldapo.exception.GldapwrapInjectionException
 
 class SearchControlsAspectTests extends GroovyTestCase {
 	SearchControlsAspectTests()

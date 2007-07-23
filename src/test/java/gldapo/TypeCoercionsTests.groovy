@@ -1,4 +1,4 @@
-import gldapwrap.GldapwrapTypeCoercions
+import gldapo.GldapwrapTypeCoercions
 import javax.naming.directory.BasicAttribute
 
 class TypeCoercionsTests extends GroovyTestCase {

@@ -1,9 +1,9 @@
 import testinjectee.TemplateInjectee
-import gldapwrap.aspect.TemplateAspect
+import gldapo.aspect.TemplateAspect
 import org.springframework.ldap.core.LdapTemplate
 import org.springframework.ldap.core.support.LdapContextSource
-import gldapwrap.exception.GldapwrapNoTemplateException
-import gldapwrap.GldapwrapTemplate
+import gldapo.exception.GldapwrapNoTemplateException
+import gldapo.GldapwrapTemplate
 import groovy.mock.interceptor.MockFor
 
 class TemplateAspectTests extends GroovyTestCase {
@@ -39,14 +39,14 @@ class TemplateAspectTests extends GroovyTestCase {
 		
 		contextSourceMock.use {
 			ldapTemplateMock.use {
-				def gldapwrapTemplate = new GldapwrapTemplate(
+				def gldapoTemplate = new GldapwrapTemplate(
 					url: "ldapwrap://somewhere.com",
 					base: "dc=somewhere,dc=com",
 					userDn: "uid=me",
 					password: "xxx"
 				)
 			
-				TemplateInjectee.setLdapTemplate(gldapwrapTemplate)
+				TemplateInjectee.setLdapTemplate(gldapoTemplate)
 				returnedTemplate = TemplateInjectee.getLdapTemplate()
 			}
 		}

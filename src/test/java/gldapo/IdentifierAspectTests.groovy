@@ -1,7 +1,7 @@
 import testinjectee.GoodIdentifierInjectee
 import testinjectee.NoIdentifierInjectee
-import gldapwrap.aspect.IdentifierAspect
-import gldapwrap.exception.GldapwrapInjectionException
+import gldapo.aspect.IdentifierAspect
+import gldapo.exception.GldapwrapInjectionException
 
 class IdentifierAspectTests extends GroovyTestCase {
 	void testGoodIdentifier() 

@@ -1,4 +1,4 @@
-import gldapwrap.aspect.*
+import gldapo.aspect.*
 import testinjectee.FindableInjectee
 import org.springframework.ldap.core.LdapTemplate
 import groovy.mock.interceptor.*

@@ -1,4 +1,4 @@
-import gldapwrap.util.InjectedClassAttributes
+import gldapo.util.InjectedClassAttributes
 
 class InjectedClassAttributesTests extends GroovyTestCase {
 	void testNotSet() {

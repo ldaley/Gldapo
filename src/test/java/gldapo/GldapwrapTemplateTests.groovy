@@ -1,4 +1,4 @@
-import gldapwrap.GldapwrapTemplate
+import gldapo.GldapwrapTemplate
 
 class GldapwrapTemplateTests extends GroovyTestCase {
 	void testNullConstructor() 

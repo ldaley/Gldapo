@@ -1,5 +1,5 @@
-import gldapwrap.aspect.AttributeMappingAspect
-import gldapwrap.mapping.GldapwrapAttributeMapping
+import gldapo.aspect.AttributeMappingAspect
+import gldapo.mapping.GldapwrapAttributeMapping
 import testinjectee.AttributeInjectee
 
 class AttributeMappingAspectTests extends GroovyTestCase {

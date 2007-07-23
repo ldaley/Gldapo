@@ -1,6 +1,6 @@
-import gldapwrap.exception.GldapwrapException
-import gldapwrap.aspect.IdentifierAspect
-import gldapwrap.aspect.LoadAspect
+import gldapo.exception.GldapwrapException
+import gldapo.aspect.IdentifierAspect
+import gldapo.aspect.LoadAspect
 import testinjectee.GoodIdentifierInjectee
 import testinjectee.NoIdentifierInjectee
 

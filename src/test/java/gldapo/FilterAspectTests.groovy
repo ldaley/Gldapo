@@ -1,7 +1,7 @@
 import testinjectee.GoodFilterInjectee
 import testinjectee.NoFilterInjectee
-import gldapwrap.aspect.FilterAspect
-import gldapwrap.exception.GldapwrapInjectionException
+import gldapo.aspect.FilterAspect
+import gldapo.exception.GldapwrapInjectionException
 
 class FilterAspectTests extends GroovyTestCase {
 	void testGoodFilter() 

@@ -1,7 +1,7 @@
 import testinjectee.TypeCoercionInjectee
-import gldapwrap.aspect.TypeCoercionAspect
-import gldapwrap.exception.GldapwrapNoAvailableTypeCoercionAvailableException
-import gldapwrap.exception.GldapwrapTypeCoercionException
+import gldapo.aspect.TypeCoercionAspect
+import gldapo.exception.GldapwrapNoAvailableTypeCoercionAvailableException
+import gldapo.exception.GldapwrapTypeCoercionException
 import javax.naming.directory.Attribute
 import java.math.BigInteger
 import javax.naming.directory.BasicAttribute
