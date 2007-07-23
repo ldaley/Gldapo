@@ -1,10 +1,10 @@
-package gldapwrap.gynamo;
+package gldapo.gynamo;
 import gynamo.Gynamo
 import gynamo.GynamoDependencies
 import org.springframework.ldap.filter.Filter
 import javax.naming.directory.SearchControls
-import gldapwrap.mapping.DefaultGldapwrapAttributeMapper
-import gldapwrap.mapping.GldapwrapAttributeMapper
+import gldapo.mapping.DefaultGldapwrapAttributeMapper
+import gldapo.mapping.GldapwrapAttributeMapper
 import org.springframework.ldap.core.LdapOperations
 import org.springframework.ldap.core.CollectingNameClassPairCallbackHandler
 import org.springframework.ldap.core.AttributesMapperCallbackHandler

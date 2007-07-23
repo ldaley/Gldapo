@@ -1,4 +1,4 @@
-package gldapwrap.exception;
+package gldapo.exception;
 
 public class GldapwrapNoTemplateException extends GldapwrapException
 {

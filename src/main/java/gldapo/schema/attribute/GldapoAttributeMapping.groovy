@@ -1,4 +1,4 @@
-package gldapwrap.mapping;
+package gldapo.mapping;
 
 class GldapwrapAttributeMapping
 {

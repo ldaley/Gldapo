@@ -1,4 +1,4 @@
-package gldapwrap.schema;
+package gldapo.schema;
 class Person 
 {
 	static filter = "(objectclass=person)"

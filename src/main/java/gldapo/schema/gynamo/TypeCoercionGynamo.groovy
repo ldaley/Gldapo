@@ -1,8 +1,8 @@
-package gldapwrap.gynamo;
+package gldapo.gynamo;
 import gynamo.Gynamo
-import gldapwrap.GldapwrapTypeCoercions
-import gldapwrap.exception.GldapwrapTypeCoercionException
-import gldapwrap.exception.GldapwrapNoAvailableTypeCoercionAvailableException
+import gldapo.GldapwrapTypeCoercions
+import gldapo.exception.GldapwrapTypeCoercionException
+import gldapo.exception.GldapwrapNoAvailableTypeCoercionAvailableException
 import org.apache.commons.lang.WordUtils
 import javax.naming.directory.Attribute
 

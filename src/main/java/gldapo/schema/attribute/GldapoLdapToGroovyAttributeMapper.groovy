@@ -1,4 +1,4 @@
-package gldapwrap.mapping;
+package gldapo.mapping;
 import javax.naming.directory.Attributes;
 
 class DefaultGldapwrapAttributeMapper implements GldapwrapAttributeMapper {

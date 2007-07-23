@@ -1,5 +1,5 @@
-package gldapwrap.gynamo;
-import gldapwrap.exception.GldapwrapException
+package gldapo.gynamo;
+import gldapo.exception.GldapwrapException
 import org.springframework.ldap.filter.EqualsFilter
 import gynamo.Gynamo
 import gynamo.GynamoDependencies

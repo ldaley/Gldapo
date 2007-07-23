@@ -1,7 +1,7 @@
-package gldapwrap.gynamo;
+package gldapo.gynamo;
 import gynamo.Gynamo
 import gynamo.GynamoPropertyStorage
-import gldapwrap.mapping.GldapwrapAttributeMapping
+import gldapo.mapping.GldapwrapAttributeMapping
 
 class AttributeMappingGynamo extends Gynamo
 {

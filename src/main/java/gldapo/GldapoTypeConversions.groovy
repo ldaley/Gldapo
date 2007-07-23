@@ -1,4 +1,4 @@
-package gldapwrap;
+package gldapo;
 import java.math.BigInteger
 import javax.naming.directory.Attribute
 

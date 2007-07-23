@@ -1,4 +1,4 @@
-package gldapwrap.exception;
+package gldapo.exception;
 
 public class GldapwrapInjectionException extends GldapwrapException
 {

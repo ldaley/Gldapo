@@ -1,7 +1,7 @@
-package gldapwrap.gynamo;
+package gldapo.gynamo;
 import org.springframework.ldap.core.LdapOperations
-import gldapwrap.exception.GldapwrapNoTemplateException
-import gldapwrap.GldapwrapTemplate
+import gldapo.exception.GldapwrapNoTemplateException
+import gldapo.GldapwrapTemplate
 import gynamo.Gynamo
 import gynamo.GynamoPropertyStorage
 

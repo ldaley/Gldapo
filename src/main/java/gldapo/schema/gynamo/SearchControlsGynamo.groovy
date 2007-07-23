@@ -1,4 +1,4 @@
-package gldapwrap.gynamo;
+package gldapo.gynamo;
 import gynamo.Gynamo
 import gynamo.GynamoPropertyStorage
 import javax.naming.directory.SearchControls
