@@ -1,8 +1,8 @@
 package gldapo.schema.gynamo;
 import gynamo.Gynamo
-import gldapo.schema.typeconversion.GldapoTypeConversions
+import gldapo.schema.attribute.typeconversion.GldapoTypeConversions
 import gldapo.exception.GldapoTypeConversionException
-import gldapo.exception.GldapoNoAvailableTypeConversionException
+import gldapo.exception.GldapoNoTypeConversionAvailableException
 import org.apache.commons.lang.WordUtils
 import javax.naming.directory.Attribute
 
@@ -13,18 +13,18 @@ class TypeConversionGynamo extends Gynamo
 
 		try
 		{
-			def convertedValue = TypeCoercionGynamo.tryToGroovyAttributeConversion(attributeName, attributeValue)
+			def convertedValue = TypeConversionGynamo.tryToGroovyAttributeConversion(attributeName, attributeValue)
 			if (convertedValue == null)
 			{
 				convertedValue = delegate.tryToGroovyTypeConversion(groovyType, attributeValue)
-				if (convertedValue == null) throw new GldapoNoAvailableTypeConversionException()
+				if (convertedValue == null) throw new GldapoNoTypeConversionAvailableException()
 			}
 			
 			return convertedValue
 		}
 		catch (Exception cause)
 		{
-			throw new GldapoTypeConversationException(delegate, attributeName, attributeValue.class, groovyType, cause)
+			throw new GldapoTypeConversionException(delegate, attributeName, attributeValue.class, groovyType, cause)
 		}
 	}
 	

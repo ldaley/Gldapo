@@ -5,8 +5,7 @@ import gynamo.Gynamo
 import gynamo.GynamoDependencies
 import org.springframework.ldap.filter.Filter
 import javax.naming.directory.SearchControls
-import gldapo.mapping.DefaultGldapwrapAttributeMapper
-import gldapo.mapping.GldapwrapAttributeMapper
+import gldapo.schema.attribute.GldapoLdapToGroovyAttributeMapper
 import org.springframework.ldap.core.LdapOperations
 import org.springframework.ldap.core.CollectingNameClassPairCallbackHandler
 import org.springframework.ldap.core.AttributesMapperCallbackHandler
@@ -14,23 +13,37 @@ import org.springframework.ldap.control.PagedResultsRequestControl
 import org.springframework.ldap.core.AttributesMapper
 import org.springframework.ldap.LimitExceededException
 
-@GynamoDependencies([AttributeMappingGynamo, FilterGynamo, TypeConversionGynamo])
-class FindGynamo
+@GynamoDependencies([AttributeMappingGynamo, SchemaFilterGynamo, TypeConversionGynamo])
+class FindGynamo extends Gynamo
 {
 	static DEFAULT_PAGE_SIZE = 500
 	
 	static find = { Map options ->
 		
-		def template = Gldapo.getTemplate(options?.template)
+		def template 
+		if (options?.template instanceof GldapoTemplate)
+		{
+			template = options.template
+		}
+		else if (options?.template != null)
+		{
+			template = Gldapo.instance.getTemplateByName(options?.template)
+		}
+		else
+		{
+			template = Gldapo.instance.defaultTemplate
+		}
+
 		def attributeMappings = delegate.getAttributeMappings()
 		def filter = delegate.andSchemaFilterWithFilter(options?.filter)
 		def controls = template.mergeSearchControlsWithOptions(options)
 		int pageSize = options?.pageSize == null ? FindGynamo.DEFAULT_PAGE_SIZE : options.pageSize
+		def base = options?.base
 		
 		// Restrict the returning attributes to just those specified in the schema
 		controls.returningAttributes = attributeMappings*.name
 		
-		def mapper = new GldapoLdapToGroovyAttributeMapper(schema: delegate)
+		AttributesMapper mapper = new GldapoLdapToGroovyAttributeMapper(schema: delegate)
 		CollectingNameClassPairCallbackHandler handler = new AttributesMapperCallbackHandler(mapper)
 
 		try

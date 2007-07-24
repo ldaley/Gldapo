@@ -1,4 +1,0 @@
-package testinjectee;
-class SearchControlsInjectee {
-	
-}

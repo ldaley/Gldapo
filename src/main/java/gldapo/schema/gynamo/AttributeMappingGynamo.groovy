@@ -2,6 +2,7 @@ package gldapo.schema.gynamo;
 import gynamo.Gynamo
 import gynamo.GynamoPropertyStorage
 import gldapo.schema.attribute.GldapoAttributeMapping
+import java.beans.Introspector
 
 class AttributeMappingGynamo extends Gynamo
 {
@@ -9,7 +10,7 @@ class AttributeMappingGynamo extends Gynamo
 		if (GynamoPropertyStorage[delegate].attributeMappings == null)
 		{
 			def mappings = []
-			Introspector.getBeanInfo(clazz, Object).propertyDescriptors.each {
+			Introspector.getBeanInfo(delegate, Object).propertyDescriptors.each {
 				if (it.name.equals("metaClass") == false)
 				{
 					mappings << new GldapoAttributeMapping(

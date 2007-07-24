@@ -1,5 +1,0 @@
-package testinjectee;
-
-class TemplateInjectee {
-	
-}

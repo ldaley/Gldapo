@@ -1,6 +1,6 @@
 package gldapo;
-import org.springframework.ldap.LdapTemplate
-import org.springframework.ldap.support.LdapContextSource
+import org.springframework.ldap.core.LdapTemplate
+import org.springframework.ldap.core.support.LdapContextSource
 import javax.naming.directory.SearchControls
 
 class GldapoTemplate extends LdapTemplate
@@ -25,12 +25,12 @@ class GldapoTemplate extends LdapTemplate
 	
 	static templateFromConfig(ConfigObject config)
 	{
-		template = new GldapoTemplate()
+		def template = new GldapoTemplate()
 		
 		def contextSourceConfig = config[CONFIG_CONTEXT_SOURCE_KEY]
 		if (contextSourceConfig)
 		{
-			contextSource = new LdapContextSource()
+			def contextSource = new LdapContextSource()
 			contextSourceConfig.each { def key, def value ->
 				contextSource."${key}" = value
 			}
@@ -41,7 +41,7 @@ class GldapoTemplate extends LdapTemplate
 		def searchControlsConfig = config[CONFIG_SEARCH_CONTROLS_KEY]
 		if (searchControlsConfig)
 		{
-			searchControls = new SearchControls()
+			def searchControls = new SearchControls()
 			searchControlsConfig.each { def key, def value ->
 				searchControls."${key}" = value
 			}
@@ -56,7 +56,7 @@ class GldapoTemplate extends LdapTemplate
 	
 	SearchControls mergeSearchControlsWithOptions(def options)
 	{
-		def controls = delegate.searchControls
+		def controls = searchControls
 		if (options != null)
 		{
 			this.class.searchControlOptions.each {

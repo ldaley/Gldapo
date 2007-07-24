@@ -1,11 +1,10 @@
-import gldapo.GldapwrapTemplate
-import gldapo.GldapwrapInjector
-import gldapo.schema.Person
+import gldapo.Gldapo
+import gldapo.schema.provided.Person
 import javax.naming.directory.SearchControls
 
-class IntegrationTests extends GroovyTestCase {
+class LiveTest extends GroovyTestCase {
 	
-	IntegrationTests()
+/*	IntegrationTests()
 	{
 		def ldapTemplate = new GldapwrapTemplate(
 			url: "ldap://directory.washington.edu",
@@ -23,4 +22,4 @@ class IntegrationTests extends GroovyTestCase {
 			countLimit: 2 // Only get two so we don't hit their server hard
 		).size())
 	}
-}
+*/}

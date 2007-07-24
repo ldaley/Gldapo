@@ -1,7 +1,8 @@
 package gldapo.schema.attribute;
 import javax.naming.directory.Attributes;
+import org.springframework.ldap.core.AttributesMapper
 
-class GldapoLdapToGroovyAttributeMapper
+class GldapoLdapToGroovyAttributeMapper implements AttributesMapper
 {
 	Class schema
 	List attributeMappings

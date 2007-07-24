@@ -3,8 +3,7 @@ import gldapo.schema.annotations.GldapoSchemaFilter
 import gynamo.Gynamo
 import gynamo.GynamoPropertyStorage
 
-
-class FilterGynamo extends Gynamo
+class SchemaFilterGynamo extends Gynamo
 {
 	static final public NO_FILTER_FILTER = "(objectclass=*)"
 		
@@ -16,7 +15,7 @@ class FilterGynamo extends Gynamo
 		}
 		else
 		{
-			return FilterGynamo.NO_FILTER_FILTER
+			return SchemaFilterGynamo.NO_FILTER_FILTER
 		}
 	}
 	
@@ -24,9 +23,9 @@ class FilterGynamo extends Gynamo
 		String schemaFilter = delegate.getSchemaFilter()
 		if (filter == null)
 		{
-			if (schemaFilter == null || schemaFilter.equalsString(FilterGynamo.NO_FILTER_FILTER))
+			if (schemaFilter == null || schemaFilter.equals(SchemaFilterGynamo.NO_FILTER_FILTER))
 			{
-				filter = FilterGynamo.NO_FILTER_FILTER
+				filter = SchemaFilterGynamo.NO_FILTER_FILTER
 			}
 			else
 			{
@@ -35,7 +34,7 @@ class FilterGynamo extends Gynamo
 		}
 		else
 		{
-			if (schemaFilter != null && schemaFilter.equalsString(FilterGynamo.NO_FILTER_FILTER) == false)
+			if (schemaFilter != null && schemaFilter.equals(SchemaFilterGynamo.NO_FILTER_FILTER) == false)
 			{
 				filter = "(&${schemaFilter}${filter})"
 			}	

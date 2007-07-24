@@ -1,6 +1,6 @@
 package gldapo;
 import gynamo.Gynamo;
-import gldapo.gynamo.GldapoSchemaMetaGynamo;
+import gldapo.schema.gynamo.GldapoSchemaMetaGynamo;
 import org.springframework.beans.factory.InitializingBean;
 
 class Gldapo
@@ -13,9 +13,9 @@ class Gldapo
 
 	private static Gldapo instance
 
-	Map<GldapoTemplate> template
+	Map<GldapoTemplate> templates
 	List<Class> schemas = []
-	GldapoDirectory defaultTemplate
+	GldapoTemplate defaultTemplate
 	
 	private Gldapo()
 	{
@@ -76,12 +76,12 @@ class Gldapo
 	
 	void initializeFromConfigObject(ConfigObject config)
 	{
-		initializeDirectoriesFromConfig(config)
+		initializeTemplatesFromConfig(config)
 		initializeSchemasFromConfig(config)
-		initializeDefaultDirectoryFromConfig(config)
+		initializeDefaultTemplateFromConfig(config)
 	}
 		
-	void initializeDirectoriesFromConfig(ConfigObject config)
+	void initializeTemplatesFromConfig(ConfigObject config)
 	{
 		config[CONFIG_TEMPLATES_KEY]?.each { def templateName, def templateConfig -> 
 			this.templates[templateName] = GldapoTemplate.templateFromConfig(templateConfig)
@@ -96,5 +96,10 @@ class Gldapo
 	void initializeDefaultTemplateFromConfig(ConfigObject config)
 	{
 		def defaultTemplate = config[CONFIG_SCHEMAS_KEY]
+	}
+	
+	def getTemplateByName(String templateName)
+	{
+		return this.templates[templateName]
 	}
 }
