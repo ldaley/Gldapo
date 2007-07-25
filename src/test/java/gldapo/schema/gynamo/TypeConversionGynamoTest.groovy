@@ -18,7 +18,7 @@ class TypeConversionGynamoTest extends GroovyTestCase
 	
 	void testFactoryConversion() 
 	{
-		def converted = TypeConversionSchema.coerceLdapAttributeToGroovy(Integer, "anInt", new BasicAttribute("a", "4"))
+		def converted = TypeConversionSchema.convertLdapAttributeToGroovy(Integer, "anInt", new BasicAttribute("a", "4"))
 		assertEquals(Integer, converted.class)
 	}
 	
@@ -26,7 +26,7 @@ class TypeConversionGynamoTest extends GroovyTestCase
 	{
 		try
 		{
-			TypeConversionSchema.coerceLdapAttributeToGroovy(Exception, "blah", new BasicAttribute("a", "4"))
+			TypeConversionSchema.convertLdapAttributeToGroovy(Exception, "blah", new BasicAttribute("a", "4"))
 			fail("A GldapoNoTypeConversionAvailableException should have been raised")
 		}
 		catch (GldapoTypeConversionException e)
@@ -40,20 +40,20 @@ class TypeConversionGynamoTest extends GroovyTestCase
 		def bi50 = new BigInteger("50");
 		def bi100 = new BigInteger("100");
 		
-		assertEquals(bi50, TypeConversionSchema.coerceLdapAttributeToGroovy(BigInteger, "garbage", new BasicAttribute("a", "50"))) // Use global
+		assertEquals(bi50, TypeConversionSchema.convertLdapAttributeToGroovy(BigInteger, "garbage", new BasicAttribute("a", "50"))) // Use global
 		
-		TypeConversionSchema.metaClass."static".coerceToBigIntegerType << { Attribute value ->
+		TypeConversionSchema.metaClass."static".convertToBigIntegerType = { Attribute value ->
 			return new BigInteger("100");
 		}
 		
-		assertEquals(bi100, TypeConversionSchema.coerceLdapAttributeToGroovy(BigInteger, "garbage", new BasicAttribute("a", "50"))) // Use override
+		assertEquals(bi100, TypeConversionSchema.convertLdapAttributeToGroovy(BigInteger, "garbage", new BasicAttribute("a", "50"))) // Use override
 	}
 	
 	void testAttributeConversion()
 	{
 		try
 		{
-			TypeConversionSchema.coerceLdapAttributeToGroovy(Exception, "garbage", "50")
+			TypeConversionSchema.convertLdapAttributeToGroovy(Exception, "garbage", "50")
 			fail("A GldapoNoTypeConversionAvailableException should have been raised")
 		}
 		catch (GldapoNoTypeConversionAvailableException)
@@ -61,22 +61,23 @@ class TypeConversionGynamoTest extends GroovyTestCase
 			// Nothing here, this is expected
 		}
 		
-		TypeConversionSchema.metaClass."static".coerceToGarbageAttribute << { Attribute value ->
+		TypeConversionSchema.metaClass."static".convertToGarbageAttribute = { Attribute value ->
+			println "asdasd"
 			return 100
 		}
 		
-		assertEquals(100, TypeConversionSchema.coerceLdapAttributeToGroovy(Exception, "garbage", new BasicAttribute("a", "50")))
+		assertEquals(100, TypeConversionSchema.convertLdapAttributeToGroovy(Exception, "garbage", new BasicAttribute("a", "50")))
 	}
 	
 	void testAttributeOverridesGeneric()
 	{
-		assertEquals(50, TypeConversionSchema.coerceLdapAttributeToGroovy(Integer, "override", new BasicAttribute("a", "50")))
+		assertEquals(50, TypeConversionSchema.convertLdapAttributeToGroovy(Integer, "override", new BasicAttribute("a", "50")))
 		
-		TypeConversionSchema.metaClass."static".coerceToOverrideAttribute << { Attribute value ->
+		TypeConversionSchema.metaClass."static".convertToOverrideAttribute << { Attribute value ->
 			return 100
 		}
 		
-		assertEquals(100, TypeConversionSchema.coerceLdapAttributeToGroovy(Exception, "override", new BasicAttribute("a", "100")))
+		assertEquals(100, TypeConversionSchema.convertLdapAttributeToGroovy(Exception, "override", new BasicAttribute("a", "100")))
 	}
 }
 

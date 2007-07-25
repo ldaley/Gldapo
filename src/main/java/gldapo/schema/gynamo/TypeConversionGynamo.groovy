@@ -8,12 +8,14 @@ import javax.naming.directory.Attribute
 
 class TypeConversionGynamo extends Gynamo
 {
-	static coerceLdapAttributeToGroovy = { Class groovyType, String attributeName, Attribute attributeValue ->
+	static final CONVERT_TO = "convertTo"
+	
+	static convertLdapAttributeToGroovy = { Class groovyType, String attributeName, Attribute attributeValue ->
 		if (attributeValue == null) return null
 
 		try
 		{
-			def convertedValue = TypeConversionGynamo.tryToGroovyAttributeConversion(attributeName, attributeValue)
+			def convertedValue = delegate.tryToGroovyAttributeConversion(attributeName, attributeValue)
 			if (convertedValue == null)
 			{
 				convertedValue = delegate.tryToGroovyTypeConversion(groovyType, attributeValue)
@@ -31,7 +33,7 @@ class TypeConversionGynamo extends Gynamo
 	static tryToGroovyAttributeConversion = { 
 		String attributeName, Attribute attributeValue ->
 
-		String methodName = "coerceTo" + WordUtils.capitalize(attributeName) + "Attribute"
+		String methodName = TypeConversionGynamo.CONVERT_TO + WordUtils.capitalize(attributeName) + "Attribute"
 		
 		try
 		{
@@ -46,7 +48,7 @@ class TypeConversionGynamo extends Gynamo
 	static tryToGroovyTypeConversion = {
 		Class groovyType, Attribute attributeValue ->
 
-		String methodName = "coerceTo" + WordUtils.capitalize(groovyType.simpleName) + "Type"
+		String methodName = TypeConversionGynamo.CONVERT_TO + WordUtils.capitalize(groovyType.simpleName) + "Type"
 
 		// Try local first
 		try

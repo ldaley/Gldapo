@@ -21,13 +21,13 @@ class FindGynamo extends Gynamo
 	static find = { Map options ->
 		
 		def template 
-		if (options?.template instanceof GldapoTemplate)
+		if (options?.template instanceof String)
 		{
-			template = options.template
+			template = Gldapo.instance.getTemplateByName(options?.template)
 		}
 		else if (options?.template != null)
 		{
-			template = Gldapo.instance.getTemplateByName(options?.template)
+			template = options.template
 		}
 		else
 		{

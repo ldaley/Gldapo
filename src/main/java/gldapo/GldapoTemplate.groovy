@@ -7,25 +7,14 @@ class GldapoTemplate extends LdapTemplate
 {
 	static final CONFIG_CONTEXT_SOURCE_KEY = 'contextSource'
 	static final CONFIG_SEARCH_CONTROLS_KEY = 'searchControls'
-	static final CONFIG_TEMPLATE_BASE_KEY = 'templateBase'
-	
-	static public final searchControlOptions = [
-		"countLimit", "derefLinkFlag", "returningAttributes", 
-		"returningObjFlag", "searchScope", "timeLimit"
-	]
-	
+	static final CONFIG_TEMPLATE_BASE_KEY = 'base'
+		
 	SearchControls searchControls
-	String templateBase
-	
-	SearchControls getSearchControls()
-	{
-		if (searchControls == null) searchControls = new SearchControls()
-		return searchControls
-	}
+	String base
 	
 	static templateFromConfig(ConfigObject config)
 	{
-		def template = new GldapoTemplate()
+		def template = this.newInstance()
 		
 		def contextSourceConfig = config[CONFIG_CONTEXT_SOURCE_KEY]
 		if (contextSourceConfig)
@@ -48,25 +37,9 @@ class GldapoTemplate extends LdapTemplate
 			template.searchControls = searchControls
 		}
 		
-		template.templateBase = config[CONFIG_TEMPLATE_BASE_KEY]
+		template.base = config[CONFIG_TEMPLATE_BASE_KEY]
 		template.afterPropertiesSet()
 		
 		return template
-	}
-	
-	SearchControls mergeSearchControlsWithOptions(def options)
-	{
-		def controls = searchControls
-		if (options != null)
-		{
-			this.class.searchControlOptions.each {
-				if (options[it] != null)
-				{
-					classControls."${it}" = options[it]
-				}
-			}
-		}
-		
-		return controls
 	}
 }

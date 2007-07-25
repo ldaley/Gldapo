@@ -17,7 +17,7 @@ class GldapoLdapToGroovyAttributeMapper implements AttributesMapper
 	{
 		def object = schema.newInstance()
 		attributeMappings.each { GldapoAttributeMapping attributeMapping ->
-			def coercedValue = schema.coerceLdapAttributeToGroovy(
+			def coercedValue = schema.convertLdapAttributeToGroovy(
 				attributeMapping.type, 
 				attributeMapping.name, 
 				attributes.get(attributeMapping.name)
