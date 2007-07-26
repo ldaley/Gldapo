@@ -20,7 +20,7 @@ class SchemaFilterGynamo extends Gynamo
 	}
 	
 	static andSchemaFilterWithFilter = { String filter ->
-		String schemaFilter = delegate.getSchemaFilter()
+		String schemaFilter = delegate.schemaFilter
 		if (filter == null)
 		{
 			if (schemaFilter == null || schemaFilter.equals(SchemaFilterGynamo.NO_FILTER_FILTER))

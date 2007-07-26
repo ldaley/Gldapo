@@ -32,7 +32,11 @@ class GldapoSchemaRegistry
 	static newFromConfig(ConfigObject config)
 	{
 		def registry = this.newInstance()
-		config[CONFIG_SCHEMAS_KEY]?.each { registry << it }
+		if (config.containsKey(CONFIG_SCHEMAS_KEY))
+		{
+			config[CONFIG_SCHEMAS_KEY].each { registry << it }
+		}
+
 		return registry
 	}
 }

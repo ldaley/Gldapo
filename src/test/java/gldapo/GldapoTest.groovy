@@ -1,17 +1,20 @@
 package gldapo;
+import gldapo.exception.GldapoInitializationException
 
 class GldapoTest extends GroovyTestCase 
 {
-	void testRegisterSchema() 
+	void testInitialiseDefaultConf() 
 	{
-		def gldapo = Gldapo.instance
-		
-		gldapo.registerSchema(Schema1)
-
-		
+		Gldapo.initialize("dev")
+		assertEquals(2, Gldapo.templateRegistry.templates.size())
+		assertEquals("development", Gldapo.templateRegistry["t2"].base) // Tests env collapse
 	}
+	
+	void testNullUrlExplodes()
+	{
+		shouldFail {
+			Gldapo.initialize(new File("2853kgmpv0").toURL())
+		}
+	}
+	
 }
-
-class Schema1 {}
-class Schema2 {}
-class Schema3 {}

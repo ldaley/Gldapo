@@ -10,13 +10,22 @@ class SearchControlsMerger
 	
 	static SearchControls merge(c1, c2)
 	{
-		if (c1 == null) c1 = new SearchControls()
-		if (c2 == null) c2 = new SearchControls()
+		def controls = new SearchControls()
+		if (c1 == null && c2 == null) return controls 
+		if (c1 == null) c1 = [:]
+		if (c2 == null) c2 = [:]
 		
 		searchControlOptions.each {
-			if (c2."${it}" != null) c1."${it}" = c2."${it}"
+			if (c2.containsKey(it))
+			{
+				controls."${it}" = c2[it]
+			}
+			else if (c1.containsKey(it))
+			{
+				controls."${it}" = c1[it]
+			}
 		}
 		
-		return c1
+		return controls
 	}
 }

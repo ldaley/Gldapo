@@ -1,43 +1,42 @@
 package gldapo.schema.gynamo;
-import gynamo.*
-import groovy.mock.interceptor.*
-import gldapo.GldapoTemplate
-import javax.naming.directory.Attributes
-import javax.naming.directory.Attribute
-import org.springframework.ldap.control.PagedResultsRequestControl
-import javax.naming.directory.SearchControls
+import gldapo.GldapoSchemaRegistry
+import gldapo.schema.annotations.*
 
+/**
+ * @todo These tests need to be more comprehensive
+ */
 class FindGynamoTest extends GroovyTestCase 
 {
 
 	FindGynamoTest()
 	{
-		Gynamo.gynamize(FindSchema, FindGynamo)
+		GldapoSchemaRegistry.newInstance() << FindSchema
 	}
 	
 	void testFind() 
 	{
-		def templateMock = new MockFor(GldapoTemplate)
-		templateMock.demand.mergeSearchControlsWithOptions {
-			return new SearchControls()
-		}
-		templateMock.demand.search {
+		def matches = [1,2,3]
+		def template = new Expando()
+		template.search = {
 			base, filter, controls, handler, requestControl ->
 			
-			handler = [getLists: {return []}] as Object
-			requestControl = [getCookie: {return null}] as Object
+			assertEquals("ou=people", base)
+			assertEquals("(&(objectclass=find)(a=b))", filter)
+			handler = [list: matches]
+			requestControl = [cookie: null]
 		}
 		
-		def matches = null
-		templateMock.use {
-			def template = new GldapoTemplate()
-			matches = FindSchema.find([template: template])
-		}
+		def results = FindSchema.find(
+			template: template,
+			filter: "(a=b)",
+			base: "ou=people"
+		)
 	}
 }
 
+@GldapoSchemaFilter("(objectclass=find)")
 class FindSchema 
 {
-	String attr1
-	String attr2
+	String uid
+	String sn
 }

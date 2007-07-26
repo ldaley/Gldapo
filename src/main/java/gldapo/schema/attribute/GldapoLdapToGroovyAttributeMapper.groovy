@@ -9,8 +9,8 @@ class GldapoLdapToGroovyAttributeMapper implements AttributesMapper
 	
 	void setSchema(Class schema)
 	{
-		schema = schema
-		attributeMappings = schema.getAttributeMappings()
+		this.schema = schema
+		this.attributeMappings = schema.getAttributeMappings()
 	}
 	
 	Object mapFromAttributes(Attributes attributes)

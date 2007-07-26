@@ -1,38 +1,41 @@
 package gldapo;
 import org.springframework.beans.factory.InitializingBean;
-
+import gldapo.exception.GldapoInitializationException;
 class Gldapo
 {
 	static final DEFAULT_CONFIG_FILENAME = 'gldapo-conf.groovy'
-	static final DEFAULT_CONFIG_ENVIRONMENT = 'production'
 
 	static templateRegistry
 	static schemaRegistry
-
-	void initializeFromConfig(ConfigObject config)
+	
+	static initialize()
 	{
-		schemaRegistry = GldapoSchemaRegistry.newFromConfig(config)
-		templateRegistry = GldapoTemplateRegistry().newFromConfig(config)
+		initialize(null)
+	}
+	
+	static initialize(String environment)
+	{
+		def configUrl = getClassLoader().findResource(DEFAULT_CONFIG_FILENAME)
+		if (configUrl == null)
+		{
+			throw new GldapoInitializationException("Could not find default config resource ${DEFAULT_CONFIG_FILENAME}" as String)
+		}
 		
-	}
-			
-	void initialize()
-	{
-		initialize(DEFAULT_CONFIG_ENVIRONMENT)
+		initialize(configUrl, environment)
 	}
 	
-	void initialize(String environment)
+	static initialize(URL configUrl)
 	{
-		initializeFromConfigURL(new File(DEFAULT_CONFIG_FILENAME).toURL(), environment)
+		initialize(configUrl, null)
 	}
 	
-	void initializeFromConfigURL(URL configUrl)
+	static initialize(URL configUrl, String environment)
 	{
-		initializeFromConfigURL(configUrl, DEFAULT_CONFIG_ENVIRONMENT)
-	}
-	
-	void initializeFromConfigURL(URL configUrl, String environment)
-	{
+		if (configUrl == null)
+		{ 
+			throw new GldapoInitializationException("Gldapo.initializeFromConfigURL called with null URL")
+		}
+		
 		def slurper
 		if (environment)
 		{
@@ -42,8 +45,13 @@ class Gldapo
 		{
 			slurper = new ConfigSlurper()
 		}
-			
-		def config = slurper.parse(configUrl)
-		initializeFromConfig(config)
+
+		initialize(slurper.parse(configUrl))
+	}
+	
+	static initialize(ConfigObject config)
+	{
+		schemaRegistry = GldapoSchemaRegistry.newFromConfig(config)
+		templateRegistry = GldapoTemplateRegistry.newFromConfig(config)
 	}
 }

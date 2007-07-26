@@ -18,8 +18,6 @@ class LoadGynamoTest extends GroovyTestCase
 		}
 	}
 
-/*	
-	Test disabled because of http://jira.codehaus.org/browse/GROOVY-2000
 	void testLoad()
 	{
 		Gynamo.gynamize(CanLoadSchema, LoadGynamo)
@@ -35,7 +33,7 @@ class LoadGynamoTest extends GroovyTestCase
 		findResults = []
 		assertEquals(null, CanLoadSchema.load("something", [:]))
 	}
-*/}
+}
 
 @GldapoIdentifyingAttribute("uid")
 class CanLoadSchema 
