@@ -13,27 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-templates {
-	t1 {
-		contextSource {
-			url = "ldap://example.com"
-			base = "ou=example,dc=com"
-		}
-		base = "ou=people"
-	}
-	t2 {
-		contextSource {
-			url = "ldap://example2.com"
-			base = "ou=example2,dc=com"
-		}
-		base = "ou=people2"
-	}
-}
-defaultTemplate = "t1"
-schemas = [gldapo.schema.provided.Person, gldapo.schema.provided.ActiveDirectoryPerson]
+package gldapo.exception;
 
-environments {
-	dev {
-		templates.t2.base = "development"
+class GldapoException extends Exception
+{
+	GldapoException(String message)
+	{
+		super(message)
+	}
+	
+	GldapoException(String message, Exception cause)
+	{
+		super(message, cause)
 	}
 }

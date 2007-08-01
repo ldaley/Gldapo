@@ -13,27 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-templates {
-	t1 {
-		contextSource {
-			url = "ldap://example.com"
-			base = "ou=example,dc=com"
-		}
-		base = "ou=people"
-	}
-	t2 {
-		contextSource {
-			url = "ldap://example2.com"
-			base = "ou=example2,dc=com"
-		}
-		base = "ou=people2"
-	}
-}
-defaultTemplate = "t1"
-schemas = [gldapo.schema.provided.Person, gldapo.schema.provided.ActiveDirectoryPerson]
+package gldapo;
+import gldapo.exception.GldapoInitializationException
 
-environments {
-	dev {
-		templates.t2.base = "development"
+class GldapoTest extends GroovyTestCase 
+{
+	void testInitialiseDefaultConf() 
+	{
+		Gldapo.initialize("dev")
+		assertEquals(2, Gldapo.templateRegistry.templates.size())
+		assertEquals("development", Gldapo.templateRegistry["t2"].base) // Tests env collapse
 	}
+	
+	void testNullUrlExplodes()
+	{
+		shouldFail {
+			Gldapo.initialize(new File("2853kgmpv0").toURL())
+		}
+	}
+	
 }

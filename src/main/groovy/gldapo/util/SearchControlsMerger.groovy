@@ -13,27 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-templates {
-	t1 {
-		contextSource {
-			url = "ldap://example.com"
-			base = "ou=example,dc=com"
-		}
-		base = "ou=people"
-	}
-	t2 {
-		contextSource {
-			url = "ldap://example2.com"
-			base = "ou=example2,dc=com"
-		}
-		base = "ou=people2"
-	}
-}
-defaultTemplate = "t1"
-schemas = [gldapo.schema.provided.Person, gldapo.schema.provided.ActiveDirectoryPerson]
+package gldapo.util;
+import javax.naming.directory.SearchControls
 
-environments {
-	dev {
-		templates.t2.base = "development"
+class SearchControlsMerger 
+{
+	static public final searchControlOptions = [
+		"countLimit", "derefLinkFlag", "searchScope", "timeLimit"
+	]
+	
+	static SearchControls merge(c1, c2)
+	{
+		def controls = new SearchControls()
+		if (c1 == null && c2 == null) return controls 
+		if (c1 == null) c1 = [:]
+		if (c2 == null) c2 = [:]
+		
+		searchControlOptions.each {
+			if (c2.containsKey(it))
+			{
+				controls."${it}" = c2[it]
+			}
+			else if (c1.containsKey(it))
+			{
+				controls."${it}" = c1[it]
+			}
+		}
+		
+		return controls
 	}
 }

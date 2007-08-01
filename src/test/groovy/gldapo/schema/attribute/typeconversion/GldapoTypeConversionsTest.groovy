@@ -13,27 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-templates {
-	t1 {
-		contextSource {
-			url = "ldap://example.com"
-			base = "ou=example,dc=com"
-		}
-		base = "ou=people"
-	}
-	t2 {
-		contextSource {
-			url = "ldap://example2.com"
-			base = "ou=example2,dc=com"
-		}
-		base = "ou=people2"
-	}
-}
-defaultTemplate = "t1"
-schemas = [gldapo.schema.provided.Person, gldapo.schema.provided.ActiveDirectoryPerson]
+package gldapo.schema.attribute.typeconversion;
+import javax.naming.directory.BasicAttribute
 
-environments {
-	dev {
-		templates.t2.base = "development"
+class GldapoTypeConversionsTest extends GroovyTestCase 
+{
+	void testStringConversion() 
+	{
+		def a = new BasicAttribute("", 2)
+		def convertd = GldapoTypeConversions.convertToStringType(a)
+		assertEquals(String, convertd.class)
+		assertEquals("2", convertd)
+	}
+	
+	void testListConversion()
+	{
+		def a = new BasicAttribute("", 1)
+		a.add(2)
+		a.add(3)
+		def convertd = GldapoTypeConversions.convertToListType(a)
+		assert(convertd instanceof List)
+		assertEquals([1, 2, 3], convertd)
 	}
 }

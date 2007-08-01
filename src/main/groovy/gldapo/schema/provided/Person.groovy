@@ -13,27 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-templates {
-	t1 {
-		contextSource {
-			url = "ldap://example.com"
-			base = "ou=example,dc=com"
-		}
-		base = "ou=people"
-	}
-	t2 {
-		contextSource {
-			url = "ldap://example2.com"
-			base = "ou=example2,dc=com"
-		}
-		base = "ou=people2"
-	}
-}
-defaultTemplate = "t1"
-schemas = [gldapo.schema.provided.Person, gldapo.schema.provided.ActiveDirectoryPerson]
+package gldapo.schema.provided;
+import gldapo.schema.annotations.*
 
-environments {
-	dev {
-		templates.t2.base = "development"
-	}
+@GldapoSchemaFilter("(objectclass=person)")
+@GldapoIdentifyingAttribute("uid")
+class Person 
+{	
+	List objectclass
+	String sn
+	String distinguishedName
+	String givenName
 }

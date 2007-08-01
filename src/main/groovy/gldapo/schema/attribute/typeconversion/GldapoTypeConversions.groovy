@@ -13,27 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-templates {
-	t1 {
-		contextSource {
-			url = "ldap://example.com"
-			base = "ou=example,dc=com"
-		}
-		base = "ou=people"
-	}
-	t2 {
-		contextSource {
-			url = "ldap://example2.com"
-			base = "ou=example2,dc=com"
-		}
-		base = "ou=people2"
-	}
-}
-defaultTemplate = "t1"
-schemas = [gldapo.schema.provided.Person, gldapo.schema.provided.ActiveDirectoryPerson]
+package gldapo.schema.attribute.typeconversion;
+import java.math.BigInteger
+import javax.naming.directory.Attribute
 
-environments {
-	dev {
-		templates.t2.base = "development"
+class GldapoTypeConversions 
+{
+	static public String convertToStringType(Attribute value)
+	{
+		return value.get().toString()
+	}
+	
+	static public Integer convertToIntegerType(Attribute value)
+	{
+		return value.get().toInteger()
+	}
+	
+	static public BigInteger convertToBigIntegerType(Attribute value)
+	{
+		return new BigInteger(value.get());
+	}
+	
+	static public List convertToListType(Attribute value)
+	{
+		def list = []
+		0.upto(value.size() - 1) {
+			list << value.get(it)
+		}
+		return list
 	}
 }
