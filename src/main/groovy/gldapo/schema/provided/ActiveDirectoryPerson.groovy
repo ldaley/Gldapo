@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package gldapo.schema.provided;
-import gldapo.schema.annotations.*
+import gldapo.schema.annotation.*
 
 @GldapoSchemaFilter("(objectclass=person)")
 @GldapoIdentifyingAttribute("samaccountname")

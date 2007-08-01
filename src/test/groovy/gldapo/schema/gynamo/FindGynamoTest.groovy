@@ -15,7 +15,7 @@
  */
 package gldapo.schema.gynamo;
 import gldapo.GldapoSchemaRegistry
-import gldapo.schema.annotations.*
+import gldapo.schema.annotation.*
 
 /**
  * @todo These tests need to be more comprehensive

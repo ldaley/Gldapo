@@ -16,7 +16,7 @@
 package gldapo.schema.gynamo;
 import gldapo.GldapoTemplate
 import gldapo.exception.GldapoException
-import gldapo.schema.annotations.GldapoIdentifyingAttribute
+import gldapo.schema.annotation.GldapoIdentifyingAttribute
 import groovy.mock.interceptor.*
 import javax.naming.directory.SearchControls
 import org.springframework.ldap.core.AttributesMapperCallbackHandler

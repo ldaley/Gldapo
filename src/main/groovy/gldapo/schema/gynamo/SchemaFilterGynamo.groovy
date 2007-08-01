@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package gldapo.schema.gynamo;
-import gldapo.schema.annotations.GldapoSchemaFilter
+import gldapo.schema.annotation.GldapoSchemaFilter
 import gynamo.GynamoPropertyStorage
 
 class SchemaFilterGynamo 

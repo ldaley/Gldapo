@@ -15,7 +15,7 @@
  */
 package gldapo.schema.gynamo;
 import gldapo.exception.GldapoException
-import gldapo.schema.annotations.GldapoSchemaFilter
+import gldapo.schema.annotation.GldapoSchemaFilter
 import gynamo.*
 import gldapo.exception.GldapoNoTypeConversionAvailableException
 import gldapo.exception.GldapoTypeConversionException

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package gldapo.schema.gynamo;
-import gldapo.schema.annotations.GldapoIdentifyingAttribute
+import gldapo.schema.annotation.GldapoIdentifyingAttribute
 
 class IdentifyingAttributeGynamo 
 {
