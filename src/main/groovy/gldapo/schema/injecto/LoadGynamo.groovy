@@ -39,8 +39,4 @@ class LoadGynamo
 			return matches[0]
 		}
 	}
-	
-	static load = { String identifyingValue ->
-		delegate.load(identifyingValue, null)
-	}
 }
