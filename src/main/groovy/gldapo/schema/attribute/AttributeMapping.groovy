@@ -67,9 +67,9 @@ class AttributeMapping
 	Class propertyType
 	
 	/**
-	 * Schema classes can declare a psuedo type like 'ActiveDirectoryDate' for conversion
+	 * 
 	 */
-	String pseudoType
+	String typeNameForConversion
 	
 	/**
 	 * Multivalue attributes are declared by List<T>, Set<T> or SortedSet<T>
@@ -82,43 +82,71 @@ class AttributeMapping
 	AttributeMapping(Class schemaClass, Field property)
 	{
 		def synonymAnnotation = property.getAnnotation(GldapoSynonymFor)
-		def pseudoTypeAnnotation = property.getAnnotation(GldapoPseudoType)
-
-		
 		this.attributeName = (synonymAnnotation) ? synonymAnnotation.value() : property.name
-		
-		if (pseudoTypeAnnotation) this.pseudoType = pseudoTypeAnnotation.value()
 		
 		def realPropertyType = property.genericType
 		
 		if (Collection.isAssignableFrom(realPropertyType))
 		{
+			def abstractCollectionType
+			
 			if (realPropertyType instanceof ParameterizedType)
 			{
-				this.collectionType = realPropertyType.rawType
+				abstractCollectionType = realPropertyType.rawType
 				this.propertyType = realPropertyType.actualTypeArguments[0]
 			}
 			else
 			{
-				this.collectionType = realPropertyType
+				abstractCollectionType = realPropertyType
 				this.propertyType = defaultCollectionElementType
 			}
 			
-			if (collectionTypeMap.keys.contains(this.collectionType) == false)
+			this.collectionType = collectionTypeMap[abstractCollectionType]
+			if (this.collectionType == null)
 			{
-				// Throw exception here, illegal collection type
+				// TODO Throw exception here, illegal collection type
 			}
+			
 		}
 		else
 		{
-			this.propertyType = realPropertyType
+			this.propertyType = realPropertyType.simpleName
+		}
+		
+		def pseudoTypeAnnotation = property.getAnnotation(GldapoPseudoType)
+		if (pseudoTypeAnnotation)
+		{
+			this.typeNameForConversion = pseudoTypeAnnotation.value()
+		}
+		else
+		{
+			this.typeNameForConversion = this.propertyType.simpleName
+		}
+	}
+	
+	def convertAttributeToProperty(String[] attributeValues)
+	{
+		if (attribute == null) return null
+		 
+		if (this.collectionType)
+		{
+			def collection = this.collectionType.newInstance()
+			attributeValues.each {
+				collection << this.convertSingleAttributeValueToProperty(it)
+			}
+			return collection
+		}
+		else
+		{
+			if (attribute.isEmpty()) return null
+			return this.convertSingleAttributeValueToProperty(attributeValues[0])
 		}
 	}
 	
 	/**
 	 * 
 	 */
-	def convertAttributeToProperty(List attributes)
+	def convertSingleAttributeValueToProperty(String attribute)
 	{
 		if (attribute == null) return null
 		
@@ -161,25 +189,25 @@ class AttributeMapping
 		}
 	}
 	
-	String getTypeNameForConversion()
-	{
-		if (typeNameForConversion == null)
-		{
-			typeNameForConversion = (conversionPsuedoType) ? conversionPsuedoType : propertyType.simpleName
-		}
-		return typeNameForConversion
-	}
-	
+	/**
+	 * 
+	 */
 	def getAttributeToPropertyByPropertyConverterMethodName()
 	{
-		"convertTo" + WordUtils.capitalize(propertyName) + "Property"
+		"convertTo" + WordUtils.capitalize(this.propertyName) + "Property"
 	}
 	
+	/**
+	 * 
+	 */
 	def getAttributeToPropertyByTypeConverterMethodName()
 	{
-		"convertTo" + WordUtils.capitalize(getTypeNameForConversion()) + "Type"
+		"convertTo" + WordUtils.capitalize(this.typeNameForConversion) + "Type"
 	}
 	
+	/**
+	 * 
+	 */
 	static List<AttributeMapping> allFor(Class schemaClass)
 	{
 		def mappings = []
