@@ -14,31 +14,36 @@
  * limitations under the License.
  */
 package gldapo.schema.attribute;
-import javax.naming.directory.Attributes;
-import org.springframework.ldap.core.AttributesMapper
+import org.springframework.ldap.core.ContextMapper
 
-class GldapoLdapToGroovyAttributeMapper implements AttributesMapper
+class GldapoContextMapper implements ContextMapper
 {
-	Class schema
+	Class schemaClass
 	List attributeMappings
+	String base
 	
 	void setSchema(Class schema)
 	{
-		this.schema = schema
-		this.attributeMappings = schema.getAttributeMappings()
+		this.schemaClass = schemaClass
+		this.attributeMappings = schemaClass.getAttributeMappings()
 	}
 	
 	Object mapFromAttributes(Attributes attributes)
 	{
-		def object = schema.newInstance()
-		attributeMappings.each { GldapoAttributeMapping attributeMapping ->
-			def coercedValue = schema.convertLdapAttributeToGroovy(
-				attributeMapping.type, 
-				attributeMapping.name, 
-				attributes.get(attributeMapping.name)
-			)
-			object."${attributeMapping.name}" = coercedValue
+		def entry = schemaClass.newInstance()
+		attributeMappings.each { AttributeMapping attributeMapping ->
+			def attribute = context.getStringAttributes(attributeMapping.attributeName)
+			object."${attributeMapping.propertyName}" = attributeMapping.convertAttributeToProperty()
 		}
 		return object
 	}
+	
+	public Object mapFromContext(Object ctx) {
+        DirContextAdapter context = (DirContextAdapter)ctx;
+        Person p = new Person();
+        p.setFullName();
+        p.setLastName(context.getStringAttribute("sn"));
+        p.setDescription(context.getStringAttribute("description"));
+        return p;
+     }
 }

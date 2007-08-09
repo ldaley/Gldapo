@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Gldapo</title>
+  </properties>
+  <body>
+    <release version="0.3" description="Current work version">
+      <action dev="Luke Daley" type="add">Renamed project to 'Gldapo'</action>
+      <action dev="Luke Daley" type="add">Changed from Gant build to Maven</action>
+      <action dev="Luke Daley" type="add">Replaced mixin stuff with Gynamo library</action>
+      <action dev="Luke Daley" type="add">Refactored significantly to make more Spring friendly</action>
+      <action dev="Luke Daley" type="add">Schema filters are now specified with the 'GldapoSchemaFilter' annotation instead of a static property</action>
+      <action dev="Luke Daley" type="add">Schema identifying attributes are now specified with the 'GldapoIdentifyingAttribute' annotation</action>
+      <action dev="Luke Daley" type="add">Templates and schema classes can now be specified in a config script (thanks to new ConfigSlurper in Groovy)</action>
+      <action dev="Luke Daley" type="add">Moved to Groovy 1.1-beta-3</action>
+    </release>
+    <release version="0.2" date="2007-07-03">
+      <action dev="Luke Daley" type="fix">
+        Improved find() to take a map which allows for a more flexible argument list
+      </action>
+      <action dev="Luke Daley" type="fix">
+        Fixed sizelimitexceeded exception
+      </action>
+      <action dev="Luke Daley" type="delete">
+        Implemented paging
+      </action>
+    </release>
+  </body>
+</document>

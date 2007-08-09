@@ -19,11 +19,10 @@ import org.springframework.ldap.core.support.LdapContextSource
 import org.apache.commons.lang.WordUtils
 import org.springframework.beans.factory.BeanNameAware
 
-class GldapoTemplate extends LdapTemplate implements BeanNameAware
+class GldapoTemplate extends LdapTemplate implements BeanNameAware, IGldapoTemplate
 {
 	static final CONFIG_CONTEXT_SOURCE_KEY = 'contextSource'
 	static final CONFIG_SEARCH_CONTROLS_KEY = 'searchControls'
-	static final CONFIG_TEMPLATE_BASE_KEY = 'base'
 		
 	Map searchControls
 	String base
@@ -39,7 +38,7 @@ class GldapoTemplate extends LdapTemplate implements BeanNameAware
 		def contextSourceConfig = config[CONFIG_CONTEXT_SOURCE_KEY]
 		if (contextSourceConfig)
 		{
-			def contextSource = new LdapContextSource()
+			def contextSource = new GldapoContextSource()
 			contextSourceConfig.each { def key, def value ->
 				contextSource."set${WordUtils.capitalize(key)}"(value)
 			}
@@ -62,5 +61,21 @@ class GldapoTemplate extends LdapTemplate implements BeanNameAware
 		template.afterPropertiesSet()
 		
 		return template
+	}
+	
+	/**
+	 * Here to make sure we are using GldapoContextSources
+	 */
+	void setContextSource(GldapoContextSource contextSource)
+	{
+		super(contextSource)
+	}
+	
+	/**
+	 * Simply retrieves the property from the context source
+	 */
+	String getBaseDN()
+	{
+		contextSource.baseDN
 	}
 }

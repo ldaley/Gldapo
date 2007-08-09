@@ -13,33 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.attribute.typeconversion;
+package gldapo.schema.attribute;
 import java.math.BigInteger
-import javax.naming.directory.Attribute
 
-class GldapoTypeConversions 
+class DefaultTypeConversions 
 {
-	static public String convertToStringType(Attribute value)
+	static String convertToStringType(String value)
 	{
-		return value.get().toString()
+		return value
 	}
 	
-	static public Integer convertToIntegerType(Attribute value)
+	static Integer convertToIntegerType(String value)
 	{
-		return value.get().toInteger()
+		return value.toInteger()
 	}
 	
-	static public BigInteger convertToBigIntegerType(Attribute value)
+	static BigInteger convertToBigIntegerType(String value)
 	{
-		return new BigInteger(value.get());
-	}
-	
-	static public List convertToListType(Attribute value)
-	{
-		def list = []
-		0.upto(value.size() - 1) {
-			list << value.get(it)
-		}
-		return list
+		return new BigInteger(value)
 	}
 }

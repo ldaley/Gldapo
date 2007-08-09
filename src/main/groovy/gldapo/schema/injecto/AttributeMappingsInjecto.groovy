@@ -13,28 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.gynamo;
-import gynamo.GynamoPropertyStorage
-import gldapo.schema.attribute.GldapoAttributeMapping
-import java.beans.Introspector
+package gldapo.schema.injecto;
+import gldapo.schema.attribute.AttributeMapping
 
-class AttributeMappingGynamo 
+class AttributeMappingsInjecto 
 {
+	@InjectoProperty(write = false)
+	static attributeMappings
+	
 	static getAttributeMappings = { ->
-		if (GynamoPropertyStorage[delegate].attributeMappings == null)
+		def attributeMappings = delegate.getInjectoProperty("attributeMappings")
+		if (attributeMappings == null)
 		{
-			def mappings = []
-			Introspector.getBeanInfo(delegate, Object).propertyDescriptors.each {
-				if (it.name.equals("metaClass") == false)
-				{
-					mappings << new GldapoAttributeMapping(
-						name: it.name,
-						type: it.propertyType,
-					)
-				}
-			}
-			GynamoPropertyStorage[delegate].attributeMappings = mappings
+			attributeMappings = AttributeMapping.allFor(delegate)
+			delegate.setInjectoProperty("attributeMappings", attributeMappings)
 		}
-		return GynamoPropertyStorage[delegate].attributeMappings
+		return attributeMappings
 	}	
 }

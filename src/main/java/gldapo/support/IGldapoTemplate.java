@@ -13,14 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.gynamo;
-import gldapo.schema.attribute.typeconversion.GldapoTypeConversions
-import gldapo.exception.GldapoTypeConversionException
-import gldapo.exception.GldapoNoTypeConversionAvailableException
-import org.apache.commons.lang.WordUtils
-import javax.naming.directory.Attribute
+package gldapo.support;
 
-class TypeConversionGynamo 
+public interface IGldapoTemplate
 {
-
+	String getBaseDN();
+	
 }

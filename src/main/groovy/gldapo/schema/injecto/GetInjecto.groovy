@@ -17,17 +17,12 @@ package gldapo.schema.gynamo;
 import gldapo.GldapoTemplate
 import gldapo.exception.GldapoException
 import org.springframework.ldap.filter.EqualsFilter
-import gynamo.GynamoDependencies
-import org.springframework.ldap.core.AttributesMapperCallbackHandler
+import injecto.InjectoDependencies
 
-@GynamoDependencies([IdentifyingAttributeGynamo, FindGynamo])
-class LoadGynamo 
+@InjectoDependencies([FindInjecto])
+class GetInjecto 
 {
-	static load = { String identifyingValue, def template ->
-		if (delegate.identifyingAttribute == null)
-		{
-			throw new GldapoException("Cannot use load() on ${delegate.name} as it has no GldapoIdentifyingAttribute annotation" as String)
-		}
+	static get = { String dn, def template ->
 		def filter = new EqualsFilter(delegate.identifyingAttribute, identifyingValue)
 		def matches = delegate.find(template: template, filter: filter.encode(), countLimit: 1)
 		if (matches.size() == 0)

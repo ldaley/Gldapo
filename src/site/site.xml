@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<site>
+  <body>
+    <menu name="Overview">
+      <item name="Introduction" href="/index.html"/>
+    </menu>
+    <menu name="Guide">
+        <item name="Schema Classes" href="/guide/schemaClasses.html"/>
+        <item name="Templates" href="/guide/templates.html"/>
+        <item name="Initialization" href="/guide/initialization.html"/>
+        <item name="Searching" href="/guide/searching.html"/>
+    </menu>
+	${reports}
+  </body>
+</site>

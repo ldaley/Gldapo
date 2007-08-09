@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 package gldapo.schema.gynamo;
-import gldapo.Gldapo;
-import gldapo.GldapoTemplate;
-import gynamo.GynamoDependencies
+import gldapo.Gldapo
+import gldapo.support.GldapoTemplate
+import injecto.annotation.InjectoDepenedencies
 import org.springframework.ldap.filter.Filter
-import javax.naming.directory.SearchControls
 import gldapo.schema.attribute.GldapoLdapToGroovyAttributeMapper
 import org.springframework.ldap.core.LdapOperations
 import org.springframework.ldap.core.CollectingNameClassPairCallbackHandler
@@ -29,12 +28,12 @@ import org.springframework.ldap.LimitExceededException
 import gldapo.exception.GldapoException
 import gldapo.util.SearchControlsMerger
 
-@GynamoDependencies([AttributeMappingGynamo, SchemaFilterGynamo, TypeConversionGynamo])
-class FindGynamo 
+@InjectoDependencies([PropertyAttributeMappingInjecto, SchemaFilterInjecto, TypeConversionInjecto])
+class FindAllInjecto 
 {
 	static DEFAULT_PAGE_SIZE = 500
 	
-	static find = { Map options ->
+	static findAll = { Map options ->
 		
 		def template 
 		if (options?.template instanceof String)

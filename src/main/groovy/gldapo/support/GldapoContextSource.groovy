@@ -13,14 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.gynamo;
-import gldapo.schema.attribute.typeconversion.GldapoTypeConversions
-import gldapo.exception.GldapoTypeConversionException
-import gldapo.exception.GldapoNoTypeConversionAvailableException
-import org.apache.commons.lang.WordUtils
-import javax.naming.directory.Attribute
+package gldapo.support;
+import org.springframework.ldap.core.support.LdapContextSource
 
-class TypeConversionGynamo 
+class GldapoContextSource extends LdapContextSource 
 {
-
+	private String baseDN
+	
+	void setBase(String base)
+	{
+		this.baseDN = base
+		super(base);
+	}
+	
+	String getBaseDN()
+	{
+		return this.baseDN
+	}
 }
