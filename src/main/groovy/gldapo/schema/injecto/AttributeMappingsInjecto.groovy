@@ -15,6 +15,7 @@
  */
 package gldapo.schema.injecto;
 import gldapo.schema.attribute.AttributeMapping
+import injecto.annotation.InjectoProperty
 
 class AttributeMappingsInjecto 
 {

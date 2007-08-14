@@ -15,6 +15,7 @@
  */
 package gldapo.schema.attribute;
 import org.springframework.ldap.core.ContextMapper
+import org.springframework.ldap.core.DirContextAdapter
 
 class GldapoContextMapper implements ContextMapper
 {
@@ -22,28 +23,22 @@ class GldapoContextMapper implements ContextMapper
 	List attributeMappings
 	String base
 	
-	void setSchema(Class schema)
+	void setSchemaClass(Class schema)
 	{
 		this.schemaClass = schemaClass
-		this.attributeMappings = schemaClass.getAttributeMappings()
+		this.attributeMappings = schemaClass.attributeMappings
 	}
+
 	
-	Object mapFromAttributes(Attributes attributes)
+	Object mapFromContext(context) 
 	{
 		def entry = schemaClass.newInstance()
-		attributeMappings.each { AttributeMapping attributeMapping ->
-			def attribute = context.getStringAttributes(attributeMapping.attributeName)
-			object."${attributeMapping.propertyName}" = attributeMapping.convertAttributeToProperty()
+		
+		attributeMappings.each {
+			def attribute = context.getStringAttributes(it.attributeName)
+			entry."${it.propertyName}" = it.convertAttributeToProperty()
 		}
-		return object
-	}
-	
-	public Object mapFromContext(Object ctx) {
-        DirContextAdapter context = (DirContextAdapter)ctx;
-        Person p = new Person();
-        p.setFullName();
-        p.setLastName(context.getStringAttribute("sn"));
-        p.setDescription(context.getStringAttribute("description"));
-        return p;
+		
+		return entry
      }
 }

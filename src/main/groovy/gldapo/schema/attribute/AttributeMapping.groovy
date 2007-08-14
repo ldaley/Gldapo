@@ -21,13 +21,8 @@ import gldapo.schema.annotation.GldapoSynonymFor
 import gldapo.util.FieldInspector
 
 
-/*class T
-{
-	List<Integer> l
-}
 
-T.getDeclaredField("l").genericType
-*//**
+/**
  * Represents the bridging between the data of the LDAP world and the Groovy world
  * 
  * property - Groovy side

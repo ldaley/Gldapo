@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 package gldapo;
-import gldapo.schema.gynamo.GldapoSchemaMetaGynamo;
+import gldapo.schema.injecto.GldapoSchemaMetaInjecto;
+import injecto.Injecto
 
 class GldapoSchemaRegistry 
 {
@@ -36,8 +37,8 @@ class GldapoSchemaRegistry
 	
 	void leftShift(Class schema)
 	{
-		use (Gynamo) {
-			schema.gynamize(GldapoSchemaMetaGynamo)
+		use (Injecto) {
+			schema.injecto(GldapoSchemaMetaInjecto)
 		}
 
 		this.getSchemas() << schema

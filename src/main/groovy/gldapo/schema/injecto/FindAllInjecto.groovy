@@ -18,7 +18,7 @@ import gldapo.Gldapo
 import gldapo.support.GldapoTemplate
 import injecto.annotation.InjectoDepenedencies
 import org.springframework.ldap.filter.Filter
-import gldapo.schema.attribute.GldapoLdapToGroovyAttributeMapper
+import gldapo.schema.attribute.GldapoContextMapper
 import org.springframework.ldap.core.LdapOperations
 import org.springframework.ldap.core.CollectingNameClassPairCallbackHandler
 import org.springframework.ldap.core.AttributesMapperCallbackHandler
@@ -57,7 +57,7 @@ class FindAllInjecto
 		// Restrict the returning attributes to just those specified in the schema
 		controls.returningAttributes = delegate.attributeMappings*.name
 		
-		AttributesMapper mapper = new GldapoLdapToGroovyAttributeMapper(schema: delegate)
+		ContextMapper mapper = new GldapoContextMapper(schema: delegate)
 		CollectingNameClassPairCallbackHandler handler = new AttributesMapperCallbackHandler(mapper)
 
 		try

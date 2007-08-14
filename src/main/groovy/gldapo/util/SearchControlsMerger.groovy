@@ -32,11 +32,29 @@ class SearchControlsMerger
 		searchControlOptions.each {
 			if (c2.containsKey(it))
 			{
-				controls."${it}" = c2[it]
+				def v
+				if (it.equals("searchScope")) 
+				{
+					v = SearchScopeTranslator.translate(c2[it])
+				}
+				else
+				{
+					v = c2[it]
+				}
+				controls."${it}" = v
 			}
 			else if (c1.containsKey(it))
 			{
-				controls."${it}" = c1[it]
+				def v
+				if (it.equals("searchScope")) 
+				{
+					v = SearchScopeTranslator.translate(c1[it])
+				}
+				else
+				{
+					v = c1[it]
+				}
+				controls."${it}" = v
 			}
 		}
 		

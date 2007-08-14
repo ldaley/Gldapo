@@ -19,12 +19,12 @@ import gldapo.exception.GldapoException
 import org.springframework.ldap.filter.EqualsFilter
 import injecto.InjectoDependencies
 
-@InjectoDependencies([FindInjecto])
+@InjectoDependencies([FindAllInjecto])
 class GetInjecto 
 {
-	static get = { String dn, def template ->
-		def filter = new EqualsFilter(delegate.identifyingAttribute, identifyingValue)
-		def matches = delegate.find(template: template, filter: filter.encode(), countLimit: 1)
+	static get = { String dn, IGldapoTemplate template ->
+		
+		def matches = delegate.find(template: template, filter: filter.encode(), searchScope: "object")
 		if (matches.size() == 0)
 		{
 			return null

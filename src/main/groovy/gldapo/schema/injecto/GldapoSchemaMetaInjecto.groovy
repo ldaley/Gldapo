@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.gynamo;
-import gynamo.GynamoDependencies
+package gldapo.schema.injecto;
+import injecto.annotation.InjectoDependencies
 
-@GynamoDependencies([FindGynamo, LoadGynamo])
-class GldapoSchemaMetaGynamo 
+@InjectoDependencies([FindAllInjecto, GetInjecto])
+class GldapoSchemaMetaInjecto
 {
 	
 }
