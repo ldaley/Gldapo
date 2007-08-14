@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 package gldapo.schema.gynamo;
-import gldapo.GldapoTemplate
+
+import gldapo.template.GldapoTemplate
 import gldapo.exception.GldapoException
+
 import org.springframework.ldap.filter.EqualsFilter
-import injecto.InjectoDependencies
+
+import injecto.annotation.InjectoDependencies
 
 @InjectoDependencies([FindAllInjecto])
 class GetInjecto 
 {
-	static get = { String dn, IGldapoTemplate template ->
+	static get = { String dn, GldapoTemplate template ->
 		
 		def matches = delegate.find(template: template, filter: filter.encode(), searchScope: "object")
 		if (matches.size() == 0)

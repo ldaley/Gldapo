@@ -17,31 +17,17 @@ package gldapo;
 import gldapo.schema.injecto.GldapoSchemaMetaInjecto;
 import injecto.Injecto
 
-class GldapoSchemaRegistry 
+class GldapoSchemaRegistry extends LinkedList<Class>
 {
 	static final CONFIG_SCHEMAS_KEY = 'schemas'
 	
-	List schemas
-	
-	List getSchemas()
-	{
-		if (this.schemas == null) this.schemas = []
-		return this.schemas
-	}
-	
-	void setSchemas(List<Class> schemas)
-	{
-		this.schemas = []
-		schemas.each { this << it }
-	}
-	
-	void leftShift(Class schema)
+	void add(Class schema)
 	{
 		use (Injecto) {
 			schema.injecto(GldapoSchemaMetaInjecto)
 		}
 
-		this.getSchemas() << schema
+		super(schema)
 	}
 	
 	static newFromConfig(ConfigObject config)

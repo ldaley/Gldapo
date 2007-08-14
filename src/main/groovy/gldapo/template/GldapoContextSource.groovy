@@ -13,21 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.support;
+package gldapo.template;
 import org.springframework.ldap.core.support.LdapContextSource
 
 class GldapoContextSource extends LdapContextSource 
-{
-	private String baseDN
-	
-	void setBase(String base)
-	{
-		this.baseDN = base
-		super(base);
-	}
-	
+{	
 	String getBaseDN()
 	{
-		return this.baseDN
+		return this.getBase()?.toString()
 	}
 }

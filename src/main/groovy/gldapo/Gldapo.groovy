@@ -14,21 +14,45 @@
  * limitations under the License.
  */
 package gldapo;
-import org.springframework.beans.factory.InitializingBean;
 import gldapo.exception.GldapoInitializationException;
 
+/**
+ * A static style class that is responsible for initialising the Gldapo system and providing access
+ * to global type objects.
+ */
 class Gldapo
 {
+	/**
+	 * The name of the file that is looked for if initialize is called with no URL for the config file
+	 */
 	static final DEFAULT_CONFIG_FILENAME = 'gldapo-conf.groovy'
 
-	static templateRegistry
-	static schemaRegistry
+	/**
+	 * Used to obtain templates by name
+	 */
+	static GldapoTemplateRegistry templateRegistry
 	
+	/**
+	 * Used to Gldapify a schema class, registering in registry injects dynamic behaviour
+	 */
+	static GldapoSchemaRegistry schemaRegistry
+	
+	/**
+	 * A collection of run time global settings
+	 */
+	static GldapoSettings settings
+	
+	/**
+	 * Initialises with the default config file and no environment
+	 */
 	static initialize()
 	{
 		initialize(null)
 	}
 	
+	/**
+	 * Initialise with default config file and specified environment
+	 */
 	static initialize(String environment)
 	{
 		def configUrl = getClassLoader().findResource(DEFAULT_CONFIG_FILENAME)
@@ -40,11 +64,17 @@ class Gldapo
 		initialize(configUrl, environment)
 	}
 	
+	/**
+	 * Initialise with config file at URL and no environment
+	 */
 	static initialize(URL configUrl)
 	{
 		initialize(configUrl, null)
 	}
 	
+	/**
+	 * Initialise with config file at URL and specified environment
+	 */
 	static initialize(URL configUrl, String environment)
 	{
 		if (configUrl == null)
@@ -65,9 +95,13 @@ class Gldapo
 		initialize(slurper.parse(configUrl))
 	}
 	
+	/**
+	 * Initialise from the passed config object
+	 */
 	static initialize(ConfigObject config)
 	{
 		schemaRegistry = GldapoSchemaRegistry.newFromConfig(config)
 		templateRegistry = GldapoTemplateRegistry.newFromConfig(config)
+		settings = GldapoSettings.newFromConfig(config)
 	}
 }
