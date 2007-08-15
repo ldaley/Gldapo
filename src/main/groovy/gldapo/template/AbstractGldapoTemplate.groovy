@@ -66,7 +66,7 @@ abstract class AbstractGldapoTemplate extends LdapTemplate implements GldapoTemp
 	 */
 	void setContextSource(GldapoContextSource contextSource)
 	{
-		super(contextSource)
+/*		super(contextSource)*/
 	}
 	
 	/**
@@ -74,7 +74,7 @@ abstract class AbstractGldapoTemplate extends LdapTemplate implements GldapoTemp
 	 */
 	void setContextSource(LdapContextSource contextSource)
 	{
-		throw new IllegalArgumentException("Can't use LdapContextSource with GldapoTemplates")
+/*		throw new IllegalArgumentException("Can't use LdapContextSource with GldapoTemplates")*/
 	}
 	
 	/**

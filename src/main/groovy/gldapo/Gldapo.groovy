@@ -30,17 +30,17 @@ class Gldapo
 	/**
 	 * Used to obtain templates by name
 	 */
-	static GldapoTemplateRegistry templateRegistry
+	static templateRegistry
 	
 	/**
 	 * Used to Gldapify a schema class, registering in registry injects dynamic behaviour
 	 */
-	static GldapoSchemaRegistry schemaRegistry
+	static schemaRegistry
 	
 	/**
 	 * A collection of run time global settings
 	 */
-	static GldapoSettings settings
+	static settings
 	
 	/**
 	 * Initialises with the default config file and no environment
