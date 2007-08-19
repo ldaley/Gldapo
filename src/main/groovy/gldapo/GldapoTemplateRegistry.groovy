@@ -19,7 +19,7 @@ import gldapo.exception.GldapoException
 import gldapo.exception.GldapoInvalidConfigException
 import gldapo.template.*
 
-class GldapoTemplateRegistry extends LinkedList<GldapoTemplate>
+class GldapoTemplateRegistry extends LinkedList
 {
 	static final CONFIG_TEMPLATES_KEY = 'templates'
 	static final CONFIG_DEFAULT_TEMPLATE_KEY = 'defaultTemplate'
@@ -34,23 +34,23 @@ class GldapoTemplateRegistry extends LinkedList<GldapoTemplate>
 		return defaultTemplate
 	}
 	
-	static newFromConfig(ConfigObject config)
-	{
-		def registry = this.newInstance()
-		
-		config[CONFIG_TEMPLATES_KEY]?.each { def templateName, def templateConfig -> 
-			registry << DefaultGldapoTemplate.newFromConfig(templateName, templateConfig)
-		}
-		
-		if (config[CONFIG_DEFAULT_TEMPLATE_KEY] != null) registry.defaultTemplateName = config[CONFIG_DEFAULT_TEMPLATE_KEY]
-
-		return registry
-	}
-	
 	GldapoTemplate getAt(String name)
 	{
 		def template = this.find { it.beanName.equals(name) }
 		if (template == null) throw new GldapoException("There is no template registered by the name of ${name}")
 		return template
+	}
+	
+	static newInstance(ConfigObject config)
+	{
+		def registry = this.newInstance()
+		
+		config[CONFIG_TEMPLATES_KEY]?.each { def templateName, def templateConfig -> 
+			registry << DefaultGldapoTemplate.newInstance(templateName, templateConfig)
+		}
+		
+		if (config[CONFIG_DEFAULT_TEMPLATE_KEY] != null) registry.defaultTemplateName = config[CONFIG_DEFAULT_TEMPLATE_KEY]
+
+		return registry
 	}
 }

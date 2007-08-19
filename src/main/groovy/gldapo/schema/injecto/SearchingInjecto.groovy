@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto;
-import gldapo.schema.attribute.AttributeMapping
-import injecto.annotation.InjectoProperty
+import gldapo.schema.operation.GldapoSearch
+import gldapo.GldapoOperationRegistry
+import injecto.annotation.InjectoDependencies
 
-class AttributeMappingsInjecto 
-{
-	@InjectoProperty(write = false)
-	static attributeMappings
+
+@InjectoDependencies([AttributeMappingsInjecto, SchemaFilterInjecto])
+class SearchingInjecto 
+{	
+	static findAll = { Map options ->
+		
+		def searchOptions = options.clone()
+		searchOptions.schema = delegate
+		
+		Gldapo.instance.operations.getNewOperation(GldapoOperationRegistry.SEARCH, searchOptions).execute()
+	}
 	
-	static getAttributeMappings = { ->
-		def attributeMappings = delegate.getInjectoProperty("attributeMappings")
-		if (attributeMappings == null)
-		{
-			attributeMappings = AttributeMapping.allFor(delegate)
-			delegate.setInjectoProperty("attributeMappings", attributeMappings)
-		}
-		return attributeMappings
-	}	
+	static find = { Map options ->
+		options.countLimit = 1
+		def r = delegate.findAll(options)
+		(r.size() > 0) ? r[0] : null
+	}
 }

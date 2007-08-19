@@ -17,7 +17,6 @@ package gldapo.schema.provided;
 import gldapo.schema.annotation.*
 
 @GldapoSchemaFilter("(objectclass=person)")
-@GldapoIdentifyingAttribute("uid")
 class Person 
 {	
 	List objectclass

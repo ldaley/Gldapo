@@ -19,7 +19,7 @@ class GldapoSettings
 {
 	Integer pageSize = 500
 	
-	static newFromConfig(ConfigObject config)
+	static newInstance(ConfigObject config)
 	{
 		def settings = this.newInstance()
 		

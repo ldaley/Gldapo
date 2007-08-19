@@ -15,12 +15,10 @@
  */
 package gldapo.schema.attribute;
 import org.apache.commons.lang.WordUtils
-import java.lang.reflect.*
-import gldapo.exception.*
+import java.lang.reflect.Field
+import gldapo.exception.GldapoTypeMappingException
 import gldapo.schema.annotation.GldapoSynonymFor
 import gldapo.util.FieldInspector
-
-
 
 /**
  * Represents the bridging between the data of the LDAP world and the Groovy world
@@ -28,191 +26,99 @@ import gldapo.util.FieldInspector
  * property - Groovy side
  * attribute - LDAP side
  */
-class AttributeMapping
+abstract class AttributeMapping
 {
+	
 	/**
 	 * 
 	 */
-	static defaultCollectionElementType = String
-	
-	static collectionTypeMap = [
-		(List): LinkedList,
-		(Set): LinkedHashSet,
-		(SortedSet): TreeSet
-	]
+	Class schema
 	
 	/**
-	 * The name of the variable on the schema class
+	 * 
 	 */
-	String propertyName
+	Field field
 	
 	/**
 	 * The name on the LDAP side
 	 */
 	String attributeName
+
+	/**
+	 * pseudo property type
+	 */
+	String typeMapping
 	
 	/**
 	 * 
 	 */
-	Class schemaClass
-	
-	/**
-	 * The type of a single attribute value
-	 */
-	Class propertyType
-	
-	/**
-	 * 
-	 */
-	String typeNameForConversion
-	
-	/**
-	 * Multivalue attributes are declared by List<T>, Set<T> or SortedSet<T>
-	 */
-	Class collectionType
+	Closure toFieldTypeMapper
 
 	/**
 	 * 
 	 */
-	AttributeMapping(Class schemaClass, Field property)
+	AttributeMapping(Class schema, Field field)
 	{
-		def synonymAnnotation = property.getAnnotation(GldapoSynonymFor)
-		this.attributeName = (synonymAnnotation) ? synonymAnnotation.value() : property.name
+		this.schema = schema
+		this.field = field
 		
-		def realPropertyType = property.genericType
-		
-		if (Collection.isAssignableFrom(realPropertyType))
-		{
-			def abstractCollectionType
-			
-			if (realPropertyType instanceof ParameterizedType)
-			{
-				abstractCollectionType = realPropertyType.rawType
-				this.propertyType = realPropertyType.actualTypeArguments[0]
-			}
-			else
-			{
-				abstractCollectionType = realPropertyType
-				this.propertyType = defaultCollectionElementType
-			}
-			
-			this.collectionType = collectionTypeMap[abstractCollectionType]
-			if (this.collectionType == null)
-			{
-				// TODO Throw exception here, illegal collection type
-			}
-			
-		}
-		else
-		{
-			this.propertyType = realPropertyType.simpleName
-		}
-		
-		def pseudoTypeAnnotation = property.getAnnotation(GldapoPseudoType)
+		this.attributeName = this.calculateAttributeName()
+		this.typeMapping = this.calculateTypeMapping()
+		this.toFieldTypeMapper = this.calculateToFieldTypeMapper()
+	}
+	
+	protected calculateAttributeName()
+	{
+		def synonymAnnotation = this.field.getAnnotation(GldapoSynonymFor)
+		(synonymAnnotation) ? synonymAnnotation.value() : this.field.name
+	}
+	
+	protected calculateTypeMapping()
+	{
+		def pseudoTypeAnnotation = this.field.getAnnotation(GldapoPseudoType)
 		if (pseudoTypeAnnotation)
 		{
-			this.typeNameForConversion = pseudoTypeAnnotation.value()
+			return pseudoTypeAnnotation.value()
 		}
 		else
 		{
-			this.typeNameForConversion = this.propertyType.simpleName
+			return this.calculateTypeMappingFromUnderlyingType()
 		}
 	}
-	
-	def convertAttributeToProperty(String[] attributeValues)
-	{
-		if (attribute == null) return null
-		 
-		if (this.collectionType)
-		{
-			def collection = this.collectionType.newInstance()
-			attributeValues.each {
-				collection << this.convertSingleAttributeValueToProperty(it)
-			}
-			return collection
-		}
-		else
-		{
-			if (attribute.isEmpty()) return null
-			return this.convertSingleAttributeValueToProperty(attributeValues[0])
-		}
-	}
-	
-	/**
-	 * 
-	 */
-	def convertSingleAttributeValueToProperty(String attribute)
-	{
-		if (attribute == null) return null
 		
-		def byPropertyConverter = this.getAttributeToPropertyByPropertyConverterMethodName()
-		def byTypeConverter = this.getAttributeToPropertyByTypeConverterMethodName()
+	protected calculateToFieldTypeMapper()
+	{	
+		Class[] p = [String] as Class[]
 		
-		try
-		{	
-			// Try attribute conversion
-			try
-			{
-				return schemaClass."$byPropertyConverter"(attribute)
-			}
-			catch (MissingMethodException e)
-			{
-			}
-			
-			// Try type conversion on the schema class
-			try
-			{
-				return schemaClass."$byTypeConverter"(attribute)
-			}
-			catch (MissingMethodException e)
-			{
-			}
+		def byFieldMapper = "mapTo" + WordUtils.capitalize(this.field.name) + "Field"
+		
+		def classByFieldMethod = schema.metaClass.getMetaMethod(byFieldMapper, p)
+		if (classByFieldMethod) return { classByFieldMethod.invoke(schema, it) }
+		
+		def byTypeMapper = "mapTo" + WordUtils.capitalize(this.typeMapping) + "Type"
 
-			// Try global conversions
-			try
-			{
-				return DefaultTypeConversions."${byTypeConverter}"(attribute)
-			}
-			catch (MissingMethodException e)
-			{
-				throw new GldapoNoTypeConversionAvailableException()
-			}
-		}
+		def classByTypeMethod = schema.metaClass.getMetaMethod(byTypeMapper, p)
+		if (classByTypeMethod) return { classByTypeMethod.invoke(schema, it) }
+		
+		def defaultByTypeMethod = Gldapo.instance.typeMappingRegistry.toFieldMappingforType(byTypeMapper)
+		if (defaultByTypeMethod) return defaultByTypeMethod
+
+		throw new GldapoTypeMappingException(schema, this.field.name, this.typeMapping, MAP_TO_FIELD, "No available type mapping")
+	}
+	
+	def toField(String[] attributeValues)
+	{
+		try
+		{
+			this.doToFieldMapping(attributeValues)
+		} 
 		catch (Exception cause)
 		{
-			throw new GldapoTypeConversionException(schemaClass, propertyName, attribute.class, typeNameForConversion, cause)
+			throw new GldapoTypeMappingException(schema, this.field.name, this.typeMapping, MAP_TO_FIELD, cause)
 		}
 	}
 	
-	/**
-	 * 
-	 */
-	def getAttributeToPropertyByPropertyConverterMethodName()
-	{
-		"convertTo" + WordUtils.capitalize(this.propertyName) + "Property"
-	}
+	abstract protected calculateTypeMappingFromFieldType()
 	
-	/**
-	 * 
-	 */
-	def getAttributeToPropertyByTypeConverterMethodName()
-	{
-		"convertTo" + WordUtils.capitalize(this.typeNameForConversion) + "Type"
-	}
-	
-	/**
-	 * 
-	 */
-	static List<AttributeMapping> allFor(Class schemaClass)
-	{
-		def mappings = []
-		
-		use (FieldInspector) {
-			targetClass.declaredFields.each {
-				if (schemaClass.fieldIsReadableAndWritable(it)) mappings << new AttributeMapping(schemaClass, it)
-			}
-		}
-		
-		return mappings
-	}
+	abstract protected doToFieldMapping(String[] attributeValues)
 }

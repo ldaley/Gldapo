@@ -18,17 +18,17 @@ import java.math.BigInteger
 
 class DefaultTypeConversions 
 {
-	static String convertToStringType(String value)
+	static convertToStringType(value)
 	{
 		return value
 	}
 	
-	static Integer convertToIntegerType(String value)
+	static convertToIntegerType(value)
 	{
 		return value.toInteger()
 	}
 	
-	static BigInteger convertToBigIntegerType(String value)
+	static convertToBigIntegerType(value)
 	{
 		return new BigInteger(value)
 	}

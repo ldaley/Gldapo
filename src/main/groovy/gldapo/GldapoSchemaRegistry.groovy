@@ -14,28 +14,38 @@
  * limitations under the License.
  */
 package gldapo;
-import gldapo.schema.injecto.GldapoSchemaMetaInjecto;
-import injecto.Injecto
+import gldapo.schema.GldapoSchemaRegistration;
 
-class GldapoSchemaRegistry extends LinkedList<Class>
+class GldapoSchemaRegistry
 {
 	static final CONFIG_SCHEMAS_KEY = 'schemas'
 	
-	void add(Class schema)
+	private List<GldapoSchemaRegistration> registrations = []
+	
+	def size()
 	{
-		use (Injecto) {
-			schema.injecto(GldapoSchemaMetaInjecto)
-		}
-
-		super(schema)
+		return registrations.size()
 	}
 	
-	static newFromConfig(ConfigObject config)
+	/**
+	 * @todo To support inheritance, this needs to register all subclasses
+	 */
+	def register(Class schema)
 	{
-		def registry = this.newInstance()
+		this.registrations << new GldapoSchemaRegistration(schema)
+	}
+	
+	def getAt(Class schema)
+	{
+		return registrations.find { it.schema = schema }
+	}
+	
+	static newInstance(ConfigObject config)
+	{
+		def registry = new GldapoSchemaRegistry()
 		if (config.containsKey(CONFIG_SCHEMAS_KEY))
 		{
-			config[CONFIG_SCHEMAS_KEY].each { registry << it }
+			config[CONFIG_SCHEMAS_KEY].each { registry.register(it) }
 		}
 
 		return registry

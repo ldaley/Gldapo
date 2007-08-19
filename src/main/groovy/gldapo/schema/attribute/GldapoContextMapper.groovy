@@ -15,7 +15,6 @@
  */
 package gldapo.schema.attribute;
 import org.springframework.ldap.core.ContextMapper
-import org.springframework.ldap.core.DirContextAdapter
 
 class GldapoContextMapper implements ContextMapper
 {
@@ -29,7 +28,6 @@ class GldapoContextMapper implements ContextMapper
 		this.attributeMappings = schemaClass.attributeMappings
 	}
 
-	
 	Object mapFromContext(context) 
 	{
 		def entry = schemaClass.newInstance()

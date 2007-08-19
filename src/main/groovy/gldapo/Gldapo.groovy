@@ -30,17 +30,36 @@ class Gldapo
 	/**
 	 * Used to obtain templates by name
 	 */
-	static templateRegistry
+	GldapoTemplateRegistry templates
 	
 	/**
 	 * Used to Gldapify a schema class, registering in registry injects dynamic behaviour
 	 */
-	static schemaRegistry
+	GldapoSchemaRegistry schemas
 	
 	/**
 	 * A collection of run time global settings
 	 */
-	static settings
+	GldapoSettings settings
+	
+	/**
+	 * 
+	 */
+	GldapoOperationRegistry operations = GldapoOperationRegistry.newDefaultOperationRegistry()
+	
+	/**
+	 * The singleton instance
+	 */
+	static private Gldapo instance
+	
+	/**
+	 * Singleton getter
+	 */
+	static Gldapo getInstance()
+	{
+		if (!instance) instance = new Gldapo()
+		return instance
+	}
 	
 	/**
 	 * Initialises with the default config file and no environment
@@ -79,7 +98,7 @@ class Gldapo
 	{
 		if (configUrl == null)
 		{ 
-			throw new GldapoInitializationException("Gldapo.initializeFromConfigURL called with null URL")
+			throw new GldapoInitializationException("Gldapo.initialize called with null URL")
 		}
 		
 		def slurper
@@ -100,8 +119,8 @@ class Gldapo
 	 */
 	static initialize(ConfigObject config)
 	{
-		schemaRegistry = GldapoSchemaRegistry.newFromConfig(config)
-		templateRegistry = GldapoTemplateRegistry.newFromConfig(config)
-		settings = GldapoSettings.newFromConfig(config)
+		this.instance.schemas = GldapoSchemaRegistry.newInstance(config)
+		this.instance.templates = GldapoTemplateRegistry.newInstance(config)
+		this.instance.settings = GldapoSettings.newInstance(config)
 	}
 }
