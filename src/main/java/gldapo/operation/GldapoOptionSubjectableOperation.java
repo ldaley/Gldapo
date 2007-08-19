@@ -13,23 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import gldapo.exception.GldapoInitializationException
+package gldapo.operation;
+import java.util.Map;
 
-class GldapoTest extends GroovyTestCase 
+public interface GldapoOptionSubjectableOperation extends GldapoOperation
 {
-	void testInitialiseDefaultConf() 
-	{
-		Gldapo.initialize("dev")
-		assertEquals(2, Gldapo.instance.directories.size())
-		assertEquals(50, Gldapo.instance.directories["t1"].searchControls.countLimit) // Tests env collapse
-	}
-	
-	void testNullUrlExplodes()
-	{
-		shouldFail {
-			Gldapo.initialize(new File("2853kgmpv0").toURL())
-		}
-	}
-	
+	public void setOptions(Map options);
 }

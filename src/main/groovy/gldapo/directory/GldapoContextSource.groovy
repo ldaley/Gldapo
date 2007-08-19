@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import gldapo.exception.GldapoInitializationException
+package gldapo.directory;
+import org.springframework.ldap.core.support.LdapContextSource
 
-class GldapoTest extends GroovyTestCase 
-{
-	void testInitialiseDefaultConf() 
+class GldapoContextSource extends LdapContextSource
+{	
+	public static final PROPS = ["url", "urls", "base", "userDn", "password"]
+	
+	String getBaseDN()
 	{
-		Gldapo.initialize("dev")
-		assertEquals(2, Gldapo.instance.directories.size())
-		assertEquals(50, Gldapo.instance.directories["t1"].searchControls.countLimit) // Tests env collapse
+		return this.base?.toString()
 	}
 	
-	void testNullUrlExplodes()
+	static newInstance(ConfigObject config)
 	{
-		shouldFail {
-			Gldapo.initialize(new File("2853kgmpv0").toURL())
-		}
+		def c = new GldapoContextSource()
+		PROPS.each { if (config.containsKey(it)) c."$it" = config."$it" }
+		c.afterPropertiesSet()
+		return c
 	}
-	
 }

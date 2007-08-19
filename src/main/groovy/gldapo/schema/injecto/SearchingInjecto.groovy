@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto;
-import gldapo.schema.operation.GldapoSearch
+import gldapo.Gldapo
 import gldapo.GldapoOperationRegistry
-import injecto.annotation.InjectoDependencies
 
-
-@InjectoDependencies([AttributeMappingsInjecto, SchemaFilterInjecto])
 class SearchingInjecto 
 {	
 	static findAll = { Map options ->

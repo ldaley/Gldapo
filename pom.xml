@@ -126,12 +126,14 @@
             <goals>
               <goal>compile</goal>
             </goals>
+<!-- <configuration><verbose>true</verbose><debug>true</debug></configuration> -->
           </execution>
           <execution>
             <id>tc</id>
             <goals>
               <goal>testCompile</goal>
             </goals>
+<!-- <configuration><verbose>true</verbose><debug>true</debug></configuration> -->
           </execution>
         </executions>
       </plugin>

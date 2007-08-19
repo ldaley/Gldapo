@@ -13,30 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.template;
+package gldapo.directory;
 
 /**
  * @todo Tests needed
  */
-class GldapoTemplateImplTest extends GroovyTestCase 
+class GldapoDirectoryImplTest extends GroovyTestCase 
 {
 	void testNewFromConfig() 
 	{
 		def c = new ConfigObject()
 		
-		c.contextSource.url = "ldap://example.com"
-		c.contextSource.base = "ou=example,ou=com"
-		c.countextSource.userDn = "cn=user"
-		c.contextSource.password = "password"
+		c.url = "ldap://example.com"
+		c.base = "ou=example,ou=com"
+		c.userDn = "cn=user"
+		c.password = "password"
 		
 		c.searchControls.countLimit = 50
-		c.base = "ou=people"
 		
-		def t = GldapoTemplateImpl.newInstance("testTemplate", c)
-		assertNotNull(t)
-		assertEquals(true, t instanceof GldapoTemplate)
-		assertEquals(50, t.searchControls.countLimit)
-		assertEquals("ou=people", t.base)
-		assertEquals("testTemplate", t.beanName)
+		def d = GldapoDirectoryImpl.newInstance("testTemplate", c)
+		assertNotNull(d)
+		assertEquals(true, d instanceof GldapoDirectory)
+		assertEquals(50, d.searchControls.countLimit)
+		assertEquals("testTemplate", d.beanName)
 	}
 }

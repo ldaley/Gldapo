@@ -15,7 +15,7 @@
  */
 package gldapo.schema.injecto;
 import injecto.*
-import gldapo.exception.GldapoNoDefaultTemplateException
+import gldapo.exception.GldapoNoDefaultDirectoryException
 
 class GetInjectoTest extends GroovyTestCase 
 {
@@ -26,7 +26,7 @@ class GetInjectoTest extends GroovyTestCase
 	
 	void testBlowsUpWhenNoDefaultTemplate()
 	{
-		shouldFail(GldapoNoDefaultTemplateException) {
+		shouldFail(GldapoNoDefaultDirectoryException) {
 			GetInjectoTest.get("abc")
 		}
 	}

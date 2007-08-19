@@ -13,23 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import gldapo.exception.GldapoInitializationException
+package gldapo.exception;
 
-class GldapoTest extends GroovyTestCase 
+class GldapoNoDefaultDirectoryException extends GldapoException
 {
-	void testInitialiseDefaultConf() 
+	GldapoNoDefaultDirectoryException()
 	{
-		Gldapo.initialize("dev")
-		assertEquals(2, Gldapo.instance.directories.size())
-		assertEquals(50, Gldapo.instance.directories["t1"].searchControls.countLimit) // Tests env collapse
+		super("A request was made for the default template but none has been specified")
 	}
-	
-	void testNullUrlExplodes()
-	{
-		shouldFail {
-			Gldapo.initialize(new File("2853kgmpv0").toURL())
-		}
-	}
-	
 }

@@ -14,56 +14,56 @@
  * limitations under the License.
  */
 package gldapo;
-import gldapo.exception.GldapoNoDefaultTemplateException
+import gldapo.exception.GldapoNoDefaultDirectoryException
 import gldapo.exception.GldapoException
-import gldapo.template.GldapoTemplate
-import gldapo.template.GldapoTemplateImpl
+import gldapo.directory.GldapoDirectory
+import gldapo.directory.GldapoDirectoryImpl
 
-class GldapoTemplateRegistryTest extends GroovyTestCase 
+class GldapoDirectoryRegistryTest extends GroovyTestCase 
 {
 	void testGetDefaultWhenIsNone() 
 	{
-		def registry = new GldapoTemplateRegistry()
-		shouldFail (GldapoNoDefaultTemplateException) {
-			def defaultTemplate = registry.defaultTemplate
+		def registry = new GldapoDirectoryRegistry()
+		shouldFail (GldapoNoDefaultDirectoryException) {
+			registry.defaultDirectory
 		}
 	}
 	
 	void testGetDefaultWhenDoesntExist() 
 	{
-		def registry = new GldapoTemplateRegistry()
-		registry.defaultTemplateName = "abc"
+		def registry = new GldapoDirectoryRegistry()
+		registry.defaultDirectoryName = "abc"
 		shouldFail (GldapoException) {
-			def defaultTemplate = registry.defaultTemplate
+			registry.defaultDirectory
 		}
 	}
 	
 	void testGetDefault()
 	{
-		def registry = new GldapoTemplateRegistry()
-		def template = new GldapoTemplateImpl()
-		template.beanName = "test"
-		registry.defaultTemplateName = "test"
-		registry << template
-		assertSame(template, registry.defaultTemplate)
+		def registry = new GldapoDirectoryRegistry()
+		def directory = new GldapoDirectoryImpl(beanName: "test")
+
+		registry.defaultDirectoryName = "test"
+		registry << directory
+		assertSame(directory, registry.defaultDirectory)
 	}
 	
 	void testNewFromOkConfig()
 	{
 		def c = new ConfigObject()
 		
-		c.templates.t1.contextSource.url = "ldap://example.com"
-		c.templates.t2.contextSource.url = "ldap://example2.com"
-		c.defaultTemplate = "t1"
+		c.directories.t1.url = "ldap://example.com"
+		c.directories.t1.defaultDirectory = true
+		c.directories.t2.url = "ldap://example2.com"
+	
+		def r = GldapoDirectoryRegistry.newInstance(c)
 		
-		def r = GldapoTemplateRegistry.newInstance(c)
-		
-		assert(r instanceof GldapoTemplateRegistry)
-		assertEquals(2, r.templates.size())
+		assert(r instanceof GldapoDirectoryRegistry)
+		assertEquals(2, r.size())
 		assertNotNull(r["t1"])
 		assertNotNull(r["t2"])
-		assert(r["t1"] instanceof GldapoTemplate)
-		assertSame(r.defaultTemplate, r["t1"])
+		assert(r["t1"] instanceof GldapoDirectory)
+		assertSame(r.defaultDirectory, r["t1"])
 	}
 	
 }

@@ -13,23 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import gldapo.exception.GldapoInitializationException
+package gldapo.schema.attribute;
 
-class GldapoTest extends GroovyTestCase 
+class SingleValueAttributeMapping extends AttributeMapping
 {
-	void testInitialiseDefaultConf() 
+	protected calculateTypeMappingFromFieldType()
 	{
-		Gldapo.initialize("dev")
-		assertEquals(2, Gldapo.instance.directories.size())
-		assertEquals(50, Gldapo.instance.directories["t1"].searchControls.countLimit) // Tests env collapse
+ 		return this.field.type.simpleName
 	}
 	
-	void testNullUrlExplodes()
+	protected doToFieldMapping(String[] attributeValues)
 	{
-		shouldFail {
-			Gldapo.initialize(new File("2853kgmpv0").toURL())
-		}
+		if (attributeValues == null || attributeValues.empty) return null
+		return this.toFieldTypeMapper.call(attributeValues[0])
 	}
-	
 }

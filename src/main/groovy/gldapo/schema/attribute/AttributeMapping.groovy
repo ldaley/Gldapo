@@ -18,7 +18,6 @@ import org.apache.commons.lang.WordUtils
 import java.lang.reflect.Field
 import gldapo.exception.GldapoTypeMappingException
 import gldapo.schema.annotation.GldapoSynonymFor
-import gldapo.util.FieldInspector
 
 /**
  * Represents the bridging between the data of the LDAP world and the Groovy world

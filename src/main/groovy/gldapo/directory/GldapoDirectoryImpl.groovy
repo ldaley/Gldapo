@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.template;
+package gldapo.directory;
 
 import gldapo.schema.attribute.GldapoContextMapper
 import gldapo.exception.GldapoException
@@ -32,9 +32,8 @@ import org.springframework.ldap.core.ContextMapper
 import org.springframework.beans.factory.BeanNameAware
 import javax.naming.directory.SearchControls
 
-class GldapoTemplateImpl extends LdapTemplate implements GldapoTemplate, BeanNameAware
+class GldapoDirectoryImpl implements GldapoDirectory, BeanNameAware
 {
-	static final CONFIG_CONTEXT_SOURCE_KEY = 'contextSource'
 	static final CONFIG_SEARCH_CONTROLS_KEY = 'searchControls'
 	
 	/**
@@ -48,26 +47,16 @@ class GldapoTemplateImpl extends LdapTemplate implements GldapoTemplate, BeanNam
 	String beanName
 	
 	/**
+	 * 
+	 */
+	LdapTemplate template
+	
+	/**
 	 * Simply retrieves the property from the context source
 	 */
 	String getBaseDN()
 	{
 		contextSource.baseDN
-	}
-	/**
-	 * Here to make sure we are using GldapoContextSources
-	 */
-	void setContextSource(GldapoContextSource contextSource)
-	{
-		super(contextSource)
-	}
-	
-	/**
-	 * @todo Use a better exception here
-	 */
-	void setContextSource(LdapContextSource contextSource)
-	{
-		throw new IllegalArgumentException("Can't use LdapContextSource with GldapoTemplates")
 	}
 	
 	List search(Class schema, String base, String filter, GldapoSearchControls controls, Integer pageSize)
@@ -81,12 +70,12 @@ class GldapoTemplateImpl extends LdapTemplate implements GldapoTemplate, BeanNam
 		try
 		{
 			PagedResultsRequestControl requestControl = new PagedResultsRequestControl(pageSize)
-			template.search(base, filter, jndiControls, handler, requestControl)
+			this.template.search(base, filter, jndiControls, handler, requestControl)
 		
 			while (requestControl?.cookie?.cookie != null)
 			{
 				requestControl = new PagedResultsRequestControl(pageSize, requestControl.cookie)
-				template.search(base, filter, jndiControls, handler, requestControl)
+				this.template.search(base, filter, jndiControls, handler, requestControl)
 			} 
 
 			return handler.list
@@ -106,29 +95,15 @@ class GldapoTemplateImpl extends LdapTemplate implements GldapoTemplate, BeanNam
 	 */
 	static newInstance(String name, ConfigObject config)
 	{
-		def template = this.newInstance()
+		def contextSource = GldapoContextSource.newInstance(config)
 		
-		template.beanName = name
-		
-		if (config.containsKey(CONFIG_CONTEXT_SOURCE_KEY))
-		{
-			template.contextSource = GldapoContextSourceImpl.newInstance(config[CONFIG_CONTEXT_SOURCE_KEY])
-		}
-		else
-		{
-			throw new GldapoInvalidConfigException("Template '${template.beanName}' does not define a context source")
-		}
-		
-		if (config.containsKey(CONFIG_SEARCH_CONTROLS_KEY))
-		{
-			template.searchControls = GldapoSearchControlsImpl.newInstance(config[CONFIG_SEARCH_CONTROLS_KEY])
-		}
-		else
-		{
-			template.searchControls = new GldapoSearchControlsImpl()
-		}
-
+		def template = new LdapTemplate(contextSource: contextSource)
 		template.afterPropertiesSet()
-		return template
+		
+		def searchControls = new GldapoSearchControlsImpl(config[CONFIG_SEARCH_CONTROLS_KEY])
+		
+		def directory = new GldapoDirectoryImpl(beanName: name, template: template, searchControls: searchControls)
+
+		return directory
 	}
 }

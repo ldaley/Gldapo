@@ -13,27 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-templates {
+directories {
 	t1 {
-		contextSource {
-			url = "ldap://example.com"
-			base = "ou=example,dc=com"
+		url = "ldap://example.com"
+		base = "ou=example,dc=com"
+		defaultDirectory = true
+		searchControls {
+			countLimit = 40
 		}
-		base = "ou=people"
 	}
 	t2 {
-		contextSource {
-			url = "ldap://example2.com"
-			base = "ou=example2,dc=com"
-		}
-		base = "ou=people2"
+		url = "ldap://example2.com"
+		base = "ou=example2,dc=com"
 	}
+
 }
-defaultTemplate = "t1"
 schemas = [gldapo.schema.provided.Person, gldapo.schema.provided.ActiveDirectoryPerson]
 
 environments {
 	dev {
-		templates.t2.base = "development"
+		directories.t1.searchControls.countLimit = 50
 	}
 }

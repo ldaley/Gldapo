@@ -14,22 +14,32 @@
  * limitations under the License.
  */
 package gldapo;
-import gldapo.exception.GldapoInitializationException
+import gldapo.operation.*
 
-class GldapoTest extends GroovyTestCase 
+class GldapoOperationRegistry extends LinkedHashMap<String,GldapoOperation>
 {
-	void testInitialiseDefaultConf() 
+	public static final SEARCH = "search"
+	
+	private static DEFAULTS = [
+		(SEARCH): GldapoSearch
+	]
+	
+	def getOperationInstance(String opname, Map options)
 	{
-		Gldapo.initialize("dev")
-		assertEquals(2, Gldapo.instance.directories.size())
-		assertEquals(50, Gldapo.instance.directories["t1"].searchControls.countLimit) // Tests env collapse
+		def op = this[opname].newInstance()
+		if (op instanceof GldapoOptionSubjectableOperation) op.options = options
+		return op
 	}
 	
-	void testNullUrlExplodes()
+	def getOperationInstance(String opname)
 	{
-		shouldFail {
-			Gldapo.initialize(new File("2853kgmpv0").toURL())
-		}
+		this.getOperationInstance(opname, null)
+	}	
+	
+	static newDefaultOperationRegistry()
+	{
+		return new GldapoOperationRegistry(DEFAULTS)
 	}
+	
 	
 }

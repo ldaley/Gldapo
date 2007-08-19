@@ -21,7 +21,7 @@ class GldapoSettings
 	
 	static newInstance(ConfigObject config)
 	{
-		def settings = this.newInstance()
+		def settings = new GldapoSettings()
 		
 		if (config.containsKey("pageSize")) settings.pageSize = config["pageSize"]
 		

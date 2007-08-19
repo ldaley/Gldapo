@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto;
-import gldapo.template.GldapoTemplate
+import gldapo.directory.GldapoDirectory
 import injecto.annotation.InjectoDependency
 import injecto.annotation.InjectAs
 
 @InjectoDependency(SearchingInjecto)
 class GetInjecto 
 {
-	static get = { String dn, GldapoTemplate template ->
-		delegate.find(absoluteBase: dn, searchScope: "object", template: template)
+	static get = { String dn, GldapoDirectory directory ->
+		delegate.find(absoluteBase: dn, searchScope: "object", directory: directory)
 	}
 	
 	@InjectAs("get")
-	static getUsingDefaultTemplate = { String dn -> 
-		delegate.get(dn, Gldapo.instance.templateRegistry.defaultTemplate)
+	static getUsingDirectoryName = { String dn, String directoryName ->
+		delegate.find(absoluteBase: dn, searchScope: "object", directory: directoryName)
+	}
+	
+	@InjectAs("get")
+	static getUsingDefaultDirectory = { String dn -> 
+		delegate.get(dn, null)
 	}
 }

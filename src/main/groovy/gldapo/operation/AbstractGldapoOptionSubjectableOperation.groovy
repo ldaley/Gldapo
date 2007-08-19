@@ -13,18 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.annotation;
-import java.lang.annotation.*;
+package gldapo.operation;
 
-/**
- * Specifies a single Gynamo that this Gynamo depends on
- * 
- * e.g. @GynamoDependency(SomeOtherGynamo)
- * @author ld@ldaley.com
- * @since 1.0
- */
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-public @interface GldapoIdentifyingAttribute {
-    String value();
+abstract class AbstractGldapoOptionSubjectableOperation implements GldapoOptionSubjectableOperation
+{
+	Map options
+	
+	abstract Object execute()
 }

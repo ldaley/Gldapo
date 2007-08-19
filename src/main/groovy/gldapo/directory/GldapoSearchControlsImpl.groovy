@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.template;
+package gldapo.directory;
 import gldapo.exception.GldapoException
 
 import javax.naming.directory.SearchControls

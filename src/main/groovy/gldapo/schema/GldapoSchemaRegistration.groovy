@@ -13,23 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import gldapo.exception.GldapoInitializationException
+package gldapo.schema;
+import gldapo.schema.attribute.AttributeMapping
+import gldapo.schema.attribute.AttributeMappingInspector
 
-class GldapoTest extends GroovyTestCase 
+class GldapoSchemaRegistration 
 {
-	void testInitialiseDefaultConf() 
+	private schema
+	private attributeMappings
+	
+	GldapoSchemaRegistration(Class schema)
 	{
-		Gldapo.initialize("dev")
-		assertEquals(2, Gldapo.instance.directories.size())
-		assertEquals(50, Gldapo.instance.directories["t1"].searchControls.countLimit) // Tests env collapse
+		this.schema = schema
+		this.attributeMappings = AttributeMappingInspector.getAttributeMappings(schema)
 	}
 	
-	void testNullUrlExplodes()
+	Class getSchema()
 	{
-		shouldFail {
-			Gldapo.initialize(new File("2853kgmpv0").toURL())
-		}
+		return this.schema
 	}
 	
+	List<AttributeMapping> getAttributeMappings()
+	{
+		return this.attributeMappings
+	}
 }

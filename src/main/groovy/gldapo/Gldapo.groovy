@@ -30,7 +30,7 @@ class Gldapo
 	/**
 	 * Used to obtain templates by name
 	 */
-	GldapoTemplateRegistry templates
+	GldapoDirectoryRegistry directories
 	
 	/**
 	 * Used to Gldapify a schema class, registering in registry injects dynamic behaviour
@@ -119,8 +119,10 @@ class Gldapo
 	 */
 	static initialize(ConfigObject config)
 	{
-		this.instance.schemas = GldapoSchemaRegistry.newInstance(config)
-		this.instance.templates = GldapoTemplateRegistry.newInstance(config)
-		this.instance.settings = GldapoSettings.newInstance(config)
+		def gldapo = getInstance()
+		
+		gldapo.schemas = GldapoSchemaRegistry.newInstance(config)
+		gldapo.directories = GldapoDirectoryRegistry.newInstance(config)
+		gldapo.settings = GldapoSettings.newInstance(config)
 	}
 }

@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.exception;
+package gldapo.operation;
 
-class GldapoNoDefaultTemplateException extends GldapoException
+public interface GldapoOperation
 {
-	GldapoNoDefaultTemplateException()
-	{
-		super("A request was made for the default template but none has been specified")
-	}
+	public Object execute() throws Exception;
 }

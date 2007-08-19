@@ -13,17 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.template;
-import org.springframework.ldap.core.support.LdapContextSource
+package gldapo.schema.attribute;
 
-class GldapoContextSourceImpl extends LdapContextSource implements GldapoContextSource
-{	
-	String getBaseDN()
-	{
-		return this.base?.toString()
-	}
-	
-	static newInstance(ConfigObject config)
+class AttributeMappingInspector 
+{
+	static getAttributeMappings(Class schema)
 	{
 		
 	}
