@@ -17,6 +17,7 @@ package gldapo;
 import gldapo.exception.GldapoNoDefaultTemplateException
 import gldapo.exception.GldapoException
 import gldapo.template.GldapoTemplate
+import gldapo.template.GldapoTemplateImpl
 
 class GldapoTemplateRegistryTest extends GroovyTestCase 
 {
@@ -40,7 +41,7 @@ class GldapoTemplateRegistryTest extends GroovyTestCase
 	void testGetDefault()
 	{
 		def registry = new GldapoTemplateRegistry()
-		def template = new GldapoTemplate()
+		def template = new GldapoTemplateImpl()
 		template.beanName = "test"
 		registry.defaultTemplateName = "test"
 		registry << template

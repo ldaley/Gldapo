@@ -13,30 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import gldapo.schema.GldapoSchemaRegistration
+package gldapo.schema.injecto;
+import injecto.*
+import gldapo.exception.GldapoNoDefaultTemplateException
 
-class GldapoSchemaRegistryTest extends GroovyTestCase 
-{	
-	void testNewInstanceFromConfig()
+class GetInjectoTest extends GroovyTestCase 
+{
+	GetInjectoTest()
 	{
-		def c = new ConfigObject()
-		c[GldapoSchemaRegistry.CONFIG_SCHEMAS_KEY] = [RegistryTestSchema1, RegistryTestSchema1]
-		
-		def r = GldapoSchemaRegistry.newInstance(c)
-		assertEquals(2, r.size())
-		
-		def t1 = r[RegistryTestSchema1]
-		def t2 = r[RegistryTestSchema2]
-		
-		assertNotNull(t1)
-		assertNotNull(t2)
-
-		assertEquals(true, t1 instanceof GldapoSchemaRegistration)
+		use(Injecto) { GetInjectoTest.inject(GetInjecto) }
+	}
+	
+	void testBlowsUpWhenNoDefaultTemplate()
+	{
+		shouldFail(GldapoNoDefaultTemplateException) {
+			GetInjectoTest.get("abc")
+		}
 	}
 }
 
-class RegistryTestSchema1 {}
-class RegistryTestSchema2 {}
-
-
+class GetInjectoTestSchema {}

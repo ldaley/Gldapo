@@ -13,30 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import gldapo.schema.GldapoSchemaRegistration
+package gldapo.schema.injecto;
+import gldapo.operation.GldapoOperation
+import gldapo.GldapoOperationRegistry
+import injecto.*
 
-class GldapoSchemaRegistryTest extends GroovyTestCase 
-{	
-	void testNewInstanceFromConfig()
+
+/**
+ * @todo These tests need to be more comprehensive
+ */
+class SearchingInjectoTest extends GroovyTestCase 
+{
+	SearchingInjectoTest()
 	{
-		def c = new ConfigObject()
-		c[GldapoSchemaRegistry.CONFIG_SCHEMAS_KEY] = [RegistryTestSchema1, RegistryTestSchema1]
-		
-		def r = GldapoSchemaRegistry.newInstance(c)
-		assertEquals(2, r.size())
-		
-		def t1 = r[RegistryTestSchema1]
-		def t2 = r[RegistryTestSchema2]
-		
-		assertNotNull(t1)
-		assertNotNull(t2)
+		use (Injecto) { SearchingInjectoTestSchema.inject(SearchingInjecto) }
+	}
+	
+	void testFindAll() 
+	{
+		Gldapo.instance.operationRegistry[GldapoOperationRegistry.SEARCH] = [execute: { -> [1,2,3] }] as GldapoOperation
 
-		assertEquals(true, t1 instanceof GldapoSchemaRegistration)
+		def r = SearchingInjectoTestSchema.findAll([:])
+		assertEquals([1,2,3], r)
 	}
 }
 
-class RegistryTestSchema1 {}
-class RegistryTestSchema2 {}
-
-
+class SearchingInjectoTestSchema {}
