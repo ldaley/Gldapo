@@ -16,6 +16,7 @@
 package gldapo;
 import gldapo.exception.GldapoNoDefaultTemplateException
 import gldapo.exception.GldapoException
+import gldapo.template.GldapoTemplate
 
 class GldapoTemplateRegistryTest extends GroovyTestCase 
 {
@@ -54,7 +55,7 @@ class GldapoTemplateRegistryTest extends GroovyTestCase
 		c.templates.t2.contextSource.url = "ldap://example2.com"
 		c.defaultTemplate = "t1"
 		
-		def r = GldapoTemplateRegistry.newFromConfig(c)
+		def r = GldapoTemplateRegistry.newInstance(c)
 		
 		assert(r instanceof GldapoTemplateRegistry)
 		assertEquals(2, r.templates.size())

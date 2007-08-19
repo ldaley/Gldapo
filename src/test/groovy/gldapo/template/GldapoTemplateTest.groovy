@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import org.springframework.ldap.core.support.LdapContextSource
+package gldapo.template;
 
 /**
  * @todo Tests needed
  */
-class GldapoTemplateTest extends GroovyTestCase 
+class GldapoTemplateImplTest extends GroovyTestCase 
 {
 	void testNewFromConfig() 
 	{
@@ -33,7 +32,7 @@ class GldapoTemplateTest extends GroovyTestCase
 		c.searchControls.countLimit = 50
 		c.base = "ou=people"
 		
-		def t = GldapoTemplate.newFromConfig("testTemplate", c)
+		def t = GldapoTemplateImpl.newInstance("testTemplate", c)
 		assertNotNull(t)
 		assertEquals(true, t instanceof GldapoTemplate)
 		assertEquals(50, t.searchControls.countLimit)
