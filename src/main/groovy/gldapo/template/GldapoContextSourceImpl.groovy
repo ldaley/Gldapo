@@ -14,7 +14,17 @@
  * limitations under the License.
  */
 package gldapo.template;
+import org.springframework.ldap.core.support.LdapContextSource
 
-class DefaultGldapoTemplate extends AbstractGldapoTemplate
-{
+class GldapoContextSourceImpl extends LdapContextSource implements GldapoContextSource
+{	
+	String getBaseDN()
+	{
+		return this.base?.toString()
+	}
+	
+	static newInstance(ConfigObject config)
+	{
+		
+	}
 }
