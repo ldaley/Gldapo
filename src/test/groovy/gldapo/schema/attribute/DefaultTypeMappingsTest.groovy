@@ -13,26 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.attribute.typeconversion;
-import javax.naming.directory.BasicAttribute
+package gldapo.schema.attribute;
+import java.math.BigInteger
 
-class GldapoTypeConversionsTest extends GroovyTestCase 
+class DefaultTypeMappingsTest extends GroovyTestCase 
 {
-	void testStringConversion() 
+	void testStringMapping() 
 	{
-		def a = new BasicAttribute("", 2)
-		def convertd = GldapoTypeConversions.convertToStringType(a)
-		assertEquals(String, convertd.class)
-		assertEquals("2", convertd)
+		def m = DefaultTypeMappings.mapToStringType("s")
+		assertEquals(String, m.class)
+		assertEquals("s", m)
 	}
 	
-	void testListConversion()
+	void testIntegerMapping()
 	{
-		def a = new BasicAttribute("", 1)
-		a.add(2)
-		a.add(3)
-		def convertd = GldapoTypeConversions.convertToListType(a)
-		assert(convertd instanceof List)
-		assertEquals([1, 2, 3], convertd)
+		def m = DefaultTypeMappings.mapToIntegerType("3")
+		assertEquals(Integer, m.class)
+		assertEquals(3, m)
+	}
+	
+	void testBigIntegerMapping()
+	{
+		def m = DefaultTypeMappings.mapToBigIntegerType("3")
+		assertEquals(BigInteger, m.class)
+		assertEquals(new BigInteger(3), m)
 	}
 }
