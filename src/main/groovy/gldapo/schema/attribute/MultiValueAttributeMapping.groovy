@@ -19,7 +19,7 @@ import gldapo.exception.GldapoException
 import java.lang.reflect.Field
 import java.lang.reflect.ParameterizedType
 
-class MultiValueAttributeMapping extends AttributeMapping
+class MultiValueAttributeMapping extends AbstractAttributeMapping
 {
 	static DEFAULT_COLLECTION_ELEMENT_TYPE = String
 	
@@ -35,7 +35,7 @@ class MultiValueAttributeMapping extends AttributeMapping
 	Class collectionType
 	
 	/**
-	 * @todo Check that this is actually a collection type
+	 * @todo Check that this is actually a collection type, maybe
 	 */
 	MultiValueAttributeMapping(Class schema, Field field)
 	{
@@ -46,14 +46,14 @@ class MultiValueAttributeMapping extends AttributeMapping
 	/**
 	 * @todo Need to use a better exception
 	 */
-	protected calculateCollectionType()
+	def calculateCollectionType()
 	{
 		def t = this.field.type
 		if (!SUPPORTED_COLLECTION_TYPE_MAP.containsKey(t)) throw new GldapoException("$t is not a supported collection type, supported values are ${SUPPORTED_COLLECTION_TYPE_MAP.keys}")
 		return SUPPORTED_COLLECTION_TYPE_MAP[t]
 	}
 		
-	protected calculateTypeMappingFromFieldType()
+	def calculateTypeMappingFromFieldType()
 	{
 		def t = this.field.genericType
 		
@@ -63,18 +63,24 @@ class MultiValueAttributeMapping extends AttributeMapping
 		}
 		else
 		{
-			return DEFAULT_COLLECTION_ELEMENT_TYPE
+			return DEFAULT_COLLECTION_ELEMENT_TYPE.simpleName
 		}
 	}
 	
-	protected doToFieldMapping(String[] attributeValues)
-	{
-		if (attributeValues == null) return null
-		
-		def c = this.collectionType.newInstance()
-		attributeValues.each {
-			c << this.toFieldTypeMapper.call(it)
+	def getFieldValue(Object context)
+	{		
+		def rawValues = context.getStringAttributes(this.attributeName)
+		if (rawValues == null || rawValues.size() < 1)
+		{
+			return null
 		}
-		return c
+		else
+		{
+			def mappedValue = this.collectionType.newInstance()
+			0.upto(rawValues.size() - 1) {
+				mappedValue << this.toFieldTypeMapper.call(rawValues[it])
+			}
+			return mappedValue
+		}
 	}
 }

@@ -1,6 +1,0 @@
-package gldapo;
-
-class GldapoTypeConversionRegistry 
-{
-	
-}

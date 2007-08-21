@@ -17,7 +17,10 @@ package gldapo.schema.attribute;
 import org.apache.commons.lang.WordUtils
 import java.lang.reflect.Field
 import gldapo.exception.GldapoTypeMappingException
+import gldapo.exception.GldapoException
 import gldapo.schema.annotation.GldapoSynonymFor
+import gldapo.schema.annotation.GldapoPseudoType
+import gldapo.Gldapo
 
 /**
  * Represents the bridging between the data of the LDAP world and the Groovy world
@@ -25,7 +28,7 @@ import gldapo.schema.annotation.GldapoSynonymFor
  * property - Groovy side
  * attribute - LDAP side
  */
-abstract class AttributeMapping
+abstract class AbstractAttributeMapping
 {
 	
 	/**
@@ -56,7 +59,7 @@ abstract class AttributeMapping
 	/**
 	 * 
 	 */
-	AttributeMapping(Class schema, Field field)
+	AbstractAttributeMapping(Class schema, Field field)
 	{
 		this.schema = schema
 		this.field = field
@@ -81,7 +84,7 @@ abstract class AttributeMapping
 		}
 		else
 		{
-			return this.calculateTypeMappingFromUnderlyingType()
+			return this.calculateTypeMappingFromFieldType()
 		}
 	}
 		
@@ -89,35 +92,44 @@ abstract class AttributeMapping
 	{	
 		Class[] p = [String] as Class[]
 		
-		def byFieldMapper = "mapTo" + WordUtils.capitalize(this.field.name) + "Field"
+		def byFieldMapperName = toFieldByFieldMapperName(this.field.name)
+		def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
+		if (classByFieldMapper) return { classByFieldMapper.invoke(schema, it) }
 		
-		def classByFieldMethod = schema.metaClass.getMetaMethod(byFieldMapper, p)
-		if (classByFieldMethod) return { classByFieldMethod.invoke(schema, it) }
+		def byTypeMapperName = toFieldByTypeMapperName(this.typeMapping)
+		def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
+		if (classByTypeMapper) return { classByTypeMapper.invoke(schema, it) }
 		
-		def byTypeMapper = "mapTo" + WordUtils.capitalize(this.typeMapping) + "Type"
+		def defaultByTypeMapper = Gldapo.instance.typeMappings.getToFieldMapperForType(this.typeMapping)
+		if (defaultByTypeMapper) return defaultByTypeMapper
 
-		def classByTypeMethod = schema.metaClass.getMetaMethod(byTypeMapper, p)
-		if (classByTypeMethod) return { classByTypeMethod.invoke(schema, it) }
+		throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, "No available type mapping")
 		
-		def defaultByTypeMethod = Gldapo.instance.typeMappingRegistry.toFieldMappingforType(byTypeMapper)
-		if (defaultByTypeMethod) return defaultByTypeMethod
-
-		throw new GldapoTypeMappingException(schema, this.field.name, this.typeMapping, MAP_TO_FIELD, "No available type mapping")
 	}
 	
-	def toField(String[] attributeValues)
+	def mapFromContext(context, subject)
 	{
 		try
 		{
-			this.doToFieldMapping(attributeValues)
+			subject."${this.field.name}" = this.getFieldValue(context)
 		} 
 		catch (Exception cause)
 		{
-			throw new GldapoTypeMappingException(schema, this.field.name, this.typeMapping, MAP_TO_FIELD, cause)
+			throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, cause)
 		}
+	}
+	
+	static toFieldByFieldMapperName(String fieldName)
+	{
+		"mapTo" + WordUtils.capitalize(fieldName) + "Field"
+	}
+	
+	static toFieldByTypeMapperName(String typeName)
+	{
+		"mapTo" + WordUtils.capitalize(typeName) + "Type"
 	}
 	
 	abstract protected calculateTypeMappingFromFieldType()
 	
-	abstract protected doToFieldMapping(String[] attributeValues)
+	abstract protected getFieldValue(Object context)
 }

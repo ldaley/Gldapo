@@ -14,29 +14,22 @@
  * limitations under the License.
  */
 package gldapo.schema.attribute;
-import org.springframework.ldap.core.ContextMapper
+import java.math.BigInteger
 
-class GldapoContextMapper implements ContextMapper
+class DefaultTypeMappings 
 {
-	Class schemaClass
-	List attributeMappings
-	String base
-	
-	void setSchemaClass(Class schema)
+	static mapToStringType(value)
 	{
-		this.schemaClass = schemaClass
-		this.attributeMappings = schemaClass.attributeMappings
+		return value
 	}
-
-	Object mapFromContext(context) 
+	
+	static mapToIntegerType(value)
 	{
-		def entry = schemaClass.newInstance()
-		
-		attributeMappings.each {
-			def attribute = context.getStringAttributes(it.attributeName)
-			entry."${it.propertyName}" = it.convertAttributeToProperty()
-		}
-		
-		return entry
-     }
+		return value.toInteger()
+	}
+	
+	static mapToBigIntegerType(value)
+	{
+		return new BigInteger(value)
+	}
 }

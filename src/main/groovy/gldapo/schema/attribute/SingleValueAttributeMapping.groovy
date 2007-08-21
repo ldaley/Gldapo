@@ -14,17 +14,30 @@
  * limitations under the License.
  */
 package gldapo.schema.attribute;
+import java.lang.reflect.Field
 
-class SingleValueAttributeMapping extends AttributeMapping
-{
+class SingleValueAttributeMapping extends AbstractAttributeMapping
+{	
+	SingleValueAttributeMapping(Class schema, Field field)
+	{
+		super(schema,field)
+	}
+	
 	protected calculateTypeMappingFromFieldType()
 	{
  		return this.field.type.simpleName
 	}
 	
-	protected doToFieldMapping(String[] attributeValues)
+	protected getFieldValue(context)
 	{
-		if (attributeValues == null || attributeValues.empty) return null
-		return this.toFieldTypeMapper.call(attributeValues[0])
+		def rawValue = context.getStringAttribute(this.attributeName)
+		if (rawValue == null)
+		{
+			return null
+		}
+		else
+		{
+			return this.toFieldTypeMapper.call(rawValue)
+		}
 	}
 }

@@ -17,20 +17,20 @@ package gldapo.exception;
 
 class GldapoTypeMappingException extends GldapoException
 {
-	static final boolean MAPPING_TO_FIELD = true
-	static final boolean MAPPING_TO_ATTRIBUTE = false
+	static Boolean MAPPING_TO_FIELD = Boolean.TRUE
+	static Boolean MAPPING_TO_ATTRIBUTE = Boolean.FALSE
 	
-	GldapoTypeMappingException(Class schema, String fieldName, String typeName, boolean direction, Throwable cause) 
+	GldapoTypeMappingException(Class schema, String fieldName, String typeName, Boolean direction, Exception cause) 
 	{
-		super(getPrefix(schema, fieldName, typeName, direction), cause)
+		super(GldapoTypeMappingException.getPrefix(schema, fieldName, typeName, direction), cause)
 	}
 	
-	GldapoTypeMappingException(Class schema, String fieldName, String typeName, boolean direction, String message) 
+	GldapoTypeMappingException(Class schema, String fieldName, String typeName, Boolean direction, String message) 
 	{
-		super(getPrefix(schema, fieldName, typeName, direction) + message)
+		super(GldapoTypeMappingException.getPrefix(schema, fieldName, typeName, direction) + message)
 	}
 	
-	String getPrefix(Class schema, String fieldName, String typeName, boolean direction)
+	static String getPrefix(Class schema, String fieldName, String typeName, Boolean direction)
 	{
 		def directionName = (direction == MAPPING_TO_FIELD) ? "TO" : "FROM"
 		"Mapping ${directionName} ${fieldName} ({$typeName}) of ${schema.name}: ".toString()

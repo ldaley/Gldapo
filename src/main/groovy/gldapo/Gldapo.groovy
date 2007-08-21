@@ -48,6 +48,11 @@ class Gldapo
 	GldapoOperationRegistry operations = GldapoOperationRegistry.newDefaultOperationRegistry()
 	
 	/**
+	 * 
+	 */
+	GldapoTypeMappingRegistry typeMappings = new GldapoTypeMappingRegistry()
+	
+	/**
 	 * The singleton instance
 	 */
 	static private Gldapo instance

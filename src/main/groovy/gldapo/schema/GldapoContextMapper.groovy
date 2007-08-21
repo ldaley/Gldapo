@@ -13,23 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.attribute;
-import java.math.BigInteger
+package gldapo.schema;
+import org.springframework.ldap.core.ContextMapper
+import org.springframework.ldap.core.DirContextAdapter
 
-class DefaultTypeConversions 
+class GldapoContextMapper implements ContextMapper
 {
-	static convertToStringType(value)
-	{
-		return value
-	}
+	Class schemaClass
+	List attributeMappings
+	String base
 	
-	static convertToIntegerType(value)
+	void setSchemaClass(Class schema)
 	{
-		return value.toInteger()
+		this.schemaClass = schemaClass
+		this.attributeMappings = schemaClass.attributeMappings
 	}
-	
-	static convertToBigIntegerType(value)
+
+	Object mapFromContext(context) 
 	{
-		return new BigInteger(value)
-	}
+		def entry = schemaClass.newInstance()
+		
+		attributeMappings.each {
+			it.mapFromContext(context, entry)
+		}
+		
+		return entry
+     }
 }
