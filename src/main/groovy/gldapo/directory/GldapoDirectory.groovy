@@ -15,7 +15,7 @@
  */
 package gldapo.directory;
 
-import gldapo.schema.attribute.GldapoContextMapper
+import gldapo.schema.GldapoContextMapper
 import gldapo.exception.GldapoException
 import gldapo.exception.GldapoInvalidConfigException
 import gldapo.util.FilterUtil
@@ -32,14 +32,14 @@ import org.springframework.ldap.core.ContextMapper
 import org.springframework.beans.factory.BeanNameAware
 import javax.naming.directory.SearchControls
 
-class GldapoDirectoryImpl implements GldapoDirectory, BeanNameAware
+class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 {
 	static final CONFIG_SEARCH_CONTROLS_KEY = 'searchControls'
 	
 	/**
 	 * 
 	 */
-	GldapoSearchControls searchControls
+	def searchControls
 	
 	/**
 	 * 
@@ -49,17 +49,17 @@ class GldapoDirectoryImpl implements GldapoDirectory, BeanNameAware
 	/**
 	 * 
 	 */
-	LdapTemplate template
+	def template
 	
 	/**
 	 * Simply retrieves the property from the context source
 	 */
-	String getBaseDN()
+	def getBaseDN()
 	{
 		contextSource.baseDN
 	}
 	
-	List search(Class schema, String base, String filter, GldapoSearchControls controls, Integer pageSize)
+	List search(Class schema, String base, String filter, GldapoSearchControlProvider controls, Integer pageSize)
 	{
 		ContextMapper mapper = new GldapoContextMapper(schema: delegate)
 		ContextMapperCallbackHandler handler = new ContextMapperCallbackHandler(mapper)
@@ -100,9 +100,9 @@ class GldapoDirectoryImpl implements GldapoDirectory, BeanNameAware
 		def template = new LdapTemplate(contextSource: contextSource)
 		template.afterPropertiesSet()
 		
-		def searchControls = new GldapoSearchControlsImpl(config[CONFIG_SEARCH_CONTROLS_KEY])
+		def searchControls = new GldapoSearchControls(config[CONFIG_SEARCH_CONTROLS_KEY])
 		
-		def directory = new GldapoDirectoryImpl(beanName: name, template: template, searchControls: searchControls)
+		def directory = new GldapoDirectory(beanName: name, template: template, searchControls: searchControls)
 
 		return directory
 	}

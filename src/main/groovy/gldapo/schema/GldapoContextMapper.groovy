@@ -19,22 +19,14 @@ import org.springframework.ldap.core.DirContextAdapter
 
 class GldapoContextMapper implements ContextMapper
 {
-	Class schemaClass
-	List attributeMappings
-	String base
-	
-	void setSchemaClass(Class schema)
-	{
-		this.schemaClass = schemaClass
-		this.attributeMappings = schemaClass.attributeMappings
-	}
+	GldapoSchemaRegistration schemaRegistration
 
 	Object mapFromContext(context) 
 	{
-		def entry = schemaClass.newInstance()
+		def entry = schemaRegistration.schema.newInstance()
 		
-		attributeMappings.each {
-			it.mapFromContext(context, entry)
+		schemaRegistration.attributeMappings.each { name, mapping ->
+			mapping.mapFromContext(context, entry)
 		}
 		
 		return entry

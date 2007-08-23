@@ -45,7 +45,7 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory>
 		def registry = new GldapoDirectoryRegistry()
 		
 		config[CONFIG_DIRECTORIES_KEY]?.each { dirName, dirConfig -> 
-			registry << GldapoDirectoryImpl.newInstance(dirName, dirConfig)
+			registry << GldapoDirectory.newInstance(dirName, dirConfig)
 			if (dirConfig.defaultDirectory) registry.defaultDirectoryName = dirName
 		}
 		

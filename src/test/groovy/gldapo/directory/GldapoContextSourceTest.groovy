@@ -15,10 +15,7 @@
  */
 package gldapo.directory;
 
-/**
- * @todo Tests needed
- */
-class GldapoDirectoryImplTest extends GroovyTestCase 
+class GldapoContextSourceTest extends GroovyTestCase 
 {
 	void testNewFromConfig() 
 	{
@@ -29,12 +26,9 @@ class GldapoDirectoryImplTest extends GroovyTestCase
 		c.userDn = "cn=user"
 		c.password = "password"
 		
-		c.searchControls.countLimit = 50
+		def cs = GldapoContextSource.newInstance(c)
 		
-		def d = GldapoDirectoryImpl.newInstance("testTemplate", c)
-		assertNotNull(d)
-		assertEquals(true, d instanceof GldapoDirectory)
-		assertEquals(50, d.searchControls.countLimit)
-		assertEquals("testTemplate", d.beanName)
+		// The LdapTemplate class puts that space in.
+		assertEquals("ou=example, ou=com", cs.baseDN)
 	}
 }

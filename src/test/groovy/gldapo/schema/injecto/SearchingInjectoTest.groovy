@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto;
-import gldapo.operation.GldapoOperation
-import gldapo.GldapoOperationRegistry
+import gldapo.test.GldapoMockOperationInstaller as OI
 import injecto.*
 
 
@@ -31,10 +30,17 @@ class SearchingInjectoTest extends GroovyTestCase
 	
 	void testFindAll() 
 	{
-		Gldapo.instance.operationRegistry[GldapoOperationRegistry.SEARCH] = [execute: { -> [1,2,3] }] as GldapoOperation
-
-		def r = SearchingInjectoTestSchema.findAll([:])
-		assertEquals([1,2,3], r)
+		OI.installSearchWithResult([1,2,3])
+		assertEquals([1,2,3], SearchingInjectoTestSchema.findAll())
+	}
+	
+	void testFind()
+	{
+		OI.installSearchWithResult([1,2,3])
+		assertEquals(1, SearchingInjectoTestSchema.find())
+		
+		OI.installSearchWithResult([])
+		assertEquals(null, SearchingInjectoTestSchema.find())
 	}
 }
 

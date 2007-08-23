@@ -16,19 +16,23 @@
 package gldapo.schema.injecto;
 import injecto.*
 import gldapo.exception.GldapoNoDefaultDirectoryException
+import gldapo.test.GldapoMockOperationInstaller as OI
 
+/**
+ * Not much to test here really, it's pretty much the same as find.
+ */
 class GetInjectoTest extends GroovyTestCase 
 {
 	GetInjectoTest()
 	{
-		use(Injecto) { GetInjectoTest.inject(GetInjecto) }
+		use(Injecto) { GetInjectoTestSchema.inject(GetInjecto) }
 	}
 	
-	void testBlowsUpWhenNoDefaultTemplate()
+	
+	void testGetWithResult()
 	{
-		shouldFail(GldapoNoDefaultDirectoryException) {
-			GetInjectoTest.get("abc")
-		}
+		OI.installSearchWithResult([1,2,3])
+		assertEquals(1, GetInjectoTestSchema.getAbsolutely("abc"))
 	}
 }
 

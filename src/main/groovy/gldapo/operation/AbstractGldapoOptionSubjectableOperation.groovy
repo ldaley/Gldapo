@@ -20,4 +20,14 @@ abstract class AbstractGldapoOptionSubjectableOperation implements GldapoOptionS
 	Map options
 	
 	abstract Object execute()
+	abstract void inspectOptions()
+	
+	/**
+	 * @todo add test for null
+	 */
+	void setOptions(Map options)
+	{
+		this.options = options
+		this.inspectOptions()
+	}
 }

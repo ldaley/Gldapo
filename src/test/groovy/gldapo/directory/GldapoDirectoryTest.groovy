@@ -13,27 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import gldapo.schema.provided.Person
-import javax.naming.directory.SearchControls
+package gldapo.directory;
 
-class LiveTest extends GroovyTestCase 
+/**
+ * @todo Tests needed
+ */
+class GldapoDirectoryTest extends GroovyTestCase 
 {
-	
-	LiveTest()
+	void testNewFromConfig() 
 	{
-		Gldapo.initialize(this.class.getClassLoader().findResource("washington-edu-conf.groovy"))
-	}
-	
-	void testFind() 
-	{
-/*		def people = Person.find(
-			base: "ou=Faculty and Staff,ou=People", 
-			searchScope: SearchControls.SUBTREE_SCOPE,
-			countLimit: 2 // Only get two so we don't hit their server hard
-		)
+		def c = new ConfigObject()
 		
-		println people[0].objectclass
-		assertEquals(2, people.size())*/
+		c.url = "ldap://example.com"
+		c.base = "ou=example,ou=com"
+		c.userDn = "cn=user"
+		c.password = "password"
+		
+		c.searchControls.countLimit = 50
+		
+		def d = GldapoDirectory.newInstance("testTemplate", c)
+		assertNotNull(d)
+		assertEquals(true, d instanceof GldapoDirectory)
+		assertEquals(50, d.searchControls.countLimit)
+		assertEquals("testTemplate", d.beanName)
 	}
 }

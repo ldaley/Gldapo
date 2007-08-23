@@ -16,36 +16,32 @@
 package gldapo;
 import gldapo.operation.*
 
-class GldapoOperationRegistry
+class GldapoOperationRegistryTest extends GroovyTestCase 
 {
-	public static final SEARCH = "search"
+	def ops
 	
-	private operations = [
-		(SEARCH): GldapoSearch
-	]
-	
-	def getAt(String opname, Map options)
+	void setUp()
 	{
-		
-		def op = this.operations[opname]?.newInstance()
-		if (op instanceof GldapoOptionSubjectableOperation)
-		{
-			if (options == null) options = [:]
-			op.options = options
-		}
-		
-		return op
+		ops = new GldapoOperationRegistry()
 	}
 	
-	def getAt(String opname)
-	{
-		this.getAt(opname, null)
-	}	
-	
-	def install(opname, opclass)
-	{
-		this.operations[opname] = opclass
+	void testInstall() 
+	{	
+		def o = [execute: {}] as GldapoOperation
+		def f = new Expando(newInstance: { -> o })
+		ops.install("custom", f)
+		assertSame(o, ops["custom"])
 	}
 	
+	void testOptionPassing()
+	{
+		def options = [t: "t"]
+		def passedInOptions
+		def o = [execute: {}, setOptions: { passedInOptions = it }] as GldapoOptionSubjectableOperation
+		def f = new Expando(newInstance: { -> o })
+		ops.install("custom", f)
+		def op = ops["custom", options]
+		assertSame(options, passedInOptions)
+	}
 	
 }

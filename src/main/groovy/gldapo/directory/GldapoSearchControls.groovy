@@ -15,17 +15,15 @@
  */
 package gldapo.directory;
 import gldapo.exception.GldapoException
-
 import javax.naming.directory.SearchControls
-
-
-class GldapoSearchControlsImpl implements GldapoSearchControls
+ 
+class GldapoSearchControls implements GldapoSearchControlProvider
 {
 	public static final OBJECT_SEARCHSCOPE = "object"
 	public static final ONELEVEL_SEARCHSCOPE = "onelevel"
 	public static final SUBTREE_SEARCHSCOPE = "subtree"
 	
-	static SEARCHSCOPE_MAPPING = [
+	static Map SEARCHSCOPE_MAPPING = [
 		(OBJECT_SEARCHSCOPE): SearchControls.OBJECT_SCOPE,
 		(ONELEVEL_SEARCHSCOPE): SearchControls.ONELEVEL_SCOPE,
 		(SUBTREE_SEARCHSCOPE): SearchControls.SUBTREE_SCOPE
@@ -39,7 +37,7 @@ class GldapoSearchControlsImpl implements GldapoSearchControls
 	/**
 	 * @todo Use an inspector or something to do this dynamically
 	 */
-	def mergeWith(GldapoSearchControls controls)
+	void mergeWith(controls)
 	{
 		if (controls.countLimit != null) this.countLimit = controls.countLimit
 		if (controls.derefLinkFlag != null) this.derefLinkFlag = controls.derefLinkFlag
@@ -47,13 +45,13 @@ class GldapoSearchControlsImpl implements GldapoSearchControls
 		if (controls.timeLimit != null) this.timeLimit = controls.timeLimit
 	}
 	
-	def setSearchScope(String sc)
+	void setSearchScope(String sc)
 	{
 		if (!SEARCHSCOPE_MAPPING.containsKey(sc)) throw new GldapoException("'$sc' is not a valid search scope")
 		this.searchScope = sc
 	}
 
-	def getSearchScopeAsInteger()
+	Integer getSearchScopeAsInteger()
 	{
 		SEARCHSCOPE_MAPPING[this.searchScope]
 	}
@@ -63,10 +61,10 @@ class GldapoSearchControlsImpl implements GldapoSearchControls
 		if (c.equals(SearchControls))
 		{
 			def controls = new SearchControls()
-			if (this.countLimit != null) controls.countLimit = controls.countLimit
-			if (this.derefLinkFlag != null) controls.derefLinkFlag = controls.derefLinkFlag
-			if (this.searchScope != null) controls.searchScope = controls.searchScopeAsInteger
-			if (this.timeLimit != null) controls.timeLimit = controls.timeLimit
+			if (this.countLimit != null) controls.countLimit = this.countLimit
+			if (this.derefLinkFlag != null) controls.derefLinkFlag = this.derefLinkFlag
+			if (this.searchScope != null) controls.searchScope = this.searchScopeAsInteger
+			if (this.timeLimit != null) controls.timeLimit = this.timeLimit
 			return controls
 		}
 		else
@@ -77,6 +75,11 @@ class GldapoSearchControlsImpl implements GldapoSearchControls
 	
 	static newInstance(ConfigObject config)
 	{
-		
+		def cs = new GldapoSearchControls()
+		if (config.containsKey("countLimit")) cs.countLimit = config.countLimit
+		if (config.containsKey("derefLinkFlag")) cs.derefLinkFlag = config.derefLinkFlag
+		if (config.containsKey("searchScope")) cs.searchScope = config.searchScope
+		if (config.containsKey("timeLimit")) cs.timeLimit = config.timeLimit
+		return cs
 	}
 }

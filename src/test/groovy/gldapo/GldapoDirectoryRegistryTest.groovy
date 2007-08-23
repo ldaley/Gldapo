@@ -17,7 +17,7 @@ package gldapo;
 import gldapo.exception.GldapoNoDefaultDirectoryException
 import gldapo.exception.GldapoException
 import gldapo.directory.GldapoDirectory
-import gldapo.directory.GldapoDirectoryImpl
+import gldapo.directory.GldapoDirectory
 
 class GldapoDirectoryRegistryTest extends GroovyTestCase 
 {
@@ -41,7 +41,7 @@ class GldapoDirectoryRegistryTest extends GroovyTestCase
 	void testGetDefault()
 	{
 		def registry = new GldapoDirectoryRegistry()
-		def directory = new GldapoDirectoryImpl(beanName: "test")
+		def directory = new GldapoDirectory(beanName: "test")
 
 		registry.defaultDirectoryName = "test"
 		registry << directory

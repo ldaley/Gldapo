@@ -45,12 +45,12 @@ class Gldapo
 	/**
 	 * 
 	 */
-	GldapoOperationRegistry operations = GldapoOperationRegistry.newDefaultOperationRegistry()
+	GldapoOperationRegistry operations
 	
 	/**
 	 * 
 	 */
-	GldapoTypeMappingRegistry typeMappings = new GldapoTypeMappingRegistry()
+	GldapoTypeMappingRegistry typeMappings
 	
 	/**
 	 * The singleton instance
@@ -130,4 +130,35 @@ class Gldapo
 		gldapo.directories = GldapoDirectoryRegistry.newInstance(config)
 		gldapo.settings = GldapoSettings.newInstance(config)
 	}
+	
+	def getSchemas()
+	{
+		if (this.schemas == null) this.schemas = new GldapoSchemaRegistry()
+		return this.schemas
+	}
+	
+	def getDirectories()
+	{
+		if (this.directories == null) this.directories = new GldapoDirectoryRegistry()
+		return this.directories
+	}
+	
+	def getSettings()
+	{
+		if (this.settings == null) this.settings = new GldapoSettings()
+		return this.settings
+	}
+	
+	def getOperations()
+	{
+		if (this.operations == null) this.operations = new GldapoOperationRegistry()
+		return this.operations
+	}
+	
+	def getTypeMappings()
+	{
+		if (this.typeMappings == null) this.typeMappings = new GldapoTypeMappingRegistry()
+		this.typeMappings
+	}
+	
 }

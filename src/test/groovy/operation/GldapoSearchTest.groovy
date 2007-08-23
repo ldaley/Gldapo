@@ -13,27 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import gldapo.schema.provided.Person
-import javax.naming.directory.SearchControls
+package gldapo.operation;
+import gldapo.Gldapo
+import gldapo.directory.GldapoSearchProvider
 
-class LiveTest extends GroovyTestCase 
+class GldapoSearchTest extends GroovyTestCase 
 {
-	
-	LiveTest()
+	def getSearch(Map options)
 	{
-		Gldapo.initialize(this.class.getClassLoader().findResource("washington-edu-conf.groovy"))
+		options.directory = [:] as GldapoSearchProvider
+		new GldapoSearch(options: options)
 	}
 	
-	void testFind() 
+	void testPageSize()
 	{
-/*		def people = Person.find(
-			base: "ou=Faculty and Staff,ou=People", 
-			searchScope: SearchControls.SUBTREE_SCOPE,
-			countLimit: 2 // Only get two so we don't hit their server hard
-		)
+		def withPageSize = getSearch(pageSize: 30)
+		assertNotNull(withPageSize.pageSize)
+		assertEquals(30, withPageSize.pageSize)
 		
-		println people[0].objectclass
-		assertEquals(2, people.size())*/
+		def withoutPageSize = getSearch([:])
+		assertNotNull(withoutPageSize.pageSize)
+		assertEquals(Gldapo.instance.settings.pageSize, withoutPageSize.pageSize)
 	}
 }

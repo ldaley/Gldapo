@@ -16,20 +16,31 @@
 package gldapo.schema.injecto;
 import gldapo.Gldapo
 import gldapo.GldapoOperationRegistry
+import injecto.annotation.InjectAs
 
 class SearchingInjecto 
 {	
 	static findAll = { Map options ->
-		
+		println "findall"
 		def searchOptions = options.clone()
 		searchOptions.schema = delegate
 		
-		Gldapo.instance.operations.getNewOperation(GldapoOperationRegistry.SEARCH, searchOptions).execute()
+		Gldapo.instance.operations[GldapoOperationRegistry.SEARCH, searchOptions].execute()
+	}
+	
+	@InjectAs("findAll")
+	static findAllNoArgs = { -> 
+		delegate.findAll([:])
 	}
 	
 	static find = { Map options ->
 		options.countLimit = 1
 		def r = delegate.findAll(options)
 		(r.size() > 0) ? r[0] : null
+	}
+	
+	@InjectAs("find")
+	static findNoArgs = { -> 
+		delegate.find([:])
 	}
 }

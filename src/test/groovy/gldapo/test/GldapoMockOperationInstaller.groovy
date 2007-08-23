@@ -13,27 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
-import gldapo.schema.provided.Person
-import javax.naming.directory.SearchControls
-
-class LiveTest extends GroovyTestCase 
+package gldapo.test;
+import gldapo.GldapoOperationRegistry
+import gldapo.operation.GldapoOperation
+import gldapo.Gldapo
+/**
+ * Used to install fake operations in tests
+ */
+class GldapoMockOperationInstaller
 {
-	
-	LiveTest()
+	static install(opName, opInstance)
 	{
-		Gldapo.initialize(this.class.getClassLoader().findResource("washington-edu-conf.groovy"))
+		Gldapo.instance.operations.install(opName, new Expando(newInstance: { -> opInstance }))
 	}
 	
-	void testFind() 
+	static installSearchWithResult(result)
 	{
-/*		def people = Person.find(
-			base: "ou=Faculty and Staff,ou=People", 
-			searchScope: SearchControls.SUBTREE_SCOPE,
-			countLimit: 2 // Only get two so we don't hit their server hard
-		)
-		
-		println people[0].objectclass
-		assertEquals(2, people.size())*/
+		install(GldapoOperationRegistry.SEARCH, [execute: { -> result }] as GldapoOperation)
 	}
 }

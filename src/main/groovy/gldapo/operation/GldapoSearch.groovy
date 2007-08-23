@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 package gldapo.operation;
-import gldapo.directory.GldapoDirectory
-import gldapo.directory.GldapoSearchControlsImpl
+import gldapo.Gldapo
+import gldapo.directory.GldapoSearchProvider
+import gldapo.directory.GldapoSearchControls
+import gldapo.util.FilterUtil
 
 class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
 {
@@ -28,10 +30,15 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
 	private base
 	private returningAttributes
 	
-	GldapoSearch(Map vars)
+	def getDirectory() { directory }
+	def getFilter() { filter }
+	def getPageSize() { pageSize }
+	def getSearchControls() { searchControls }
+	def getBase() { base }
+	def getReturningAttributes() { returningAttributes }
+	
+	void inspectOptions() 
 	{
-		super(vars)
-		
 		this.directory = this.calculateDirectory()
 		this.filter = this.calculateFilter()
 		this.pageSize = this.calculatePageSize()
@@ -41,12 +48,13 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
 	
 	def calculateDirectory()
 	{
-		if (options.containsKey("directory"))
+		println options
+		if (options.directory != null)
 		{
 			def directoryValue = options.directory
 			if (directoryValue instanceof String) return Gldapo.instance.directories[directoryValue]
 			
-			if (directoryValue instanceof GldapoDirectory) return directoryValue
+			if (directoryValue instanceof GldapoSearchProvider) return directoryValue
 
 			// TODO more suitable exception needed
 			throw new IllegalArgumentException()
@@ -64,13 +72,14 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
 	
 	def calculatePageSize()
 	{
-		if (options.containsKey("pageSize")) return options.pageSize
-		return Gldapo.instance.settings.pageSize
+		println options
+		if (options.pageSize != null) return options.pageSize
+		else return Gldapo.instance.settings.pageSize
 	}
 	
 	def calculateSearchControls()
 	{
-		this.directory.searchControls.mergeWith(new GldapoSearchControlsImpl(this.options))
+		this.directory.searchControls.mergeWith(new GldapoSearchControls(this.options))
 	}
 	
 	def calculateBase()

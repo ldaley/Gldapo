@@ -14,34 +14,33 @@
  * limitations under the License.
  */
 package gldapo.schema;
-import gldapo.schema.attribute.AttributeMappingInspector
 import gldapo.schema.injecto.GldapoSchemaMetaInjecto
 import injecto.Injecto
 
-class GldapoSchemaRegistration 
+class GldapoSchemaRegistrationTest extends GroovyTestCase 
 {
-	private schema
-	private attributeMappings
+	def r
 	
-	GldapoSchemaRegistration(schema)
+	GldapoSchemaRegistrationTest()
 	{
-		prepareSchemaClass(schema)
-		this.schema = schema
-		this.attributeMappings = AttributeMappingInspector.getAttributeMappings(schema)
+		r = new GldapoSchemaRegistration(GldapoSchemaRegistrationTestSubject)
 	}
 	
-	def getSchema()
+	void testItGotInjected() 
 	{
-		return this.schema
+		assertTrue(Injecto.isInjected(GldapoSchemaRegistrationTestSubject, GldapoSchemaMetaInjecto))
 	}
 	
-	def getAttributeMappings()
+	void testReturnsRightClass()
 	{
-		return this.attributeMappings
+		assertEquals(GldapoSchemaRegistrationTestSubject, r.schema)
 	}
 	
-	static prepareSchemaClass(schema)
+	void testGetsAttributeMappings()
 	{
-		Injecto.inject(schema, GldapoSchemaMetaInjecto)
+		assertTrue(r.attributeMappings instanceof Map)
+		assertNotNull(r.attributeMappings)
 	}
 }
+
+class GldapoSchemaRegistrationTestSubject {}

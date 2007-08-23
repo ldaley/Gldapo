@@ -20,7 +20,7 @@ class AttributeMappingInspector
 {
 	static excludedFields = ["metaClass"]
 	
-	static getAttributeMappings(Class schema)
+	static Map getAttributeMappings(Class schema)
 	{
 		def mappings = [:]
 		schema.declaredFields.each {
