@@ -17,38 +17,28 @@ package gldapo.operation;
 import gldapo.Gldapo
 import gldapo.directory.GldapoSearchProvider
 import gldapo.directory.GldapoSearchControls
-import gldapo.util.FilterUtil
+import gldapo.schema.annotation.GldapoSchemaFilter
 
 class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
-{
-	private schema
-	
-	private directory
-	private filter
-	private pageSize
-	private searchControls
-	private base
-	private returningAttributes
-	
-	def getDirectory() { directory }
-	def getFilter() { filter }
-	def getPageSize() { pageSize }
-	def getSearchControls() { searchControls }
-	def getBase() { base }
-	def getReturningAttributes() { returningAttributes }
+{	
+	GldapoSearch()
+	{
+		super()
+		required = ["schema"]
+		optionals = ["directory", "filter", "pageSize", "base", "absoluteBase", "countLimit", "derefLinkFlag", "searchScope", "timeLimit"]
+	}
 	
 	void inspectOptions() 
 	{
-		this.directory = this.calculateDirectory()
-		this.filter = this.calculateFilter()
-		this.pageSize = this.calculatePageSize()
-		this.searchControls = this.calculateSearchControls()
-		this.base = this.calculateBase()
+		this.options.directory = this.calculateDirectory()
+		this.options.filter = this.calculateFilter()
+		this.options.pageSize = this.calculatePageSize()
+		this.options.searchControls = this.calculateSearchControls()
+		this.options.base = this.calculateBase()
 	}
 	
 	def calculateDirectory()
 	{
-		println options
 		if (options.directory != null)
 		{
 			def directoryValue = options.directory
@@ -67,26 +57,29 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
 	
 	def calculateFilter()
 	{
-		FilterUtil.andSchemaFilterWithFilter(this.schema, options?.filter)
+		def schemaFilter = this.options.schema.getAnnotation(GldapoSchemaFilter)?.value()
+		
+		if (this.options.filter) return (schemaFilter) ? "(&${schemaFilter}${this.options.filter})" : this.options.filter
+		else return (schemaFilter) ? schemaFilter : "(objectclass=*)"
 	}
 	
 	def calculatePageSize()
 	{
-		println options
 		if (options.pageSize != null) return options.pageSize
 		else return Gldapo.instance.settings.pageSize
 	}
 	
 	def calculateSearchControls()
 	{
-		this.directory.searchControls.mergeWith(new GldapoSearchControls(this.options))
+		def specificControls = GldapoSearchControls.newInstance(this.options)
+		(this.options.directory.searchControls) ? this.options.directory.searchControls.mergeWith(specificControls) : specificControls
 	}
 	
 	def calculateBase()
 	{
-		if (options.containsKey("absoluteBase")) return options.absoluteBase - this.directory.baseDN
-		if (options.containsKey("base")) return options.base
-		return ""
+		if (options.containsKey("absoluteBase")) return options.absoluteBase - ",${this.options.directory.base}"
+		else if (options.containsKey("base")) return options.base
+		else return ""
 	}
 	
 	def execute()

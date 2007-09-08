@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.directory;
+package gldapo.exception;
 
-public interface GldapoSearchControlProvider
+class GldapoOperationException extends GldapoException
 {
-	public Integer getCountLimit();
-	public Boolean getDerefLinkFlag();
-	public String getSearchScope();
-	public Integer getTimeLimit();
+	GldapoOperationException(String msg)
+	{
+		super(msg)
+	}
 }

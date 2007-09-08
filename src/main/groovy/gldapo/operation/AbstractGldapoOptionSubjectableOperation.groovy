@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 package gldapo.operation;
+import gldapo.exception.GldapoOperationException
 
 abstract class AbstractGldapoOptionSubjectableOperation implements GldapoOptionSubjectableOperation
 {
+	List required
+	List optionals
 	Map options
-	
+		
 	abstract Object execute()
 	abstract void inspectOptions()
 	
@@ -28,6 +31,21 @@ abstract class AbstractGldapoOptionSubjectableOperation implements GldapoOptionS
 	void setOptions(Map options)
 	{
 		this.options = options
+		this.validateOptions()
 		this.inspectOptions()
+	}
+	
+	void validateOptions()
+	{
+		def requiredNotSeen = required.clone()
+		
+		options?.keySet()?.each {
+			if (required?.contains(it)) requiredNotSeen.remove(it)
+			else if (optionals?.contains(it) == false) throw new GldapoOperationException("Option '${it}' of ${this.class.simpleName} is not supported")
+			
+			
+		}
+		
+		if (requiredNotSeen.size() != 0) throw new GldapoOperationException("Required options '${requiredNotSeen}' of ${this.class.simpleName} is not present in options")
 	}
 }

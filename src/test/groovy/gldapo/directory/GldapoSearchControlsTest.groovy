@@ -78,11 +78,11 @@ class GldapoSearchControlsTest extends GroovyTestCase
 		sc2.searchScope = "onelevel"
 		sc2.timeLimit = 300
 		
-		sc.mergeWith(sc2)
-		assertEquals(100, sc.countLimit)
-		assertFalse(sc.derefLinkFlag)
-		assertEquals("onelevel", sc.searchScope)
-		assertEquals(300, sc.timeLimit)
+		def s = sc.mergeWith(sc2)
+		assertEquals(100, s.countLimit)
+		assertFalse(s.derefLinkFlag)
+		assertEquals("onelevel", s.searchScope)
+		assertEquals(300, s.timeLimit)
 		
 		
 	}

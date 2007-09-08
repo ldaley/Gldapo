@@ -19,4 +19,6 @@ import java.util.List;
 public interface GldapoSearchProvider
 {
 	public List search(Class schema, String base, String filter, GldapoSearchControlProvider controls, Integer pageSize);
+	public GldapoSearchControlProvider getSearchControls();
+	public String getBase();
 }

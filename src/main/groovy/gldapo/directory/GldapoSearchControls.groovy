@@ -17,7 +17,7 @@ package gldapo.directory;
 import gldapo.exception.GldapoException
 import javax.naming.directory.SearchControls
  
-class GldapoSearchControls implements GldapoSearchControlProvider
+class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable
 {
 	public static final OBJECT_SEARCHSCOPE = "object"
 	public static final ONELEVEL_SEARCHSCOPE = "onelevel"
@@ -34,15 +34,29 @@ class GldapoSearchControls implements GldapoSearchControlProvider
 	String searchScope
 	Integer timeLimit
 	
+	def clone()
+	{
+		def n = new GldapoSearchControls()
+		if (this.countLimit != null) n.countLimit = this.countLimit
+		if (this.derefLinkFlag != null) n.derefLinkFlag = this.derefLinkFlag
+		if (this.searchScope != null) n.searchScope = this.searchScope
+		if (this.timeLimit != null) n.timeLimit = this.timeLimit
+		return n
+	}
+	
 	/**
 	 * @todo Use an inspector or something to do this dynamically
 	 */
-	void mergeWith(controls)
+	GldapoSearchControls mergeWith(controls)
 	{
-		if (controls.countLimit != null) this.countLimit = controls.countLimit
-		if (controls.derefLinkFlag != null) this.derefLinkFlag = controls.derefLinkFlag
-		if (controls.searchScope != null) this.searchScope = controls.searchScope
-		if (controls.timeLimit != null) this.timeLimit = controls.timeLimit
+		def m = this.clone()
+		
+		if (controls.countLimit != null) m.countLimit = controls.countLimit
+		if (controls.derefLinkFlag != null) m.derefLinkFlag = controls.derefLinkFlag
+		if (controls.searchScope != null) m.searchScope = controls.searchScope
+		if (controls.timeLimit != null) m.timeLimit = controls.timeLimit
+		
+		return m
 	}
 	
 	void setSearchScope(String sc)
@@ -73,7 +87,7 @@ class GldapoSearchControls implements GldapoSearchControlProvider
 		}
 	}
 	
-	static newInstance(ConfigObject config)
+	static newInstance(Map config)
 	{
 		def cs = new GldapoSearchControls()
 		if (config.containsKey("countLimit")) cs.countLimit = config.countLimit

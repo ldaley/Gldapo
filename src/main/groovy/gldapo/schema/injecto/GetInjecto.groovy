@@ -22,19 +22,16 @@ import injecto.annotation.InjectAs
 class GetInjecto 
 {
 	static getAbsolutely = { String dn, GldapoDirectory directory ->
-		println "get1"
 		delegate.find(absoluteBase: dn, searchScope: "object", directory: directory)
 	}
 	
 	@InjectAs("getAbsolutely")
 	static getUsingDirectoryName = { String dn, String directoryName ->
-				println "get2"
 		delegate.find(absoluteBase: dn, searchScope: "object", directory: directoryName)
 	}
 	
 	@InjectAs("getAbsolutely")
 	static getUsingDefaultDirectory = { String dn -> 
-				println "get3"
 		delegate.getAbsolutely(dn, (String)null)
 	}
 }

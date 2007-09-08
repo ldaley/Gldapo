@@ -39,7 +39,7 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 	/**
 	 * 
 	 */
-	def searchControls
+	GldapoSearchControlProvider searchControls
 	
 	/**
 	 * 
@@ -54,9 +54,9 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 	/**
 	 * Simply retrieves the property from the context source
 	 */
-	def getBaseDN()
+	String getBase()
 	{
-		contextSource.baseDN
+		template?.contextSource?.baseDN
 	}
 	
 	List search(Class schema, String base, String filter, GldapoSearchControlProvider controls, Integer pageSize)

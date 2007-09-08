@@ -21,7 +21,6 @@ import injecto.annotation.InjectAs
 class SearchingInjecto 
 {	
 	static findAll = { Map options ->
-		println "findall"
 		def searchOptions = options.clone()
 		searchOptions.schema = delegate
 		
