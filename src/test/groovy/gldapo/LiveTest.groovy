@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package gldapo
-import gldapo.schema.provided.Person
 
 class LiveTest extends GroovyTestCase 
 {
@@ -26,15 +25,17 @@ class LiveTest extends GroovyTestCase
 	
 	void testFind() 
 	{
-		def people = Person.findAll(
+		def people = WashingtonEduPerson.findAll(
+			filter: "(&(telephonenumber=*)(uid=*))",
 			base: "ou=Faculty and Staff, ou=People", 
 			searchScope: "subtree",
 			countLimit: 2 // Only get two so we don't hit their server hard
 		)
 		
-		
 		people.each {
-			println it.title
+			println it.uid
+			println it.telephoneNumber
+			
 		}
 		assertEquals(2, people.size())
 	}

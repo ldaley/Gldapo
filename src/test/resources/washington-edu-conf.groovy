@@ -20,4 +20,4 @@ directories {
 	}
 }
 
-schemas = [gldapo.schema.provided.Person]
+schemas = [WashingtonEduPerson]

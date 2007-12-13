@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.attribute
+package gldapo.schema.attribute.type
+
 import java.math.BigInteger
+import java.math.BigDecimal
 
 class DefaultTypeMappingsTest extends GroovyTestCase 
 {
@@ -37,5 +39,35 @@ class DefaultTypeMappingsTest extends GroovyTestCase
 		def m = DefaultTypeMappings.mapToBigIntegerType("3")
 		assertEquals(BigInteger, m.class)
 		assertEquals(new BigInteger("3"), m)
+	}
+	
+	void testBigDecimalMapping() {
+		def m = DefaultTypeMappings.mapToBigDecimalType("2.3")
+		assertEquals(BigDecimal, m.class)
+		assertEquals(new BigDecimal("2.3"), m)
+	}
+	
+	void testDoubleMapping() {
+		def m = DefaultTypeMappings.mapToDoubleType("2.3")
+		assertEquals(Double, m.class)
+		assertEquals(new Double("2.3"), m)
+	}
+	
+	void testFloatMapping() {
+		def m = DefaultTypeMappings.mapToFloatType("2.3")
+		assertEquals(Float, m.class)
+		assertEquals(new Float("2.3"), m)
+	}
+	
+	void testLongMapping() {
+		def m = DefaultTypeMappings.mapToLongType("123")
+		assertEquals(Long, m.class)
+		assertEquals(new Long("123"), m)
+	}
+	
+	void testShortMapping() {
+		def m = DefaultTypeMappings.mapToShortType("123")
+		assertEquals(Short, m.class)
+		assertEquals(new Short("123"), m)
 	}
 }

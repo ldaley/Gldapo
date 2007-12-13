@@ -1,41 +1,41 @@
-	--------------
-	Initialization
-	--------------
-	
+    --------------
+    Initialization
+    --------------
+    
 Initialization
 
-	Gldapo requires initialization before it can be used. This really means the following ...
-	
-	* Registering Templates
+    Gldapo requires initialization before it can be used. This really means the following ...
+    
+    * Registering Templates
 
-	* Registering Schema Classes
-	
-	Initialization is done through the core {{{../gapi/gldapo/Gldapo.html}Gldapo}} class. It can be done in a few ways. 
-	
+    * Registering Schema Classes
+    
+    Initialization is done through the core {{{../gapi/gldapo/Gldapo.html}Gldapo}} class. It can be done in a few ways. 
+    
 * Configuration Files
 
-	The most convenient way in most cases is to use a Groovy {{{http://groovy.codehaus.org/ConfigSlurper}ConfigSlurper}} configuration file.
-	
-	Here is an example configuration file ...
-	
+    The most convenient way in most cases is to use a Groovy {{{http://groovy.codehaus.org/ConfigSlurper}ConfigSlurper}} configuration file.
+    
+    Here is an example configuration file ...
+    
 +-------------------------------+
 templates {
-	myTemplate {
-		contextSource {
-			url = "ldap://example.com"
-			base = "ou=example,ou=com"
-			userDn = "uid=user,ou=example,ou=com"
-			password = "password"
-		}
-	}
-	myOtherTemplate {
-		contextSource {
-			url = "ldap://example.com"
-			base = "ou=example,ou=com"
-			userDn = "uid=user,ou=example,ou=com"
-			password = "password"
-		}
-	}
+    myTemplate {
+        contextSource {
+            url = "ldap://example.com"
+            base = "ou=example,ou=com"
+            userDn = "uid=user,ou=example,ou=com"
+            password = "password"
+        }
+    }
+    myOtherTemplate {
+        contextSource {
+            url = "ldap://example.com"
+            base = "ou=example,ou=com"
+            userDn = "uid=user,ou=example,ou=com"
+            password = "password"
+        }
+    }
 }
 defaultTemplate = "myTemplate"
 
@@ -43,7 +43,7 @@ schemas = [MySchema, MyOtherSchema]
 +-------------------------------+
 
 *----------*--------------+
-| <<templates>>> | Entries under <<<templates>>> become instances of GldapoTemplates (see {{{templates.html}templates}}).
+| <<templates>>  | Entries under <<<templates>>> become instances of GldapoTemplates (see {{{templates.html}templates}}).
 *----------*--------------+
 | <<defaultTemplate>> | If specified, will be the template used for {{{searching.html}searches}} when no template is specified.
 *----------*--------------+
@@ -52,70 +52,70 @@ schemas = [MySchema, MyOtherSchema]
 
 ** initialize(...)
 
-	To initialize from a config file, you need to use one of the initialize() methods on the {{{../gapi/gldapo/Gldapo.html}Gldapo class}}.
+    To initialize from a config file, you need to use one of the initialize() methods on the {{{../gapi/gldapo/Gldapo.html}Gldapo class}}.
 
-	The most convenient of which is initialize() with no arguments that looks for a file called 'gldapo-conf.groovy' on the class path for the configuration. Other variants allow you to specify the URL to your config.
+    The most convenient of which is initialize() with no arguments that looks for a file called 'gldapo-conf.groovy' on the class path for the configuration. Other variants allow you to specify the URL to your config.
 
 ** Environments
 
-	A nicety of the Groovy {{{http://groovy.codehaus.org/ConfigSlurper}config mechanism}} is that it caters well for multi environment configs. A use case might be that you have different development and production LDAP directories. You can effortlessly take advantage of this with Gldapo.
-	
+    A nicety of the Groovy {{{http://groovy.codehaus.org/ConfigSlurper}config mechanism}} is that it caters well for multi environment configs. A use case might be that you have different development and production LDAP directories. You can effortlessly take advantage of this with Gldapo.
+    
 +-------------------------------+
 templates {
-	myTemplate {
-		contextSource {
-			base = "ou=example,ou=com"
-			userDn = "uid=user,ou=example,ou=com"
-			password = "password"
-		}
-	}
+    myTemplate {
+        contextSource {
+            base = "ou=example,ou=com"
+            userDn = "uid=user,ou=example,ou=com"
+            password = "password"
+        }
+    }
 }
 
 environments {
-	development {
-		templates.myTemplate.contextSource.url = "ldap://dev.example.com"
-	}
-	production {
-		templates.myTemplate.contextSource.url = "ldap://example.com"
-	}
+    development {
+        templates.myTemplate.contextSource.url = "ldap://dev.example.com"
+    }
+    production {
+        templates.myTemplate.contextSource.url = "ldap://example.com"
+    }
 }
 +-------------------------------+
 
-	You would then need to use one of the initialize() variants that takes a string parameter to be used as the environment.
+    You would then need to use one of the <<<initialize()>>> variants that takes a string parameter to be used as the environment.
 
 +-------------------------------+
 import gldapo.Gldapo
 
 if (/* is production */)
 {
-	Gldapo.initialize("production")
+    Gldapo.initialize("production")
 }
 else if (/* is development */)
 {
-	Gldapo.initialize("development")
+    Gldapo.initialize("development")
 }
 +-------------------------------+
 
 * Programmatic Initialization
 
-	If you don't want to use a config file, you can initialize programatically.
-	
+    If you don't want to use a config file, you can initialize programatically.
+    
 +-------------------------------+
 import gldapo.Gldapo
 import gldapo.GldapoTemplate
 import org.springframework.ldap.core.support.LdapContextSource
 
 def cs = new LdapContextSource(
-	url: "ldap://example.com"
-	base: "ou=example,ou=com"
-	userDn: "uid=user,ou=example,ou=com"
-	password: "password"
+    url: "ldap://example.com"
+    base: "ou=example,ou=com"
+    userDn: "uid=user,ou=example,ou=com"
+    password: "password"
 )
 cs.afterPropertiesSet() // <-- required
 
 def t = new GldapoTemplate(
-	beanName: "myTemplate" // <-- required
-	contextSource: cs
+    beanName: "myTemplate" // <-- required
+    contextSource: cs
 )
 t.afterPropertiesSet() // <-- required
 
@@ -124,4 +124,4 @@ Gldapo.defaultTemplate = "myTemplate"
 Gldapo.schemaRegistry << MySchemaClass
 +-------------------------------+
 
-	If initializing programatically, you do not need to call Gldapo.initialize().
+    If initializing programatically, you do not need to call <<<Gldapo.initialize()>>>.
