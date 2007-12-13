@@ -16,4 +16,13 @@
 		</menu>
 		${reports}
   </body>
+	<skin>
+	    <groupId>org.apache.maven.skins</groupId>
+	    <artifactId>maven-stylus-skin</artifactId>
+	    <version>1.0.1</version>
+	  </skin>
+	<poweredBy>
+	    <logo name="TextMate" href="http://macromates.com/"
+	          img="images/textmate.png"/>
+	  </poweredBy>
 </site>
