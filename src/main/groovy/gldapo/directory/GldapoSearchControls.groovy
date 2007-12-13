@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.directory;
+package gldapo.directory
 import gldapo.exception.GldapoException
 import javax.naming.directory.SearchControls
  
@@ -79,6 +79,7 @@ class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable
 			if (this.derefLinkFlag != null) controls.derefLinkFlag = this.derefLinkFlag
 			if (this.searchScope != null) controls.searchScope = this.searchScopeAsInteger
 			if (this.timeLimit != null) controls.timeLimit = this.timeLimit
+			controls.returningObjFlag = true
 			return controls
 		}
 		else

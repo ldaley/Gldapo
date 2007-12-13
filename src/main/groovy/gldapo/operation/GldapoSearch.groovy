@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.operation;
+package gldapo.operation
 import gldapo.Gldapo
 import gldapo.directory.GldapoSearchProvider
 import gldapo.directory.GldapoSearchControls
@@ -84,6 +84,6 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
 	
 	def execute()
 	{
-		this.directory.search(this.schema, this.base, this.filter, this.controls, this.pageSize)
+		this.options.directory.search(this.options.schema, this.options.base, this.options.filter, this.options.searchControls, this.options.pageSize)
 	}
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.test;
+package gldapo.test
 import gldapo.GldapoOperationRegistry
 import gldapo.operation.GldapoOperation
 import gldapo.Gldapo

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.operation;
+package gldapo.operation
 import gldapo.exception.GldapoOperationException
 
 abstract class AbstractGldapoOptionSubjectableOperation implements GldapoOptionSubjectableOperation

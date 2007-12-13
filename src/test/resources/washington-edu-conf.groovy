@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-templates {
+directories {
 	washington {
-		contextSource {
-			url = "ldap://directory.washington.edu"
-			base = "o=University of Washington,c=US"
-		}
+		url = "ldap://directory.washington.edu"
+		base = "o=University of Washington,c=US"
 	}
 }
-defaultTemplate = "washington"
 
 schemas = [gldapo.schema.provided.Person]

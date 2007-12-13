@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
+package gldapo
 import gldapo.exception.GldapoInitializationException;
 
 /**
@@ -144,7 +144,7 @@ class Gldapo
 	}
 	
 	def getSettings()
-	{
+	{ 
 		if (this.settings == null) this.settings = new GldapoSettings()
 		return this.settings
 	}

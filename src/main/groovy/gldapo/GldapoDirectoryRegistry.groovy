@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
+package gldapo
 import gldapo.exception.GldapoNoDefaultDirectoryException
 import gldapo.exception.GldapoException
 import gldapo.exception.GldapoInvalidConfigException
@@ -27,6 +27,8 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory>
 	
 	def getDefaultDirectory()
 	{
+		if (this.size() == 1) return this[0]
+		
 		if (defaultDirectoryName == null) throw new GldapoNoDefaultDirectoryException()
 		def defaultDirectory = this[defaultDirectoryName]
 		if (defaultDirectory == null) throw new GldapoException("The default directory name of '${defaultDirectoryName} does not match any registered directory")

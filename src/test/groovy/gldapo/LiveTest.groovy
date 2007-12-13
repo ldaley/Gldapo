@@ -1,4 +1,4 @@
-/* 
+/*  
  * Copyright 2007 Luke Daley
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo;
+package gldapo
 import gldapo.schema.provided.Person
-import javax.naming.directory.SearchControls
 
 class LiveTest extends GroovyTestCase 
 {
@@ -27,13 +26,16 @@ class LiveTest extends GroovyTestCase
 	
 	void testFind() 
 	{
-/*		def people = Person.find(
-			base: "ou=Faculty and Staff,ou=People", 
-			searchScope: SearchControls.SUBTREE_SCOPE,
+		def people = Person.findAll(
+			base: "ou=Faculty and Staff, ou=People", 
+			searchScope: "subtree",
 			countLimit: 2 // Only get two so we don't hit their server hard
 		)
 		
-		println people[0].objectclass
-		assertEquals(2, people.size())*/
+		
+		people.each {
+			println it.title
+		}
+		assertEquals(2, people.size())
 	}
 }

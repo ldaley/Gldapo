@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.attribute;
+package gldapo.schema.attribute
 import java.lang.reflect.Field
 
 class SingleValueAttributeMapping extends AbstractAttributeMapping

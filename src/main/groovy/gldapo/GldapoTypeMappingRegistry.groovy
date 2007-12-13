@@ -1,4 +1,4 @@
-package gldapo;
+package gldapo
 import gldapo.schema.attribute.DefaultTypeMappings
 import gldapo.schema.attribute.AbstractAttributeMapping
 

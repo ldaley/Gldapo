@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.attribute;
+package gldapo.schema.attribute
 import java.math.BigInteger
 
 class DefaultTypeMappingsTest extends GroovyTestCase 
@@ -36,6 +36,6 @@ class DefaultTypeMappingsTest extends GroovyTestCase
 	{
 		def m = DefaultTypeMappings.mapToBigIntegerType("3")
 		assertEquals(BigInteger, m.class)
-		assertEquals(new BigInteger(3), m)
+		assertEquals(new BigInteger("3"), m)
 	}
 }

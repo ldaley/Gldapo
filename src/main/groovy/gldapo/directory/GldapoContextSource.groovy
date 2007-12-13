@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.directory;
+package gldapo.directory
 import org.springframework.ldap.core.support.LdapContextSource
 
 class GldapoContextSource extends LdapContextSource

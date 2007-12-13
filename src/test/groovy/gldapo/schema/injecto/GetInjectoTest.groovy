@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.injecto;
+package gldapo.schema.injecto
 import injecto.*
 import gldapo.exception.GldapoNoDefaultDirectoryException
 import gldapo.test.GldapoMockOperationInstaller as OI

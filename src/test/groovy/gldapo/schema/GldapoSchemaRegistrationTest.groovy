@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema;
+package gldapo.schema
 import gldapo.schema.injecto.GldapoSchemaMetaInjecto
 import injecto.Injecto
 

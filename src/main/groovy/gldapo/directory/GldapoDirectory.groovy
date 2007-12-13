@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.directory;
+package gldapo.directory
 
+import gldapo.Gldapo
 import gldapo.schema.GldapoContextMapper
 import gldapo.exception.GldapoException
 import gldapo.exception.GldapoInvalidConfigException
@@ -61,14 +62,18 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 	
 	List search(Class schema, String base, String filter, GldapoSearchControlProvider controls, Integer pageSize)
 	{
-		ContextMapper mapper = new GldapoContextMapper(schema: delegate)
+		def schemaRegistration = Gldapo.instance.schemas[schema]
+		
+		ContextMapper mapper = new GldapoContextMapper(schemaRegistration: schemaRegistration)
 		ContextMapperCallbackHandler handler = new ContextMapperCallbackHandler(mapper)
 
 		SearchControls jndiControls = controls as SearchControls
-		jndiControls.returningAttributes = schema.attributeMappings*.attributeName
+		jndiControls.returningAttributes = schemaRegistration.attributeMappings*.attributeName
 		
 		try
 		{
+			println filter
+			println base
 			PagedResultsRequestControl requestControl = new PagedResultsRequestControl(pageSize)
 			this.template.search(base, filter, jndiControls, handler, requestControl)
 		
