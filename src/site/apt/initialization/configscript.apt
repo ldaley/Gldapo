@@ -125,3 +125,48 @@ Gldapo.schemaRegistry << MySchemaClass
 +-------------------------------+
 
     If initializing programatically, you do not need to call <<<Gldapo.initialize()>>>.
+    
+        ---
+
+        ---
+
++-------------------------------+
+directories {
+
+    t1 {
+        defaultDirectory = true // Use this directory when none specified
+
+        url = "ldap://example.com"
+        base = "ou=example,dc=com"
+
+        userDn = "uid=someuser,ou=example,dc=com" // User to bind to the directory as
+        password = "password" 
+
+        searchControls { // Specify some default options for searching
+            countLimit = 40 // Maximum entries to return
+            timeLimit = 600 // Maximum number of seconds to spend searching
+            searchScope = "subtree" // what type of search? subtree, onelevel or object
+        }
+    }
+
+    t2 {
+        urls = [ // Specify an array of servers for redundancy
+            "ldap://s1.example2.com",
+            "ldap://s2.example2.com",
+        ]
+
+        base = "ou=example2,dc=com"
+
+        // No userDn specified so anonymous bind used
+
+        // No search controls specified so defaults used
+    }
+
+}
+
+schemas = [ # An array of class objects that are the Gldap Schema Classes
+    my.app.MyGldapoSchemaClass1,
+    my.app.MyGldapoSchemaClass2 
+]
++-------------------------------+    
+    

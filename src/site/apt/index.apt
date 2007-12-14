@@ -1,7 +1,19 @@
-    ---
+    --------------
     Groovy LDAP Objects
-    ---
+    --------------
+
+Gldapo - Groovy LDAP Objects
 
     Gldapo is to LDAP what {{{http://grails.codehaus.org/GORM}GORM}} is to SQL (or at least tries to be). It turns entries in a directory into first class Groovy objects.
 
     Gldapo uses the excellent {{{http://www.springframework.org/ldap}Spring LDAP}} library for the actual LDAP side of things. Gldapo by itself is only concerned with the objectification of LDAP entries and providing a general Object Oriented interface to LDAP programming.
+
+* Features
+
+    * LDAP entries as POGOs
+
+    * Schema classes are plain Groovy classes with some annotations (no XML)
+
+    * Easy to use, extensible, type mapping system (converting LDAP values to/from Groovy/Java types)
+
+    * Easy to use searching

@@ -2,13 +2,21 @@ pre {
 	font-size: 11px;
 	font-family: Monaco, "Courier", fixed-width;
 }
+
 .source {
 	background-color: #E6E6E6;
 }
 
-#poweredBy img {
-	width: 166px;
-	height: 90px;
-	margin-left: -10px;
-	border: none;
+#banner {
+	background-image: none;
+	background-color: #6AA5D5;
+	height: 86px;
+}
+
+#bannerLeft img {
+	margin: 2px 0px 0px 4px;
+}
+
+h3 {
+	color: #333;
 }

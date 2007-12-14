@@ -72,8 +72,6 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 		
 		try
 		{
-			println filter
-			println base
 			PagedResultsRequestControl requestControl = new PagedResultsRequestControl(pageSize)
 			this.template.search(base, filter, jndiControls, handler, requestControl)
 		

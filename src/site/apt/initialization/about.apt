@@ -1,0 +1,19 @@
+    ----------------------
+    Initialization - About
+    ----------------------
+
+Initialization
+
+    Before Gldapo can be used, it needs to be initialized. Initialization is done via one of the variants of <<<Gldapo.initialize()>>>. 
+
+    There are two initialization mechanisms, {{{configscript.html}config scripts}} and {{{programmatic.html}programmatic}}.
+
+    Initialization performs the following tasks:
+
+    * Sets up the {{{../directories/about.html}Directories}}
+
+    * Prepares the {{{../schemaclasses/about.html}Schema Classes}}
+
+    * Registers any {{{../typemappings/about.html}Type Mappings}}
+
+    * Sets any {{{../settings/about.html}Global Settings}}

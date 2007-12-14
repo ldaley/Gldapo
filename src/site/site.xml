@@ -2,17 +2,44 @@
 <site>
 	<bannerLeft>
 		<name>Gldapo</name>
-		<src>images/logo.gif</src>
+		<src>images/gldapo.png</src>
 	</bannerLeft>
+	<bannerRight>
+		<name>Made With TextMate</name>
+		<src>images/textmate.png</src>
+		<href>http://macromates.com</href>
+	</bannerRight>
 	<body>
 		<menu name="Overview">
 			<item name="Introduction" href="/index.html"/>
 		</menu>
-		<menu name="Guide">
-			<item name="Schema Classes" href="/guide/schemaClasses.html"/>
-			<item name="Templates" href="/guide/templates.html"/>
-			<item name="Initialization" href="/guide/initialization.html"/>
-			<item name="Searching" href="/guide/searching.html"/>
+		<menu name="Initialization">
+			<item name="About" href="/initialization/about.html" />
+			<item name="Config Script" href="/initialization/configscript.html" />
+			<item name="Programmatic" href="/initialization/programmatic.html" />
+		</menu>
+		<menu name="Directories">
+			<item name="About" href="/directories/about.html" />
+			<item name="Config Script" href="/directories/viaConfigScript.html" />
+			<item name="Programmatic" href="/directories/viaConfigScript.html" />
+			<item name="Search Controls" href="/directories/searchControls.html" />
+		</menu>
+		<menu name="Schema Classes">
+			<item name="About" href="/schemaclasses/about.html" />
+			<item name="Attributes" href="/schemaclasses/attributes.html"/>
+			<item name="Filters" href="/schemaclasses/filters.html"/>
+			<item name="Initialising" href="/schemaclasses/initialization.html"/>
+		</menu>
+		<menu name="Type Mapping">
+			<item name="About" href="/typemapping/about.html" />
+		</menu>
+		<menu name="Searching">
+			<item name="About" href="/searching/about.html" />
+			<item name="findAll()" href="/searching/findAll.html"/>
+			<item name="find()" href="/searching/find.html"/>
+		</menu>
+		<menu name="Settings">
+			<item name="About" href="/settings/about.html" />
 		</menu>
 		${reports}
   </body>
@@ -21,8 +48,4 @@
 	    <artifactId>maven-stylus-skin</artifactId>
 	    <version>1.0.1</version>
 	  </skin>
-	<poweredBy>
-	    <logo name="TextMate" href="http://macromates.com/"
-	          img="images/textmate.png"/>
-	  </poweredBy>
 </site>
