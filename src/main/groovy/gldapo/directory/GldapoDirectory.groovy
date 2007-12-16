@@ -96,7 +96,7 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 	/**
 	 * @todo Implement tighter checking that the config parameters are valid, for spelling mistakes and such
 	 */
-	static newInstance(String name, ConfigObject config)
+	static newInstance(String name, Map config)
 	{
 		def contextSource = GldapoContextSource.newInstance(config)
 		
