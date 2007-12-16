@@ -1,0 +1,27 @@
+    ----------------
+    Type Mappings - Default Mappings
+    ----------------
+
+Default Mappings
+
+    Gldapo provides mappings out of the box for the following core Java types ...
+
+    * String
+
+    * Integer
+
+    * BigInteger
+
+    * BigDecimal
+
+    * Double
+
+    * Float
+
+    * Long
+
+    * Short
+
+[]
+
+    These mappings are provided by the {{{../api/DefaultTypeMappings}DefaultTypeMappings}} class which is installed into the {{{globalmappings.html}global type mapping}} registry.

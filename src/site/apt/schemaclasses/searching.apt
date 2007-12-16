@@ -1,0 +1,25 @@
+    --------------------------
+    Schema Classes - Searching
+    --------------------------
+
+Searching
+
+    Gldapo makes it extremely easy to perform LDAP searches. 
+    
+    Below are some searching examples ...
+    
++-------------------------------+
+List matches = MySchemaClass.findAll(
+    directory: "myDirectory"
+    base: "ou=people",
+    filter: "(sn=s*)"
+)
+
+MySchemaClass match = MySchemaClass.find(
+    directory: "myDirectory"
+    base: "ou=people",
+    filter: "(uid=ld)"
+)
++-------------------------------+
+
+    The searching functionality for schema classes is provided by the {{{../api/SearchingInjecto}SearchingInjecto}} {{{http://ldaley.com/injecto}injecto}}. 

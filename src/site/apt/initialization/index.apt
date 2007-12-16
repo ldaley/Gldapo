@@ -10,10 +10,10 @@ Initialization
 
     Initialization performs the following tasks:
 
-    * Sets up the {{{../directories/about.html}Directories}}
+    * Sets up the {{{../directories/index.html}Directories}}
 
-    * Prepares the {{{../schemaclasses/about.html}Schema Classes}}
+    * Prepares the {{{../schemaclasses/index.html}Schema Classes}}
 
-    * Registers any {{{../typemappings/about.html}Type Mappings}}
+    * Registers any {{{../typemappings/index.html}Type Mappings}}
 
-    * Sets any {{{../settings/about.html}Global Settings}}
+    * Sets any {{{../settings/index.html}Global Settings}}

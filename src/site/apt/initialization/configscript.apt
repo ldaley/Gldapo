@@ -1,172 +1,112 @@
     --------------
-    Initialization
+    Initialization - Config Script
     --------------
     
-Initialization
+Initialization - Config Script
 
-    Gldapo requires initialization before it can be used. This really means the following ...
+    Using a config script is the easiest way to configure and initialize Gldapo. Config scripts are parsed using Groovy's {{{http://groovy.codehaus.org/ConfigSlurper}ConfigSlurper}} class.
     
-    * Registering Templates
+* Location 
 
-    * Registering Schema Classes
-    
-    Initialization is done through the core {{{../gapi/gldapo/Gldapo.html}Gldapo}} class. It can be done in a few ways. 
-    
-* Configuration Files
+** Default
 
-    The most convenient way in most cases is to use a Groovy {{{http://groovy.codehaus.org/ConfigSlurper}ConfigSlurper}} configuration file.
-    
-    Here is an example configuration file ...
-    
-+-------------------------------+
-templates {
-    myTemplate {
-        contextSource {
-            url = "ldap://example.com"
-            base = "ou=example,ou=com"
-            userDn = "uid=user,ou=example,ou=com"
-            password = "password"
-        }
-    }
-    myOtherTemplate {
-        contextSource {
-            url = "ldap://example.com"
-            base = "ou=example,ou=com"
-            userDn = "uid=user,ou=example,ou=com"
-            password = "password"
-        }
-    }
-}
-defaultTemplate = "myTemplate"
-
-schemas = [MySchema, MyOtherSchema]
-+-------------------------------+
-
-*----------*--------------+
-| <<templates>>  | Entries under <<<templates>>> become instances of GldapoTemplates (see {{{templates.html}templates}}).
-*----------*--------------+
-| <<defaultTemplate>> | If specified, will be the template used for {{{searching.html}searches}} when no template is specified.
-*----------*--------------+
-| <<schemas>> | An array of classes that are schema classes
-*----------*--------------+
-
-** initialize(...)
-
-    To initialize from a config file, you need to use one of the initialize() methods on the {{{../gapi/gldapo/Gldapo.html}Gldapo class}}.
-
-    The most convenient of which is initialize() with no arguments that looks for a file called 'gldapo-conf.groovy' on the class path for the configuration. Other variants allow you to specify the URL to your config.
-
-** Environments
-
-    A nicety of the Groovy {{{http://groovy.codehaus.org/ConfigSlurper}config mechanism}} is that it caters well for multi environment configs. A use case might be that you have different development and production LDAP directories. You can effortlessly take advantage of this with Gldapo.
-    
-+-------------------------------+
-templates {
-    myTemplate {
-        contextSource {
-            base = "ou=example,ou=com"
-            userDn = "uid=user,ou=example,ou=com"
-            password = "password"
-        }
-    }
-}
-
-environments {
-    development {
-        templates.myTemplate.contextSource.url = "ldap://dev.example.com"
-    }
-    production {
-        templates.myTemplate.contextSource.url = "ldap://example.com"
-    }
-}
-+-------------------------------+
-
-    You would then need to use one of the <<<initialize()>>> variants that takes a string parameter to be used as the environment.
+    By default, Gldapo will look for a file called <<gldapo-conf.groovy>> on the classpath. To initialize Gldapo using such a file simple call <<<initialize()>>> with no arguments ...
 
 +-------------------------------+
 import gldapo.Gldapo
 
-if (/* is production */)
-{
-    Gldapo.initialize("production")
-}
-else if (/* is development */)
-{
-    Gldapo.initialize("development")
-}
+Gldapo.initialize()
 +-------------------------------+
 
-* Programmatic Initialization
+** via URL
 
-    If you don't want to use a config file, you can initialize programatically.
-    
+    Alternatively, you can specify the location of the config file using a <<<URL>>> ...
+
 +-------------------------------+
 import gldapo.Gldapo
-import gldapo.GldapoTemplate
-import org.springframework.ldap.core.support.LdapContextSource
 
-def cs = new LdapContextSource(
-    url: "ldap://example.com"
-    base: "ou=example,ou=com"
-    userDn: "uid=user,ou=example,ou=com"
-    password: "password"
-)
-cs.afterPropertiesSet() // <-- required
-
-def t = new GldapoTemplate(
-    beanName: "myTemplate" // <-- required
-    contextSource: cs
-)
-t.afterPropertiesSet() // <-- required
-
-Gldapo.templateRegistry << t
-Gldapo.defaultTemplate = "myTemplate"
-Gldapo.schemaRegistry << MySchemaClass
+Gldapo.initialize(new URL("file:/mygldapoconfig.groovy"))
 +-------------------------------+
 
-    If initializing programatically, you do not need to call <<<Gldapo.initialize()>>>.
-    
-        ---
+* Config Script Format
 
-        ---
+    The following is an example config script ...
 
 +-------------------------------+
 directories {
-
-    t1 {
-        defaultDirectory = true // Use this directory when none specified
-
+    directory1 { 
+        defaultDirectory = true 
         url = "ldap://example.com"
         base = "ou=example,dc=com"
-
-        userDn = "uid=someuser,ou=example,dc=com" // User to bind to the directory as
+        userDn = "uid=someuser,ou=example,dc=com"
         password = "password" 
-
-        searchControls { // Specify some default options for searching
-            countLimit = 40 // Maximum entries to return
-            timeLimit = 600 // Maximum number of seconds to spend searching
-            searchScope = "subtree" // what type of search? subtree, onelevel or object
+        searchControls { 
+            countLimit = 40 
+            timeLimit = 600 
+            searchScope = "subtree" 
         }
     }
-
-    t2 {
-        urls = [ // Specify an array of servers for redundancy
+    directory2 {
+        urls = [ 
             "ldap://s1.example2.com",
             "ldap://s2.example2.com",
         ]
-
         base = "ou=example2,dc=com"
-
-        // No userDn specified so anonymous bind used
-
-        // No search controls specified so defaults used
     }
-
 }
 
 schemas = [ # An array of class objects that are the Gldap Schema Classes
     my.app.MyGldapoSchemaClass1,
     my.app.MyGldapoSchemaClass2 
 ]
-+-------------------------------+    
+
+typemappings = [
+    my.app.MyTypeMappings
+]
+
+settings {
+    pageSize = 100
+}
++-------------------------------+
+
+    When config scripts are parsed, they are parsed into <<<groovy.util.ConfigObjects>>> which implement the <<<java.util.Map>>> interface.
     
+    See {{{Gldapo.initialize(Map)}Gldapo.initialize(Map)}} for the available options for the config.
+        
+* Environment Sensitivity 
+
+    One handy feature of the Groovy {{{http://groovy.codehaus.org/ConfigSlurper}Config}} mechanism is the ability to set different values depending on the environment.
+
+     Consider the situation where you might want to use a different LDAP server for a dev/test context and a different server for production. This is easy to achieve with config scripts ...
+
++-------------------------------+
+directories {
+    d1 {
+        url = "ldap://dev.example.com" // Use this for everthing but production
+    }
+}
+
+environments { // <-- 'environments' key word
+    production {
+        directories {
+            d1 {
+                url = "ldap://example.com" // Use this one for production
+            }
+        }
+    }
+}
++-------------------------------+
+
+    Any value at all in the config script can be environment sensitive.
+
+    To specify which environment to use, pass the name of the environment to <<<initialize()>>> ...
+
++-------------------------------+
+import gldapo.Gldapo
+
+Gldapo.initialize("production") // Using default of gldapo-conf.groovy
+
+// Or 
+
+Gldapo.initialze(new URL("file://mygldapoconfig.groovy"), "production") // Using a custom URL
++-------------------------------+

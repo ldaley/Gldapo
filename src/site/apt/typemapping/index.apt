@@ -1,0 +1,19 @@
+    -------------
+    Type Mappings
+    -------------
+
+Type Mappings
+
+    A feature of Gldapo is that is converts between LDAP types and Groovy/Java types. Once properly configured, this happens transparently.
+
+    To convert between types, Gldapo looks for particular methods that do the actual conversion. There are 3 types of these methods ...
+
+    * {{{globalmappings.html}Global per type}}
+
+    * {{{perschemamappings.html}Per schema per type}}
+
+    * {{{perschemamappings.html}Per schema per attribute}}
+    
+[]
+
+    Gldapo provides some {{{defaultmappings.html}default mappings}} for the common cases.

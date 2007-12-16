@@ -1,0 +1,15 @@
+    --------------
+    Schema Classes
+    --------------
+
+Schema Classes
+
+    Schema classes are at the heart of Gldapo. They represent a particular <kind> of entry in an LDAP directory.
+        
+* Behaviour Injection
+
+    When schema classes are registered, extra behaviour is injected into these classes (via the {{{http://ldaley.com/injecto}Injecto}} framework).
+
+    The following categories of methods are injected ...
+
+    * {{{searching.html}Searching}}

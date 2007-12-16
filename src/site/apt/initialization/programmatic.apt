@@ -1,0 +1,29 @@
+    -----------------------------
+    Initialization - Programmatic
+    -----------------------------
+
+    
+Initialization - Programmatic
+
+    If you don't wish to use the {{{configscript.html}config script}} mechanism, you can initialize Gldapo by passing a <<<Map>>> to <<<Gldapo.initialize()>>>
+        
++-------------------------------+
+import gldapo.*
+
+Gldapo.initialize(
+    directories: [
+        myDirectory: [:]
+            url: ""
+            base: ""
+            userDn: ""
+        ]
+    ],
+    schemas: [my.app.MySchemaClass],
+    typemappings: [my.app.MyTypeMappings],
+    settings: [:]
+)
++-------------------------------+
+
+    ~~ TODO Link to Javadoc here
+    See {{{*--*--+}Gldapo.initialize(Map)}} for details.
+

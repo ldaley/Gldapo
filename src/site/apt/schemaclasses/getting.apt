@@ -1,0 +1,13 @@
+    ------------------------
+    Schema Classes - Getting
+    ------------------------
+
+Getting
+
+    Getting refers to retrieving a single entry by it's distinguished name (DN). The <<<getByDn()>>> method provides this functionality.
+
++-------------------------------+
+def entry = MySchemaClass.getByDn("uid=ld, ou=people, dc=example, dc=com")
++-------------------------------+
+
+    See the {{{../api/GetInjecto}GetInjecto}} documentation for details.

@@ -1,0 +1,104 @@
+    ---------------------------
+    Schema Classes - Attributes
+    ---------------------------
+
+Attributes
+
+    Gldapo maps the attributes of LDAP entries to the properties of schema class objects. There are 3 aspects to an attribute mapping ...
+
+    * The name of the attribute
+
+    * The data type of the attribute
+
+    * The cardinality of the attribute (single valued or multi valued in LDAP)
+
+    This information is harvested via introspection (with the help of some {{{schema annotations package}annotations}}).
+
+* Naming
+
+    By default, Gldapo uses the name of the schema class object properties to identify the attributes ...
+
++-------------------------------+
+class MySchemaClass {
+    String myAttribute
+}
++-------------------------------+
+
+    So in this example, the user is expecting an attribute called 'myAttribute' to exist on the target LDAP entry.
+    
+    Sometimes you might want the object property to have a different name to the LDAP entry attribute. The {{{../api/GldapoSynonymFor}GldapoSynonymFor}} attribute allows you to use a different name ...
+
++-------------------------------+
+import gldapo.schema.annotation.GldapoSynonymFor
+
+class MySchemaClass {
+    
+    @GldapoSynonymFor("uid")
+    String username
+    
+}
++-------------------------------+
+
+    You can see in this example, the use has mapped the <<<uid>>> LDAP attribute to the <<<username>>> object property of this class.
+
+* Typing 
+
+    Typing information is inferred from class of the schema class object property.
+
++-------------------------------+
+class MySchemaClass {
+    String uid
+    Integer unixUid
+}
++-------------------------------+
+
+    Gldapo will convert the types for you when going between LDAP and Groovy using the available information. For details on exactly how this works and how to participate in or augment this process, see {{{../typemapping/}type mapping}}.
+    
+** Pseudo Types
+
+    It is common for LDAP attributes to be stored in interesting and/or proprietary ways. A typical example of this is the plethora of date formats out there. In this situation, simply declaring your object property as <<<Date>>> is insufficient. To remedy this, we need to use the {{{../api/GldapoPseudoType}GldapoPseudoType}} annotation to specify how to convert to and from the type.
+
+        Microsoft's Active Directory uses two (sometimes more) different representations of dates. Gldapo can accommodate this easily with pseudo types ...
+
++-------------------------------+
+import gldapo.schema.annotation.GldapoPseudoType
+
+class MySchemaClass {
+    
+    @GldapoPseudoType("ActiveDirectoryTimestamp")
+    Date whenCreated
+    
+    @GldapoPseudoType("ActiveDirectoryDate")
+    Date accountExpires
+}
++-------------------------------+
+
+    If an attribute has a pseudo type, this is used instead of the class name of the property type during the {{{../typemapping/}type mapping}} process.
+
+* Cardinality
+
+    Attributes in LDAP are either single valued, or multi valued. To work with multi value types, you simply declare the type of the object attribute to be a <<<List>>>, <<<Set>>> or <<<SortedSet>>>. These collection types should include generics information to specify the element type ...
+
++-------------------------------+
+class MySchemaClass {
+    List<Integer> someAttribute
+}
++-------------------------------+
+
+    If the element type is ommitted, <<<String>>> is assumed.
+        
+    The following table indicates the actual class type used for the different collection types
+    
+*--*--*
+|| Declared Type || Actual Type |
+*--*--*
+| <<List>> | LinkedList |
+*--*--*
+| <<Set>> | LinkedHashSet |
+*--*--*
+| <<SortedSet>> | TreeSet |
+*--*--*
+
+** Cardinality and Pseudo Types
+
+    If a multi valued property is specified with a pseudo type will be used for the mapping process, but the collection element type will be the type declared.

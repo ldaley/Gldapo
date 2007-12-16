@@ -1,0 +1,15 @@
+    --------
+    Settings
+    --------
+
+Settings
+
+    The {{{../api/Gldapo.getSettings()}settings object}} holds some global values which are used as default values.
+
+    The available settings are ...
+
+*--*--*--*--*
+|| Name || Type || Default || Description 
+*--*--*--*--*
+| pageSize | Integer | 500 | The default page size to use for searches where no page size is specified
+*--*--*--*--*

@@ -1,0 +1,73 @@
+    ----------------------------
+    Type Mappings - Per Schema
+    ----------------------------
+
+Per Schema Type Mappings
+
+    In addition to {{{globalmappings.html}global mappings}}, per schema mappings are also used to convert data types between LDAP and Java/Groovy.
+    
+    Per schema type mappings are implemented as static methods on schema classes ...
+
++-------------------------------+
+class mySchemaClass {
+
+    String uid
+    String sn
+    String givenName
+    
+    static mapToStringType(value) { // Called when converting from LDAP type to any String type for this class
+        value.toUpperCase() 
+    }
+
+    static mapToGivenNameProperty(value) { // Called when converting from LDAP type to 'givenName' only
+        value.toLowerCase()
+    }
+}
++-------------------------------+
+
+    The above schema class converts attributes of <<<String>>> type to uppercase, except for the <<<givenName>>> attribute which is in lowercase.
+
+* Per Type
+
+    Per type mapping methods are <<<public>>> <<<static>>> methods that take a single argument of type <<<String>>> and return the converted value.
+
+    The name of the method must be 'mapTo' + <type> + 'Type', where <type> is the name of the native type.
+
+** Pseudo Types
+
+    Per type mappings are also the same for pseudo types, except the method name must be 'mapTo' + <pseudo type> + 'Type' ...
+
++-------------------------------+
+import gldapo.schema.annotation.GldapoPseudoType
+
+class MySchemaClass {
+
+    @GldapoPseudoType("UpperCaseString")
+    String uid
+    
+    static mapToUpperCaseStringType(value) {
+        value.toUpperCase()
+    }
+    
+}
++-------------------------------+
+
+* Per Attribute/Property
+
+    Per attribute/property type mapping methods have the same signature as per type methods, except the method name must be 'mapTo' + <capitalized property name> + 'Property' ...
+
++-------------------------------+
+import gldapo.schema.annotation.GldapoSynonymFor
+
+class MySchemaClass {
+
+    @GldapoSynonymFor("uid")
+    String username
+
+    static mapToUsernameProperty(value) {
+        value.toUpperCase()
+    }
+}
++-------------------------------+
+
+    If the property is a synonym for an attribute, the <<property>> name is used for the mapper.
