@@ -21,17 +21,17 @@ import injecto.annotation.InjectAs
 @InjectoDependency(SearchingInjecto)
 class GetInjecto 
 {
-	static getAbsolutely = { String dn, GldapoDirectory directory ->
+	static getByDn = { String dn, GldapoDirectory directory ->
 		delegate.find(absoluteBase: dn, searchScope: "object", directory: directory)
 	}
 	
-	@InjectAs("getAbsolutely")
+	@InjectAs("getByDn")
 	static getUsingDirectoryName = { String dn, String directoryName ->
 		delegate.find(absoluteBase: dn, searchScope: "object", directory: directoryName)
 	}
 	
-	@InjectAs("getAbsolutely")
+	@InjectAs("getByDn")
 	static getUsingDefaultDirectory = { String dn -> 
-		delegate.getAbsolutely(dn, (String)null)
+		delegate.getByDn(dn, (String)null)
 	}
 }
