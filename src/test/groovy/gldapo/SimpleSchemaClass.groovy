@@ -1,0 +1,5 @@
+class SimpleSchemaClass {
+	
+	String sn
+
+}

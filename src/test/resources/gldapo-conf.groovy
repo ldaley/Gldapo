@@ -28,7 +28,11 @@ directories {
 	}
 
 }
-schemas = [gldapo.schema.provided.Person, gldapo.schema.provided.ActiveDirectoryPerson]
+
+schemas = [
+	SimpleSchemaClass,
+	AttributeMappingWorkoutSchema
+]
 
 environments {
 	dev {

@@ -21,7 +21,7 @@ class GldapoSchemaRegistryTest extends GroovyTestCase
 	void testNewInstanceFromConfig()
 	{
 		def c = new ConfigObject()
-		c[GldapoSchemaRegistry.CONFIG_SCHEMAS_KEY] = [RegistryTestSchema1, RegistryTestSchema1]
+		c[GldapoSchemaRegistry.CONFIG_SCHEMAS_KEY] = [RegistryTestSchema1, RegistryTestSchema2]
 		
 		def r = GldapoSchemaRegistry.newInstance(c)
 		assertEquals(2, r.size())

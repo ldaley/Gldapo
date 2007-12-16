@@ -32,7 +32,7 @@ class GetInjectoTest extends GroovyTestCase
 	void testGetWithResult()
 	{
 		OI.installSearchWithResult([1,2,3])
-		assertEquals(1, GetInjectoTestSchema.getAbsolutely("abc"))
+		assertEquals(1, GetInjectoTestSchema.getByDn("abc"))
 	}
 }
 

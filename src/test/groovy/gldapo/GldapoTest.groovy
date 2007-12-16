@@ -31,5 +31,4 @@ class GldapoTest extends GroovyTestCase
 			Gldapo.initialize(new File("2853kgmpv0").toURL())
 		}
 	}
-	
 }

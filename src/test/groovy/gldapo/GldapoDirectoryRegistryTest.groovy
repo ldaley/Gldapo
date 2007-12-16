@@ -66,4 +66,9 @@ class GldapoDirectoryRegistryTest extends GroovyTestCase
 		assertSame(r.defaultDirectory, r["t1"])
 	}
 	
+	void testLeftShift() {
+		def registry = new GldapoDirectoryRegistry()
+		registry << new GldapoDirectory()
+		shouldFail(IllegalArgumentException) { registry << "" }
+	}
 }

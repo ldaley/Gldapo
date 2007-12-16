@@ -20,6 +20,7 @@ class LiveTest extends GroovyTestCase
 	
 	LiveTest()
 	{
+		println this.class.getClassLoader().findResource("washington-edu-conf.groovy")
 		Gldapo.initialize(this.class.getClassLoader().findResource("washington-edu-conf.groovy"))
 	}
 	
@@ -34,9 +35,9 @@ class LiveTest extends GroovyTestCase
 		
 		people.each {
 			println it.uid
-			println it.telephoneNumber
-			
+			println it.telephoneNumber	
 		}
+		
 		assertEquals(2, people.size())
 	}
 }
