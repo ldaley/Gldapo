@@ -87,7 +87,10 @@ abstract class AbstractAttributeMapping
 			return this.calculateTypeMappingFromFieldType()
 		}
 	}
-		
+	
+	/**
+	 * @todo Need some caching here
+	 */	
 	protected calculateToFieldTypeMapper()
 	{	
 		Class[] p = [String] as Class[]
