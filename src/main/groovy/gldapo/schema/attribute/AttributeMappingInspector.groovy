@@ -46,7 +46,7 @@ class AttributeMappingInspector
 	
 	static fieldIsReadableAndWritable(Class schema, Field field)
 	{
-		def capitalisedFieldName = field.name[0].toUpperCase() + field.name[1..field.name.size() - 1]
+		def capitalisedFieldName = (field.name.size() > 1) ? field.name[0].toUpperCase() + field.name[1..field.name.size() - 1] : field.name[0].toUpperCase()
 		return (schema.metaClass.hasMetaMethod("get${capitalisedFieldName}") && schema.metaClass.hasMetaMethod("set${capitalisedFieldName}", field.type))
 	}
 }
