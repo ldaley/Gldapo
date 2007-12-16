@@ -16,36 +16,38 @@
 package gldapo
 import gldapo.schema.GldapoSchemaRegistration;
 
-class GldapoSchemaRegistry
+class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration>
 {
 	static final CONFIG_SCHEMAS_KEY = 'schemas'
-	
-	private List<GldapoSchemaRegistration> registrations = []
-	
-	def size()
-	{
-		return registrations.size()
-	}
-	
+
 	/**
 	 * @todo To support inheritance, this needs to register all subclasses
 	 */
-	def register(Class schema)
-	{
-		this.registrations << new GldapoSchemaRegistration(schema)
+	boolean add(s) {
+		if (s instanceof GldapoSchemaRegistration) {
+			if (this.isRegistered(s.schema) == false) super.add(s)
+		} else if (s instanceof Class) {
+			if (this.isRegistered(s) == false) super.add(new GldapoSchemaRegistration(s))
+		} else {
+			throw new IllegalArgumentException("Only Class objects or GldapoSchemaRegistration objects can be added to the GldapoSchemaRegistry")
+		}		
+	}
+	
+	boolean isRegistered(schema) {
+		this.find { it.schema == schema } != null
 	}
 	
 	def getAt(Class schema)
 	{
-		return registrations.find { it.schema = schema }
+		return this.find { it.schema == schema }
 	}
 	
-	static newInstance(ConfigObject config)
+	static newInstance(Map config)
 	{
 		def registry = new GldapoSchemaRegistry()
 		if (config.containsKey(CONFIG_SCHEMAS_KEY))
 		{
-			config[CONFIG_SCHEMAS_KEY].each { registry.register(it) }
+			config[CONFIG_SCHEMAS_KEY].each { registry << it }
 		}
 
 		return registry
