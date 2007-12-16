@@ -29,6 +29,7 @@
 	</organization>
 	<scm>
 		<connection>scm:svn:http://svn.ldaley.com/gldapo</connection>
+		<url>http://websvn.ldaley.com/wsvn/gldapo/</url>
 	</scm>
 	<licenses>
 		<license>
