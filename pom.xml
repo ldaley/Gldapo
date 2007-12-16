@@ -68,7 +68,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ldap</groupId>
-			<artifactId>spring-ldap-tiger</artifactId>
+			<artifactId>spring-ldap</artifactId>
 			<version>1.2.1</version>
 		</dependency>
 		<dependency>
@@ -115,16 +115,12 @@
 			<plugin>
 				<groupId>org.codehaus.mojo.groovy</groupId>
 				<artifactId>groovy-maven-plugin</artifactId>
+				<version>1.0-beta-3</version>
+				<extensions>true</extensions>
 				<executions>
 					<execution>
-						<id>c</id>
 						<goals>
 							<goal>compile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>tc</id>
-						<goals>
 							<goal>testCompile</goal>
 						</goals>
 					</execution>
@@ -160,7 +156,6 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
 	<distributionManagement>
 		<repository>
 			<uniqueVersion>false</uniqueVersion>
