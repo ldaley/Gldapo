@@ -42,7 +42,12 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory>
 		return directory
 	}
 	
-	static newInstance(ConfigObject config)
+	boolean add(d) {
+		if ((d instanceof GldapoDirectory) == false) throw new IllegalArgumentException("Can only add GldapoDirectory objects to GldapoDirectoryRegistry")
+		super.add(d)
+	}
+	
+	static newInstance(Map config)
 	{
 		def registry = new GldapoDirectoryRegistry()
 		

@@ -122,7 +122,7 @@ class Gldapo
 	/**
 	 * Initialise from the passed config object
 	 */
-	static initialize(ConfigObject config)
+	static initialize(Map config)
 	{
 		def gldapo = getInstance()
 		

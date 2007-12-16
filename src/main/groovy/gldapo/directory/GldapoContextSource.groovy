@@ -25,7 +25,7 @@ class GldapoContextSource extends LdapContextSource
 		return this.base?.toString()
 	}
 	
-	static newInstance(ConfigObject config)
+	static newInstance(Map config)
 	{
 		def c = new GldapoContextSource()
 		PROPS.each { if (config.containsKey(it)) c."$it" = config."$it" }
