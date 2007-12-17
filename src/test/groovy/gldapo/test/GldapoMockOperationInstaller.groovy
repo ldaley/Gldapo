@@ -24,7 +24,7 @@ class GldapoMockOperationInstaller
 {
 	static install(opName, opInstance)
 	{
-		Gldapo.instance.operations.install(opName, new Expando(newInstance: { -> opInstance }))
+		Gldapo.instance.operations[opName] = new Expando(newInstance: { -> opInstance })
 	}
 	
 	static installSearchWithResult(result)

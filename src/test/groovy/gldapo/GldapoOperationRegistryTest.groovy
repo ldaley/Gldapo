@@ -29,7 +29,7 @@ class GldapoOperationRegistryTest extends GroovyTestCase
 	{	
 		def o = [execute: {}] as GldapoOperation
 		def f = new Expando(newInstance: { -> o })
-		ops.install("custom", f)
+		ops["custom"] = f
 		assertSame(o, ops["custom"])
 	}
 	
@@ -39,7 +39,7 @@ class GldapoOperationRegistryTest extends GroovyTestCase
 		def passedInOptions
 		def o = [execute: {}, setOptions: { passedInOptions = it }] as GldapoOptionSubjectableOperation
 		def f = new Expando(newInstance: { -> o })
-		ops.install("custom", f)
+		ops["custom"] = f
 		def op = ops["custom", options]
 		assertSame(options, passedInOptions)
 	}
