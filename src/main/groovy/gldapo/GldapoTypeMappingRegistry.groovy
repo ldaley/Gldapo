@@ -19,6 +19,8 @@ import gldapo.schema.attribute.AbstractAttributeMapping
 
 class GldapoTypeMappingRegistry extends LinkedList<Class>
 {
+	static String CONFIG_KEY = "typemappings"
+	
 	GldapoTypeMappingRegistry()
 	{
 		super()
@@ -39,5 +41,15 @@ class GldapoTypeMappingRegistry extends LinkedList<Class>
 		}
 		
 		(provider && mapping) ? { mapping.invoke(provider, it) } : null
+	}
+	
+	static newInstance(Map config) {
+		def tmr = new GldapoTypeMappingRegistry()
+		if (config[CONFIG_KEY] != null && config[CONFIG_KEY] instanceof Collection) {
+			config[CONFIG_KEY].each {
+				tmr << it
+			}
+		}
+		return tmr
 	}
 }

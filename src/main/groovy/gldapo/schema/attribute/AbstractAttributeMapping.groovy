@@ -103,7 +103,7 @@ abstract class AbstractAttributeMapping
 		def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
 		if (classByTypeMapper) return { classByTypeMapper.invoke(schema, it) }
 		
-		def defaultByTypeMapper = Gldapo.instance.typeMappings.getToFieldMapperForType(this.typeMapping)
+		def defaultByTypeMapper = Gldapo.instance.typemappings.getToFieldMapperForType(this.typeMapping)
 		if (defaultByTypeMapper) return defaultByTypeMapper
 
 		throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, "No available type mapping")

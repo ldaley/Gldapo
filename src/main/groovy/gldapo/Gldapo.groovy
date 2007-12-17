@@ -14,105 +14,159 @@
  * limitations under the License.
  */
 package gldapo
-import gldapo.exception.GldapoInitializationException;
+import gldapo.exception.GldapoInitializationException
 
 /**
- * A static style class that is responsible for initialising the Gldapo system and providing access
- * to global type objects.
+ * The singleton instance of this class provides access to the various registries and settings at runtime.
+ * It is also the entry point for initializing Gldapo.
  */
-class Gldapo
-{
+class Gldapo {
+	
 	/**
-	 * The name of the file that is looked for if initialize is called with no URL for the config file
+	 * The name of the file that is looked for if initialize is called with no URL for the config file ({@value})
 	 */
 	static final DEFAULT_CONFIG_FILENAME = 'gldapo-conf.groovy'
 
 	/**
-	 * Used to obtain templates by name
-	 */
-	GldapoDirectoryRegistry directories
-	
-	/**
-	 * Used to Gldapify a schema class, registering in registry injects dynamic behaviour
-	 */
-	GldapoSchemaRegistry schemas
-	
-	/**
-	 * A collection of run time global settings
-	 */
-	GldapoSettings settings
-	
-	/**
-	 * 
-	 */
-	GldapoOperationRegistry operations
-	
-	/**
-	 * 
-	 */
-	GldapoTypeMappingRegistry typeMappings
-	
-	/**
 	 * The singleton instance
 	 */
 	static private Gldapo instance
+
+	/**
+	 * 
+	 */
+	private GldapoDirectoryRegistry directories
 	
 	/**
-	 * Singleton getter
+	 * 
 	 */
-	static Gldapo getInstance()
-	{
-		if (!instance) instance = new Gldapo()
-		return instance
+	private GldapoSchemaRegistry schemas
+	
+	/**
+	 * 
+	 */
+	private GldapoSettings settings
+	
+	/**
+	 * 
+	 */
+	private GldapoTypeMappingRegistry typemappings
+
+	/**
+	 * 
+	 */
+	private GldapoOperationRegistry operations
+	
+		
+	/**
+	 * Does nothing.
+	 */
+	private Gldapo() {
+		
+	}
+
+	/**
+	 * The directory registry holds all the known about {@link GldapoDirectory directory objects}.
+	 */
+	GldapoDirectoryRegistry getDirectories() {
+		return this.directories
+	}
+
+	/**
+	 * The schema registry holds all schema classes. 
+	 * 
+	 * Schema classes <strong>must</strong> be registered with the registry before they can be used.
+	 */
+	GldapoSchemaRegistry getSchemas() {
+		return this.schemas
 	}
 	
 	/**
-	 * Initialises with the default config file and no environment
+	 * The type mapping registry holds global type mappings for converting data between the LDAP and Java worlds.
 	 */
-	static initialize()
-	{
+	GldapoTypeMappingRegistry getTypeMappings() {
+		return this.typemappings
+	}
+
+	/**
+	 * A collection of run time global settings.
+	 */
+	GldapoSettings getSettings() { 
+		return this.settings
+	}
+
+	/**
+	 * The operation registry contains objects that performing LDAP operations
+	 */
+	GldapoOperationRegistry getOperations() {
+		return this.operations
+	}
+
+	/**
+	 * Retrieves the instance.
+	 * 
+	 * Must be called <strong>after</strong> {@link #initialize(Map)}.
+	 * 
+	 * @return The singleton instance of {@code Gldapo}
+	 * @throws GldapoInitializationException if intialize hasn't been called
+	 */
+	static Gldapo getInstance() throws GldapoInitializationException {
+		if (instance != null) {
+			return instance
+		} else {
+			throw new GldapoInitializationException("Gldapo not initialized")
+		}
+	}
+	
+	/**
+	 * Calls {@link #initialize(String)} with a null string.
+	 */
+	static initialize() {
 		initialize(null)
 	}
 	
 	/**
-	 * Initialise with default config file and specified environment
+	 * Tries to find the {@link DEFAULT_CONFIG_FILENAME default config} file and passes it's URL along with {@code environment}
+	 * to {@link #initialize(URL,String)}
+	 * 
+	 * @param environment the environment to parse the default config file with
+	 * @throws GldapoInitializationException If no {@link DEFAULT_CONFIG_FILENAME default config} file can be found
 	 */
-	static initialize(String environment)
-	{
+	static initialize(String environment) throws GldapoInitializationException {
+		
 		def configUrl = getClassLoader().findResource(DEFAULT_CONFIG_FILENAME)
-		if (configUrl == null)
-		{
+
+		if (configUrl == null) 
 			throw new GldapoInitializationException("Could not find default config resource ${DEFAULT_CONFIG_FILENAME}" as String)
-		}
 		
 		initialize(configUrl, environment)
 	}
 	
 	/**
-	 * Initialise with config file at URL and no environment
+	 * Calls {@link #initialize(URL,String)}, passing {@code configUrl} and a {@code null} {@code environment}
 	 */
-	static initialize(URL configUrl)
-	{
+	static initialize(URL configUrl) {
 		initialize(configUrl, null)
 	}
 	
 	/**
-	 * Initialise with config file at URL and specified environment
+	 * Initializes using the config script @ {@code configUrl} and parses it for @{@code environment}
+	 * 
+	 * Creates a {@link http://http://groovy.codehaus.org/ConfigSlurper ConfigSlurper} with the context of {@code environment}
+	 * and uses it to parse {@code configUrl} into a {@link http://fisheye.codehaus.org/browse/groovy/trunk/groovy/groovy-core/src/main/groovy/util/ConfigObject.groovy?r=trunk groovy.util.ConfigObject}.
+	 * The config object is then passed to {@link initialize(Map)}.
+	 * 
+	 * @param configUrl The location of the config script (must not be null)
+	 * @param environment The environment context to parse configUrl with (can be null)
+	 * @throws GldapoInitializationException If configUrl is {@code null}
 	 */
-	static initialize(URL configUrl, String environment)
-	{
-		if (configUrl == null)
-		{ 
-			throw new GldapoInitializationException("Gldapo.initialize called with null URL")
-		}
-		
+	static initialize(URL configUrl, String environment) throws GldapoInitializationException {
+		if (configUrl == null) throw new GldapoInitializationException("Gldapo.initialize called with null URL")
+
 		def slurper
-		if (environment)
-		{
+		if (environment) {
 			slurper = new ConfigSlurper(environment)
-		}
-		else
-		{
+		} else {
 			slurper = new ConfigSlurper()
 		}
 
@@ -120,45 +174,31 @@ class Gldapo
 	}
 	
 	/**
-	 * Initialise from the passed config object
+	 * Initializes Gldapo from the given config map.
+	 * 
+	 * This method simply passes the config to the following methods, setting the respective instance to the return value ...
+	 * 
+	 * <ul>
+	 * 	<li>{@link GldapoSchemaRegistry#newInstance(Map)}
+	 * 	<li>{@link GldapoDirectoryRegistry#newInstance(Map)}
+	 * 	<li>{@link GldapoTypeMappingRegistry#newInstance(Map)}
+	 * 	<li>{@link GldapoSettings#newInstance(Map)}
+	 * </ul>
+	 * 
+	 * Also creates an instance of {@link GldapoOperationRegistry}
+	 * 
+	 * @param config A map containing the desired config for Gldapo
+	 * @throws GldapoInitializationException If there is something wrong with the config
 	 */
-	static initialize(Map config)
-	{
-		def gldapo = getInstance()
+	static initialize(Map config) throws GldapoInitializationException {
 		
-		gldapo.schemas = GldapoSchemaRegistry.newInstance(config)
-		gldapo.directories = GldapoDirectoryRegistry.newInstance(config)
-		gldapo.settings = GldapoSettings.newInstance(config)
+		instance = new Gldapo()
+		instance.typemappings = GldapoTypeMappingRegistry.newInstance(config)
+		instance.schemas = GldapoSchemaRegistry.newInstance(config)
+		instance.directories = GldapoDirectoryRegistry.newInstance(config)
+
+
+		instance.settings = GldapoSettings.newInstance(config)
+		instance.operations = GldapoOperationRegistry.newInstance()
 	}
-	
-	def getSchemas()
-	{
-		if (this.schemas == null) this.schemas = new GldapoSchemaRegistry()
-		return this.schemas
-	}
-	
-	def getDirectories()
-	{
-		if (this.directories == null) this.directories = new GldapoDirectoryRegistry()
-		return this.directories
-	}
-	
-	def getSettings()
-	{ 
-		if (this.settings == null) this.settings = new GldapoSettings()
-		return this.settings
-	}
-	
-	def getOperations()
-	{
-		if (this.operations == null) this.operations = new GldapoOperationRegistry()
-		return this.operations
-	}
-	
-	def getTypeMappings()
-	{
-		if (this.typeMappings == null) this.typeMappings = new GldapoTypeMappingRegistry()
-		this.typeMappings
-	}
-	
 }

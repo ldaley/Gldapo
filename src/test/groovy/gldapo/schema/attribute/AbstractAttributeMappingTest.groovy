@@ -21,6 +21,10 @@ abstract class AbstractAttributeMappingTest extends GroovyTestCase
 	abstract def getMappingClass()
 	abstract def getMappingSubjectClass()
 	
+	AbstractAttributeMappingTest() {
+		gldapo.Gldapo.initialize([:])
+	}
+	
 	def mappingForField(String fieldName)
 	{
 		def m = this.mappingClass

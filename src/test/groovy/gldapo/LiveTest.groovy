@@ -20,7 +20,6 @@ class LiveTest extends GroovyTestCase
 	
 	LiveTest()
 	{
-		println this.class.getClassLoader().findResource("washington-edu-conf.groovy")
 		Gldapo.initialize(this.class.getClassLoader().findResource("washington-edu-conf.groovy"))
 	}
 	
