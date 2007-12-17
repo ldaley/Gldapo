@@ -185,6 +185,8 @@ class Gldapo {
 	 * 	<li>{@link GldapoSettings#newInstance(Map)}
 	 * </ul>
 	 * 
+	 * For the details of the config map format, see the above methods.
+	 * 
 	 * Also creates an instance of {@link GldapoOperationRegistry}
 	 * 
 	 * @param config A map containing the desired config for Gldapo
