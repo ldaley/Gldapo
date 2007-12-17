@@ -15,9 +15,9 @@
  */
 package gldapo.exception
 
-class GldapoNoDefaultDirectoryException extends GldapoException
+class GldapoDirectoryNotFoundException extends GldapoException
 {
-	GldapoNoDefaultDirectoryException(String directoryName)
+	GldapoDirectoryNotFoundException(String directoryName)
 	{
 		super("No directory with name '$directoryName' could be found" as String)
 	}
