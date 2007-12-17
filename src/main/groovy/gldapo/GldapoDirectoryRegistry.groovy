@@ -77,7 +77,7 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
 	 */
 	boolean add(directory) {
 		if (directory instanceof GldapoDirectory) {
-			super.add(d)
+			super.add(directory)
 		} else { 
 			throw new IllegalArgumentException("Can only add GldapoDirectory objects to GldapoDirectoryRegistry")
 		}
@@ -115,6 +115,7 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
 		def registry = new GldapoDirectoryRegistry()
 		
 		config[CONFIG_DIRECTORIES_KEY]?.each { dirName, dirConfig -> 
+			println "Adding $dirName"
 			registry << GldapoDirectory.newInstance(dirName, dirConfig)
 			if (dirConfig.defaultDirectory) registry.defaultDirectoryName = dirName
 		}
