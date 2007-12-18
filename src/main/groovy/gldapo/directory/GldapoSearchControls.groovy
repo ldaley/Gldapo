@@ -30,9 +30,28 @@ class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable
 	]
 	
 	Integer countLimit
+	
+	Integer getCountLimit() {
+		this.countLimit
+	}
+	
 	Boolean derefLinkFlag
+	
+	Boolean getDerefLinkFlag() {
+		this.derefLinkFlag
+	}
+	
 	String searchScope
+	
+	String getSearchScope() {
+		this.searchScope
+	}
+	
 	Integer timeLimit
+	
+	Integer getTimeLimit() {
+		this.timeLimit
+	}
 	
 	def clone()
 	{

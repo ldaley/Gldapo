@@ -19,17 +19,19 @@ import gldapo.directory.GldapoSearchProvider
 import gldapo.directory.GldapoSearchControls
 import gldapo.schema.annotation.GldapoSchemaFilter
 
+/**
+ * Represents an actual search operation. Sanitises the search options then calls {@link GldapoDirectory#search}.
+ */
 class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
 {	
-	GldapoSearch()
-	{
+    
+	GldapoSearch() {
 		super()
 		required = ["schema"]
 		optionals = ["directory", "filter", "pageSize", "base", "absoluteBase", "countLimit", "derefLinkFlag", "searchScope", "timeLimit"]
 	}
 	
-	void inspectOptions() 
-	{
+	void inspectOptions() {
 		this.options.directory = this.calculateDirectory()
 		this.options.filter = this.calculateFilter()
 		this.options.pageSize = this.calculatePageSize()

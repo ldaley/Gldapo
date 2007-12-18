@@ -17,7 +17,7 @@ package gldapo
 import gldapo.exception.GldapoInitializationException
 
 /**
- * The singleton instance of this class provides access to the various registries and settings at runtime.
+ * The singleton instance of this class provides access to the various registries and settings at runtime. 
  * It is also the entry point for initializing Gldapo.
  */
 class Gldapo {
@@ -74,7 +74,7 @@ class Gldapo {
 
 	/**
 	 * The schema registry holds all schema classes. 
-	 * 
+	 * <p>
 	 * Schema classes <strong>must</strong> be registered with the registry before they can be used.
 	 */
 	GldapoSchemaRegistry getSchemas() {
@@ -104,7 +104,6 @@ class Gldapo {
 
 	/**
 	 * Retrieves the instance.
-	 * 
 	 * Must be called <strong>after</strong> {@link #initialize(Map)}.
 	 * 
 	 * @return The singleton instance of {@code Gldapo}
@@ -151,7 +150,7 @@ class Gldapo {
 	
 	/**
 	 * Initializes using the config script @ {@code configUrl} and parses it for @{@code environment}
-	 * 
+	 * <p>
 	 * Creates a {@link http://http://groovy.codehaus.org/ConfigSlurper ConfigSlurper} with the context of {@code environment}
 	 * and uses it to parse {@code configUrl} into a {@link http://fisheye.codehaus.org/browse/groovy/trunk/groovy/groovy-core/src/main/groovy/util/ConfigObject.groovy?r=trunk groovy.util.ConfigObject}.
 	 * The config object is then passed to {@link initialize(Map)}.
@@ -175,18 +174,16 @@ class Gldapo {
 	
 	/**
 	 * Initializes Gldapo from the given config map.
-	 * 
+	 * <p>
 	 * This method simply passes the config to the following methods, setting the respective instance to the return value ...
-	 * 
 	 * <ul>
 	 * 	<li>{@link GldapoSchemaRegistry#newInstance(Map)}
 	 * 	<li>{@link GldapoDirectoryRegistry#newInstance(Map)}
 	 * 	<li>{@link GldapoTypeMappingRegistry#newInstance(Map)}
 	 * 	<li>{@link GldapoSettings#newInstance(Map)}
 	 * </ul>
-	 * 
 	 * For the details of the config map format, see the above methods.
-	 * 
+	 * <p>
 	 * Also creates an instance of {@link GldapoOperationRegistry}
 	 * 
 	 * @param config A map containing the desired config for Gldapo
@@ -198,8 +195,6 @@ class Gldapo {
 		instance.typemappings = GldapoTypeMappingRegistry.newInstance(config)
 		instance.schemas = GldapoSchemaRegistry.newInstance(config)
 		instance.directories = GldapoDirectoryRegistry.newInstance(config)
-
-
 		instance.settings = GldapoSettings.newInstance(config)
 		instance.operations = GldapoOperationRegistry.newInstance()
 	}

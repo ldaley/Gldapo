@@ -15,15 +15,54 @@
  */
 package gldapo
 
-class GldapoSettings 
-{
+/**
+ * The settings {@link Gldapo#getSettings() instance} holds the global default settings for Gldapo
+ */
+class GldapoSettings {
+	
+	/**
+	 * The key that the setting should be under in the config map
+	 * 
+	 * @see #newInstance(Map)
+	 */
+	static String CONFIG_KEY = "settings"
+	
+	/**
+	 * The page size is used for search operations where no page size is specified.
+	 * Paging refers to collecting large result sets in <em>chunks</em>.
+	 * The default setting is {@value}
+	 */
 	Integer pageSize = 500
 	
-	static newInstance(Map config)
-	{
+	/**
+	 * Create a new settings object from a config map.
+	 * <p>
+	 * The map should have an entry under the key {@value #CONFIG_KEY} which is a map containing entries 
+	 * for each of the following attributes:
+	 * <ul>
+	 * 	<li>{@link #pageSize}</li>
+	 * </ul>
+	 * <p>
+	 * Example ...
+	 * <pre>
+	 * [
+	 * 	settings: [
+	 * 		pageSize: 40
+	 * 	]
+	 * ]
+	 * </pre>
+	 * 
+	 * @param config the config map
+	 * @return the new instance from the config
+	 */
+	static newInstance(Map config) {
 		def settings = new GldapoSettings()
 		
-		if (config.containsKey("pageSize")) settings.pageSize = config["pageSize"]
+		if (config.containsKey(CONFIG_KEY)) {
+			def settingsConfig = config[CONFIG_KEY]
+			if ((settingsConfig instanceof Map) == false) throw GldapoInvalidConfigException("$CONFIG_KEY is not a Map")
+			settings.pageSize = settingsConfig.pageSize
+		}
 		
 		return settings
 	}

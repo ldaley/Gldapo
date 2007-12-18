@@ -17,18 +17,34 @@ package gldapo
 import gldapo.schema.attribute.type.DefaultTypeMappings
 import gldapo.schema.attribute.AbstractAttributeMapping
 
-class GldapoTypeMappingRegistry extends LinkedList<Class>
-{
+/**
+ * Holds the global type mappings to convert values to and from LDAP and Java
+ * 
+ * @see Gldapo#getTypemappings()
+ */
+class GldapoTypeMappingRegistry extends LinkedList<Class> {
+    
+	/**
+	 * The key under which the array of type mapping classes is excepted to be in the {@link newInstance(Map) config}.
+	 * Is '{@value}'
+	 */
 	static String CONFIG_KEY = "typemappings"
 	
-	GldapoTypeMappingRegistry()
-	{
+	/**
+	 * Installs {@link DefaultTypeMappings} into the registry.
+	 */
+	GldapoTypeMappingRegistry()	{
 		super()
 		this << DefaultTypeMappings
 	}
 	
-	def getToFieldMapperForType(String type)
-	{
+	/**
+	 * Returns a closure that can be used to convert a LDAP value to a particular type.
+	 * <p>
+	 * Uses {@link AbstractAttributeMapping#toFieldByTypeMapperName(Object)} to calculate the name of the
+	 * suitable mapping method
+	 */
+	def getToFieldMapperForType(String type) {
 		findMapper(AbstractAttributeMapping.toFieldByTypeMapperName(type), Object)
 	}
 	

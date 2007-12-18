@@ -40,7 +40,7 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
 	
 	/**
 	 * Returns the current default directory.
-	 * 
+	 * <p>
 	 * If there is only one directory in the registry, it is returned regardless. Else the registry is searched for a directory with
 	 * a name matching {@link #defaultDirectoryName}.
 	 * 
@@ -65,7 +65,7 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
 	 */
 	def getAt(String name)
 	{
-		def directory = this.find { it.beanName.equals(name) }
+		def directory = this.find { it.name.equals(name) }
 		if (directory == null) throw new GldapoDirectoryNotFoundException(name)
 		return directory
 	}
@@ -85,14 +85,13 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
 	
 	/**
 	 * Creates an instance from a Map
-	 * 
+	 * <p>
 	 * The map should contain a key of {@link CONFIG_DIRECTORIES_KEY} ({@value #CONFIG_DIRECTORIES_KEY}) with a value that is also a map.
-	 * 
+	 * <p>
 	 * The value map should be <em>N</em> number of entries where the key is the name of a directory, and the value being a config map
 	 * suitable for {@link GldapoDirectory#newInstance(String,Map)}.
-	 * 
+	 * <p>
 	 * Example:
-	 * 
 	 * <pre>
 	 * [
 	 * 	directory1: [
@@ -104,7 +103,6 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
 	 * 	]
 	 * ]
 	 * </pre>
-	 * 
 	 * For the directory configs themselves, in addition to directory config, you can indicate the default directory by adding a entry of
 	 * {@code defaultDirectory} with a value of {@code true}
 	 * 

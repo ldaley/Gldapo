@@ -16,34 +16,69 @@
 package gldapo.operation
 import gldapo.exception.GldapoOperationException
 
-abstract class AbstractGldapoOptionSubjectableOperation implements GldapoOptionSubjectableOperation
-{
+/**
+ * Provides basic support for implementers of {@link GldapoOptionSubjectableOperation}
+ * <p>
+ * Allows subclasses to specify their option list in terms or required and optionals.
+ */
+abstract class AbstractGldapoOptionSubjectableOperation implements GldapoOptionSubjectableOperation {
+    
+    /**
+     * A list of option names that are required by the operation
+     * 
+     * @see #validateOptions()
+     */
 	List required
+	
+	/**
+	 * A list of option names that are optional for the operation
+	 */
 	List optionals
-	Map options
-		
+	
+	/**
+	 * The actual map of options
+	 */
+	protected Map options
+	
 	abstract Object execute()
+	
+	/**
+	 * A hook for subclasses to act upon the options after they have been set, but before {@link #execute()}
+	 */
 	abstract void inspectOptions()
 	
 	/**
-	 * @todo add test for null
+	 * Performs validation and inspection after setting the options.
+	 * <p>
+	 * After setting the options instance var, calls ...
+	 * <ul>
+	 * <li>{@link #validateOptions()}
+	 * <li>{@link #inspectOptions()}
+	 * </ul>
+	 * 
+	 * @param options The new options map
 	 */
-	void setOptions(Map options)
-	{
+	void setOptions(Map options) {
 		this.options = options
 		this.validateOptions()
 		this.inspectOptions()
 	}
 	
-	void validateOptions()
-	{
+	/**
+	 * Ensures that the required options were met.
+	 * 
+	 * @throws GldapoOperationException if any of the required options are present
+	 */
+	void validateOptions() throws GldapoOperationException {
 		def requiredNotSeen = required.clone()
 		
 		options?.keySet()?.each {
-			if (required?.contains(it)) requiredNotSeen.remove(it)
-			else if (optionals?.contains(it) == false) throw new GldapoOperationException("Option '${it}' of ${this.class.simpleName} is not supported")
-			
-			
+			if (required?.contains(it)) {
+			    requiredNotSeen.remove(it)
+			}
+			else if (optionals?.contains(it) == false) { 
+			    throw new GldapoOperationException("Option '${it}' of ${this.class.simpleName} is not supported")
+			}
 		}
 		
 		if (requiredNotSeen.size() != 0) throw new GldapoOperationException("Required options '${requiredNotSeen}' of ${this.class.simpleName} is not present in options")

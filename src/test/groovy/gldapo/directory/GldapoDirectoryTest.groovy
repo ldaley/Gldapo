@@ -35,6 +35,6 @@ class GldapoDirectoryTest extends GroovyTestCase
 		assertNotNull(d)
 		assertEquals(true, d instanceof GldapoDirectory)
 		assertEquals(50, d.searchControls.countLimit)
-		assertEquals("testTemplate", d.beanName)
+		assertEquals("testTemplate", d.name)
 	}
 }

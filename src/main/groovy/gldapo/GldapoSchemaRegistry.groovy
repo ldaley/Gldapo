@@ -20,15 +20,15 @@ import gldapo.schema.GldapoSchemaRegistration
 /**
  * The schema registry holds {@link GldapoSchemaRegistration} objects that hold the necessary
  * meta data that Gldapo needs to do all the LDAP magic with schema classes.
- * 
+ * <p>
  * You can add actual schema classes or registrations ...
- * 
+ * <p>
  * {@code schemaRegistry << MySchemaClass}
- * 
+ * <p>
  * or ...
- * 
+ * <p>
  * {@code schemaRegistry << new GldapoSchemaRegistration(MySchemaClass)}
- * 
+ * <p>
  * Both will have the same effect, but the first way is preffered (the registration object will be created implicitly)
  * 
  * @see #add(Object)
@@ -45,10 +45,10 @@ class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration>
 
 	/**
 	 * Registers a new schema class.
-	 * 
+	 * <p>
 	 * If {@code registration} is a {@link java.lang.Class}  (implicitly creating a {@link GldapoSchemaRegistration} for it), 
 	 * or just adding {@code registration} if it is a schema registration. 
-	 * 
+	 * <p>
 	 * If the schema class in question is already registered, this will silently do nothing.
 	 * 
 	 * @param registration Either the schema class, or a {@link GldapoSchemaRegistration registration} for a schema class
@@ -86,12 +86,10 @@ class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration>
 	
 	/**
 	 * Creates a new registry from a config map.
-	 * 
 	 * The config map should contain an entry under the key '{@value #CONFIG_SCHEMAS_KEY}' where the value is a List of 
 	 * Class objects. The class objects are the desired schema classes.
-	 * 
+	 * <p>
 	 * Example ...
-	 * 
 	 * <pre>
 	 * [
 	 * 	schemas: [
@@ -107,8 +105,7 @@ class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration>
 	static newInstance(Map config)
 	{
 		def registry = new GldapoSchemaRegistry()
-		if (config.containsKey(CONFIG_SCHEMAS_KEY))
-		{
+		if (config.containsKey(CONFIG_SCHEMAS_KEY)) {
 			config[CONFIG_SCHEMAS_KEY].each { registry << it }
 		}
 

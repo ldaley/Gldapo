@@ -117,6 +117,7 @@
 				<groupId>org.codehaus.mojo.groovy</groupId>
 				<artifactId>groovy-maven-plugin</artifactId>
 				<version>1.0-beta-3</version>
+				<extensions>true</extensions>
 				<executions>
 					<execution>
 						<goals>
@@ -151,8 +152,19 @@
 				<artifactId>taglist-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo.groovy</groupId>
-				<artifactId>groovy-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<links>
+						<link>http://java.sun.com/j2ee/1.4/docs/api</link>
+						<link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+					</links>
+					<sourcepath>target/groovy-stubs/main:src/main/java</sourcepath>
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>

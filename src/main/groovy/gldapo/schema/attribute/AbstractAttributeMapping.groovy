@@ -57,6 +57,11 @@ abstract class AbstractAttributeMapping
 	Closure toFieldTypeMapper
 
 	/**
+	 * The current stub generator requires default constructors for some reason
+	 */
+	AbstractAttributeMapping() {}
+	
+	/**
 	 * 
 	 */
 	AbstractAttributeMapping(Class schema, Field field)

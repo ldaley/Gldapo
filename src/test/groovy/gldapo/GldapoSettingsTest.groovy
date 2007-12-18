@@ -23,7 +23,7 @@ class GldapoSettingsTest extends GroovyTestCase
 	void testLoadFromConfig() 
 	{
 		def c = new ConfigObject()
-		c.pageSize = 300
+		c.settings = [pageSize:  300]
 		def s = GldapoSettings.newInstance(c)
 		assertEquals(300, s.pageSize)
 	}

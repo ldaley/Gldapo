@@ -18,12 +18,11 @@ import gldapo.operation.*
 
 /**
  * The operation registry contains instances of {@link GldapoOperation} that perform LDAP operations.
- * 
  * For example, the searching operation is abstracted to the {@link GldapoSearch} operation.
- * 
+ * <p>
  * Operations are referenced by a name. This allows different operations to be installed over the top of each other if
  * desired.
- * 
+ * <p>
  * The operation registry exists to allow a way to completely change the way an operation works. This is handy
  * for testing, but might be useful for some edge case.
  * 
@@ -39,7 +38,6 @@ class GldapoOperationRegistry {
 	
 	/**
 	 * The store of operations. Is initialised with the default operations ...
-	 * 
 	 * <pre>
 	 * [GldapoOperationRegistry.SEARCH: GldapoSearch]
 	 * </pre>
@@ -49,8 +47,7 @@ class GldapoOperationRegistry {
 	]
 	
 	/**
-	 * Creates a new instance of the operation that is registered under {@code name} and returns it.
-	 * 
+	 * Creates a new instance of the operation that is registered under {@code name} and returns it. 
 	 * If the target operation is a {@link GldapoOptionSubjectableOperation}, the {@code options} are given to the new
 	 * operation instance.
 	 * 

@@ -45,12 +45,23 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 	/**
 	 * 
 	 */
-	String beanName
+	String name
 	
 	/**
 	 * 
 	 */
 	def template
+	
+	/**
+	 * The stub generator doesn't generate getter/setters properly. Have to put them in manually for now.
+	 */
+	void setBeanName(String beanName) {
+		this.name = beanName
+	}
+	
+	GldapoSearchControlProvider getSearchControls() {
+		this.searchControls
+	}
 	
 	/**
 	 * Simply retrieves the property from the context source
