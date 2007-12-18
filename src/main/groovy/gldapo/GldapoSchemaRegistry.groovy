@@ -14,34 +14,96 @@
  * limitations under the License.
  */
 package gldapo
-import gldapo.schema.GldapoSchemaRegistration;
 
+import gldapo.schema.GldapoSchemaRegistration
+
+/**
+ * The schema registry holds {@link GldapoSchemaRegistration} objects that hold the necessary
+ * meta data that Gldapo needs to do all the LDAP magic with schema classes.
+ * 
+ * You can add actual schema classes or registrations ...
+ * 
+ * {@code schemaRegistry << MySchemaClass}
+ * 
+ * or ...
+ * 
+ * {@code schemaRegistry << new GldapoSchemaRegistration(MySchemaClass)}
+ * 
+ * Both will have the same effect, but the first way is preffered (the registration object will be created implicitly)
+ * 
+ * @see #add(Object)
+ */
 class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration>
 {
+	
+	/**
+	 * Is the key that the list of schema classes is expected to be under in the config ('{@value}')
+	 * 
+	 * @see #newInstance(Map)
+	 */
 	static final CONFIG_SCHEMAS_KEY = 'schemas'
 
 	/**
-	 * @todo To support inheritance, this needs to register all subclasses
+	 * Registers a new schema class.
+	 * 
+	 * If {@code registration} is a {@link java.lang.Class}  (implicitly creating a {@link GldapoSchemaRegistration} for it), 
+	 * or just adding {@code registration} if it is a schema registration. 
+	 * 
+	 * If the schema class in question is already registered, this will silently do nothing.
+	 * 
+	 * @param registration Either the schema class, or a {@link GldapoSchemaRegistration registration} for a schema class
+	 * @throws IllegalArgumentException if {@code registration} is not a Class or GldapoSchemaRegistration object
 	 */
-	boolean add(s) {
-		if (s instanceof GldapoSchemaRegistration) {
-			if (this.isRegistered(s.schema) == false) super.add(s)
-		} else if (s instanceof Class) {
-			if (this.isRegistered(s) == false) super.add(new GldapoSchemaRegistration(s))
+	boolean add(registration) {
+		if (registration instanceof GldapoSchemaRegistration) {
+			if (this.isRegistered(registration.schema) == false) super.add(registration)
+		} else if (registration instanceof Class) {
+			if (this.isRegistered(registration) == false) super.add(new GldapoSchemaRegistration(registration))
 		} else {
 			throw new IllegalArgumentException("Only Class objects or GldapoSchemaRegistration objects can be added to the GldapoSchemaRegistry")
 		}		
 	}
 	
-	boolean isRegistered(schema) {
+	/**
+	 * Test to see if a particular schema class is already registered.
+	 * 
+	 * @param schema the Class in question
+	 * @return whether it is registered or not
+	 */
+	boolean isRegistered(Class schema) {
 		this.find { it.schema == schema } != null
 	}
 	
-	def getAt(Class schema)
-	{
+	/**
+	 * Allows fetching of the registration of a schema class, by the schema class
+	 * 
+	 * @param schema the schema class in question
+	 * @return A {@link GldapoSchemaRegistration} object for the schema class, or null if that class is not registered
+	 */
+	def getAt(Class schema) {
 		return this.find { it.schema == schema }
 	}
 	
+	/**
+	 * Creates a new registry from a config map.
+	 * 
+	 * The config map should contain an entry under the key '{@value #CONFIG_SCHEMAS_KEY}' where the value is a List of 
+	 * Class objects. The class objects are the desired schema classes.
+	 * 
+	 * Example ...
+	 * 
+	 * <pre>
+	 * [
+	 * 	schemas: [
+	 * 		MySchemaClass1,
+	 * 		MySchemaClass2
+	 * 	]
+	 * ]
+	 * </pre>
+	 * 
+	 * @param config the map
+	 * @return the newly created registry
+	 */
 	static newInstance(Map config)
 	{
 		def registry = new GldapoSchemaRegistry()
