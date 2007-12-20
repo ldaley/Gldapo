@@ -19,7 +19,7 @@
     <groupId>com.ldaley</groupId>
     <artifactId>gldapo</artifactId>
     <packaging>jar</packaging>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.4b1-SNAPSHOT</version>
     <name>Gldapo</name>
     <description>An Object Oriented LDAP interface for the Groovy programming language</description>
     <url>http://ldaley.com/gldapo</url>
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.ldaley</groupId>
             <artifactId>injecto</artifactId>
-            <version>0.6-SNAPSHOT</version>
+            <version>0.6</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.ldap</groupId>
@@ -127,15 +127,38 @@
                             <goal>testCompile</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>updatedownloadlink</id>
+                        <phase>post-site</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <source>${pom.basedir}/src/scripts/copydownloadstosite.groovy</source>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id>package</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>attached</goal>
+                            <goal>assembly</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/assembly/standalone.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>pre-site</id>
+                        <phase>pre-site</phase>
+                        <goals>
+                            <goal>assembly</goal>
                         </goals>
                         <configuration>
                             <descriptors>

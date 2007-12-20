@@ -10,8 +10,9 @@
 		<href>http://macromates.com</href>
 	</bannerRight>
 	<body>
-		<menu name="Overview">
+		<menu name="Gldapo">
 			<item name="Introduction" href="/index.html"/>
+			<item name="Download" href="/download.html"/>
 		</menu>
 		<menu name="Initialization">
 			<item name="About" href="/initialization/index.html" />
