@@ -19,7 +19,7 @@
     <groupId>com.ldaley</groupId>
     <artifactId>gldapo</artifactId>
     <packaging>jar</packaging>
-    <version>0.4b2-SNAPSHOT</version>
+    <version>0.4b1-SNAPSHOT</version>
     <name>Gldapo</name>
     <description>An Object Oriented LDAP interface for the Groovy programming language</description>
     <url>http://ldaley.com/gldapo</url>
