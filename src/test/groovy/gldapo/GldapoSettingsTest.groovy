@@ -27,4 +27,8 @@ class GldapoSettingsTest extends GroovyTestCase
 		def s = GldapoSettings.newInstance(c)
 		assertEquals(300, s.pageSize)
 	}
+	
+	void testNewFromNullConfig() {
+	   GldapoSettings.newInstance(null)
+	}
 }

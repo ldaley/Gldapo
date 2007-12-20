@@ -58,7 +58,7 @@ class GldapoSettings {
 	static newInstance(Map config) {
 		def settings = new GldapoSettings()
 		
-		if (config.containsKey(CONFIG_KEY)) {
+		if (config != null && config.containsKey(CONFIG_KEY)) {
 			def settingsConfig = config[CONFIG_KEY]
 			if ((settingsConfig instanceof Map) == false) throw GldapoInvalidConfigException("$CONFIG_KEY is not a Map")
 			settings.pageSize = settingsConfig.pageSize

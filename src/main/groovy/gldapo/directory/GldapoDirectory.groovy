@@ -19,6 +19,7 @@ import gldapo.Gldapo
 import gldapo.schema.GldapoContextMapper
 import gldapo.exception.GldapoException
 import gldapo.exception.GldapoInvalidConfigException
+import gldapo.exception.GldapoInvalidConfigException
 import gldapo.util.FilterUtil
 import org.springframework.ldap.core.LdapTemplate
 import org.springframework.ldap.core.support.LdapContextSource
@@ -109,6 +110,8 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 	 */
 	static newInstance(String name, Map config)
 	{
+	    if (config == null) throw new GldapoInvalidConfigException("Config for directory '$name' is null" as String)
+	    
 		def contextSource = GldapoContextSource.newInstance(config)
 		
 		def template = new LdapTemplate(contextSource: contextSource)

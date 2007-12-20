@@ -105,7 +105,8 @@ class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration>
 	static newInstance(Map config)
 	{
 		def registry = new GldapoSchemaRegistry()
-		if (config.containsKey(CONFIG_SCHEMAS_KEY)) {
+		
+		if (config != null && config.containsKey(CONFIG_SCHEMAS_KEY)) {
 			config[CONFIG_SCHEMAS_KEY].each { registry << it }
 		}
 

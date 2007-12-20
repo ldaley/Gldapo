@@ -62,6 +62,10 @@ class GldapoTypeMappingRegistryTest extends GroovyTestCase
 		assertNotNull(m2)
 		assertEquals(2, m2.call(""))
 	}
+	
+	void testNewFromNullConfig() {
+	   GldapoTypeMappingRegistry.newInstance(null)
+	}
 }
 
 class GldapoTypeMappingRegistryTest1

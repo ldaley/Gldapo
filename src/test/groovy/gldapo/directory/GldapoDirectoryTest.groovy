@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package gldapo.directory
+import gldapo.exception.GldapoInvalidConfigException
 
 /**
  * @todo Tests needed
@@ -36,5 +37,9 @@ class GldapoDirectoryTest extends GroovyTestCase
 		assertEquals(true, d instanceof GldapoDirectory)
 		assertEquals(50, d.searchControls.countLimit)
 		assertEquals("testTemplate", d.name)
+	}
+	
+	void testNewFromNullConfig() {
+        shouldFail(GldapoInvalidConfigException) { GldapoDirectory.newInstance("test", null) }
 	}
 }

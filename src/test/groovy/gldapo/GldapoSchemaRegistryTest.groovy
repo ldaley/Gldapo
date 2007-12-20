@@ -34,6 +34,10 @@ class GldapoSchemaRegistryTest extends GroovyTestCase
 
 		assertEquals(true, t1 instanceof GldapoSchemaRegistration)
 	}
+	
+	void testNewFromNullConfig() {
+	   GldapoSchemaRegistry.newInstance(null)
+	}
 }
 
 class RegistryTestSchema1 {}

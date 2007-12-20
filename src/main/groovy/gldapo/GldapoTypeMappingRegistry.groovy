@@ -59,9 +59,12 @@ class GldapoTypeMappingRegistry extends LinkedList<Class> {
 		(provider && mapping) ? { mapping.invoke(provider, it) } : null
 	}
 	
+	/**
+	 * 
+	 */
 	static newInstance(Map config) {
 		def tmr = new GldapoTypeMappingRegistry()
-		if (config[CONFIG_KEY] != null && config[CONFIG_KEY] instanceof Collection) {
+		if (config != null && config[CONFIG_KEY] != null && config[CONFIG_KEY] instanceof Collection) {
 			config[CONFIG_KEY].each {
 				tmr << it
 			}
