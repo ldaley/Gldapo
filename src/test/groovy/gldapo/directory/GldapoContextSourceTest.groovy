@@ -29,6 +29,6 @@ class GldapoContextSourceTest extends GroovyTestCase
 		def cs = GldapoContextSource.newInstance(c)
 		
 		// The LdapTemplate class puts that space in.
-		assertEquals("ou=example, ou=com", cs.baseDN)
+		assertEquals("ou=example, ou=com", cs.base.toString())
 	}
 }
