@@ -16,20 +16,40 @@
 package gldapo.directory
 import org.springframework.ldap.core.support.LdapContextSource
 
-class GldapoContextSource extends LdapContextSource
-{	
-	public static final PROPS = ["url", "urls", "base", "userDn", "password"]
-	
-	String getBaseDN()
-	{
-		return this.base?.toString()
-	}
-	
-	static newInstance(Map config)
-	{
-		def c = new GldapoContextSource()
-		PROPS.each { if (config.containsKey(it)) c."$it" = config."$it" }
-		c.afterPropertiesSet()
-		return c
-	}
+/**
+ * Provide constructing from config map functionality
+ */
+class GldapoContextSource extends LdapContextSource {
+
+    /**
+     * The list of properties that can be set in the config
+     * 
+     * @see #newInstance(Map)
+     */
+    public static final PROPS = ["url", "urls", "base", "userDn", "password"]
+    
+    /**
+     * Constructs a new context source from a config map.
+     * <p>
+     * Can have the following keys:
+     * <ul>
+     * <li>url
+     * <li>urls
+     * <li>base
+     * <li>userDn
+     * <li>password
+     * </ul>
+     * <p>
+     * {@code url} is a single url string (ldap://example.com). {@code urls} is a List of url strings. Only one of these attributes are required.
+     * <p>
+     * {@code userDn} and {@code password} are both optional. If ommitted, an anonymous context will be used.
+     * <p>
+     * {@code base} is the base location for all search operations
+     */
+    static newInstance(Map config) {
+        def c = new GldapoContextSource()
+        PROPS.each { if (config.containsKey(it)) c[it] = config[it] }
+        c.afterPropertiesSet()
+        return c
+    }
 }

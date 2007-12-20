@@ -69,7 +69,7 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 	 */
 	String getBase()
 	{
-		template?.contextSource?.baseDN
+		template?.contextSource?.base as String
 	}
 	
 	List search(Class schema, String base, String filter, GldapoSearchControlProvider controls, Integer pageSize)
