@@ -1,0 +1,137 @@
+    ---------------------------------
+    Schema Classes - Method Reference
+    ---------------------------------
+
+Method Reference
+
+    The following methods are available on all schema classes.
+
+    * {{{#find()}find()}}
+
+    * {{{#find(Map)}find(Map)}}
+
+    * {{{#findAll()}findAll()}}
+
+    * {{{#findAll(Map)}findAll(Map)}}
+
+    * {{{#getByDn(String)}getByDn(String)}}
+
+    * {{{#getByDn(String,String)}getByDn(String,String)}}
+
+    * {{{#getByDn(String,GldapoDirectory)}getByDn(String,GldapoDirectory)}}
+
+    * {{{#getDirectory()}getDirectory()}}
+
+    * {{{#getDn()}getDn()}}
+
+    * {{{#getRdn()}getRdn()}}
+
+* {find()}
+
+    Performs a search and returns a single object which was the first found. Or <<<null>>> if no matches were found.
+
++-------------------------------+
+static find()
++-------------------------------+
+
+    Calls {{{#find(Map)}find(Map)}} with an empty map.
+
+* {find(Map)}
+
+    Performs a search and returns a single object which was the first found. Or <<<null>>> if no matches were found.
+
++-------------------------------+
+static find(Map options)
++-------------------------------+
+
+    Calls {{{#findAll(Map)}findAll(Map)}}, passing thru options, but setting the <<<countLimit>>> option to <<<1>>>, forcing the return of maximum one object.
+
+* {findAll()}
+
+    Performs a search returning a <<<List>>> of matching entries.
+
++-------------------------------+
+static List findAll()
++-------------------------------+
+
+    Calls {{{#findAll(Map)}}} with an empty map.
+    
+* {findAll(Map)}
+
+    Performs a search returning a <<<List>>> of matching entries.
+
++-------------------------------+
+static List findAll(Map options)
++-------------------------------+
+
+    The map of options can contain the following items:
+
+*--*--+
+|| Attribute || Description |
+*--*--+
+| <<directory>> | Either the name of a registered directory, or an instance of <<<GldapoDirectory>>>. If <<<null>>>, the default directory will be used. |
+*--*--+
+| <<filter>> | An LDAP filter string to use to restrict the search. If the schema class has a {{{filters.html}filter}} it will be anded to the search filter. If no filter is specified <<<"(objectclass=*)">>> |
+*--*--+
+| <<base>> | The LDAP path string (relative to the base of the directory) to start the search at. If ommitted, the directory base will be used |
+*--*--+
+| <<absoluteBase>> | The LDAP path string to start the search at, but absolutely, not relative to the directory base |
+*--*--+
+| <<searchScope>> | A string indicating the scope of the search (either <<<object>>>, <<<onelevel>>> and <<<subtree>>>). Default is <<<onelevel>>> |
+*--*--+
+| <<pageSize>> | The number of entries to return in one page. The {{{../settings/}global setting}} is used if not specified for the search |
+*--*--+
+| <<countLimit>> | The maximum amount of entries for the server to return. No limit is used if omitted. (be mindful that some servers set limits server side)|
+*--*--+
+| <<timeLimit>> | The maximum number of milliseconds to spend searching. No limit is used if omitted. (be mindful that some servers set limits server side) |
+*--*--+
+| <<derefLinkFlag>> | A boolean to enables/disable link dereferencing during the search. Default is <<<false>>>. |
+*--*--+
+
+* {getByDn(String)}
+
+    Returns a single entry by it's distinguished name using the <<default directory>>.
+
++-------------------------------+
+static getByDn(String dn)
++-------------------------------+
+
+* {getByDn(String,String)}
+
+    Returns a single entry by it's distinguished name using the directory registered under <<<directoryName>>>
+        
++-------------------------------+
+static getByDn(String dn, String directoryName)
++-------------------------------+    
+
+* {getByDn(String, GldapoDirectory)}
+
+    Returns a single entry by it's distinguished name using <<<directory>>>
+
++-------------------------------+
+static getByDn(String dn, GldapoDirectory directory)
++-------------------------------+
+
+* {getDirectory()}
+
+    Returns the instance of <<<GldapoDirectory>>> that the entry was retrieved from.
+
++-------------------------------+
+GldapoDirectory getDirectory()
++-------------------------------+
+
+* {getDn()}
+
+    Returns the distinguished name of this entry.
+
++-------------------------------+
+String getDn()
++-------------------------------+
+
+* {getRdn()}
+
+    Returns the distinguished name <relative> to the base of the directory of this entry.
+
++-------------------------------+
+String getRdn()
++-------------------------------+

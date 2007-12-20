@@ -28,8 +28,8 @@
 			<item name="About" href="/schemaclasses/index.html" />
 			<item name="Attributes" href="/schemaclasses/attributes.html"/>
 			<item name="Filters" href="/schemaclasses/filters.html"/>
-			<item name="Getting" href="/schemaclasses/getting.html" />
 			<item name="Searching" href="schemaclasses/searching.html" />
+			<item name="Method Reference" href="schemaclasses/methodreference.html" />
 		</menu>
 		<menu name="Type Mapping">
 			<item name="About" href="/typemapping/index.html" />

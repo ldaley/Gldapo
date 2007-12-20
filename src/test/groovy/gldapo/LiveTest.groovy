@@ -33,6 +33,8 @@ class LiveTest extends GroovyTestCase
 		)
 		
 		people.each {
+		    println it.dn
+		    println it.rdn
 			println it.uid
 			println it.telephoneNumber	
 		}

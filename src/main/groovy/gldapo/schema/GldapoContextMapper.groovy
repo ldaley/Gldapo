@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 package gldapo.schema
+import gldapo.directory.GldapoDirectory
 import org.springframework.ldap.core.ContextMapper
 import org.springframework.ldap.core.DirContextAdapter
 
 class GldapoContextMapper implements ContextMapper
 {
 	GldapoSchemaRegistration schemaRegistration
+	GldapoDirectory directory
 
 	Object mapFromContext(context) 
 	{
 		def entry = schemaRegistration.schema.newInstance()
+		
+		entry.directory = directory
+		entry.rdn = context.dn
 		
 		schemaRegistration.attributeMappings.each { name, mapping ->
 			mapping.mapFromContext(context, entry)

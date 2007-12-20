@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto
-import injecto.annotation.InjectoDependencies
+import gldapo.directory.GldapoDirectory
+import injecto.annotation.InjectoProperty
+import injecto.annotation.InjectoDependency
 
-@InjectoDependencies([SearchingInjecto, GetInjecto, DirectoryInjecto, DnInjecto])
-class GldapoSchemaMetaInjecto {}
+@InjectoDependency(DirectoryInjecto)
+class DnInjecto {
+    @InjectoProperty
+    String rdn = null
+    
+    def getDn = { ->
+        return delegate.rdn.toString() + ", " + delegate.directory.base
+    }
+}

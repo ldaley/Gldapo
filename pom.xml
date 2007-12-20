@@ -144,10 +144,6 @@
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>changes-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
                 <artifactId>taglist-maven-plugin</artifactId>
             </plugin>
             <plugin>
@@ -159,7 +155,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <links>
-                        <link>http://java.sun.com/j2ee/1.4/docs/api</link>
+                        <link>http://static.springframework.org/spring-ldap/docs/1.2.1/api/spring-ldap</link>
                         <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
                     </links>
                     <sourcepath>target/groovy-stubs/main:src/main/java</sourcepath>

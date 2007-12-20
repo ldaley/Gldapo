@@ -76,7 +76,7 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 	{
 		def schemaRegistration = Gldapo.instance.schemas[schema]
 		
-		ContextMapper mapper = new GldapoContextMapper(schemaRegistration: schemaRegistration)
+		ContextMapper mapper = new GldapoContextMapper(schemaRegistration: schemaRegistration, directory: this)
 		ContextMapperCallbackHandler handler = new ContextMapperCallbackHandler(mapper)
 
 		SearchControls jndiControls = controls as SearchControls

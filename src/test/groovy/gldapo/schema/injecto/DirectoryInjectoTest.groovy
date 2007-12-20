@@ -14,7 +14,21 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto
-import injecto.annotation.InjectoDependencies
+import gldapo.directory.GldapoDirectory
+import injecto.*
 
-@InjectoDependencies([SearchingInjecto, GetInjecto, DirectoryInjecto, DnInjecto])
-class GldapoSchemaMetaInjecto {}
+class DirectoryInjectoTest extends GroovyTestCase {
+
+    DirectoryInjectoTest() {
+        use (Injecto) { DirectoryInjectoTestSchema.inject(DirectoryInjecto) }
+    }
+    
+    void testDirectory() {
+        def o = new DirectoryInjectoTestSchema()
+        def d = new GldapoDirectory()
+        o.directory = d
+        assertSame(d, o.directory)
+    }
+}
+
+class DirectoryInjectoTestSchema {}

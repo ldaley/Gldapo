@@ -22,4 +22,4 @@ MySchemaClass match = MySchemaClass.find(
 )
 +-------------------------------+
 
-    The searching functionality for schema classes is provided by the {{{../api/SearchingInjecto}SearchingInjecto}} {{{http://ldaley.com/injecto}injecto}}. 
+    See the {{{methodreference.html}method reference}} for details.

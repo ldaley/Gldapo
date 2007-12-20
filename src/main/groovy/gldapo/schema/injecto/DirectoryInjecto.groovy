@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto
-import injecto.annotation.InjectoDependencies
+import gldapo.directory.GldapoDirectory
+import injecto.annotation.InjectoProperty
 
-@InjectoDependencies([SearchingInjecto, GetInjecto, DirectoryInjecto, DnInjecto])
-class GldapoSchemaMetaInjecto {}
+class DirectoryInjecto {
+    @InjectoProperty
+    GldapoDirectory directory = null
+}

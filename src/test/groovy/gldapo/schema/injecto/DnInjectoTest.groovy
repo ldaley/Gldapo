@@ -14,7 +14,26 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto
-import injecto.annotation.InjectoDependencies
+import injecto.*
 
-@InjectoDependencies([SearchingInjecto, GetInjecto, DirectoryInjecto, DnInjecto])
-class GldapoSchemaMetaInjecto {}
+class DnInjectoTest extends GroovyTestCase {
+
+    DnInjectoTest() {
+        use (Injecto) { DnInjectoTestSchema.inject(DnInjecto) }
+    }
+    
+    void testRdn() {
+        def o = new DnInjectoTestSchema()
+        o.rdn = "test"
+        assertEquals("test", o.rdn)
+    }
+    
+    void testDn() {
+        def o = new DnInjectoTestSchema()
+        o.directory = [base: "dc=example, dc=com"]
+        o.rdn = "ou=people"
+        assertEquals("ou=people, dc=example, dc=com", o.dn)
+    }
+}
+
+class DnInjectoTestSchema {}
