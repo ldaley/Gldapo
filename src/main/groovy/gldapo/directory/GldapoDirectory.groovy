@@ -114,9 +114,9 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
 		def template = new LdapTemplate(contextSource: contextSource)
 		template.afterPropertiesSet()
 		
-		def searchControls = new GldapoSearchControls(config[CONFIG_SEARCH_CONTROLS_KEY])
+		def searchControls = GldapoSearchControls.newInstance(config[CONFIG_SEARCH_CONTROLS_KEY])
 		
-		def directory = new GldapoDirectory(beanName: name, template: template, searchControls: searchControls)
+		def directory = new GldapoDirectory(name: name, template: template, searchControls: searchControls)
 
 		return directory
 	}

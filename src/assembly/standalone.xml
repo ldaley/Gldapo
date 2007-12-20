@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<assembly>
+    <id>standalone</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <baseDirectory>gldapo</baseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>deps</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+    <fileSets>
+        <fileSet>
+            <directory>src/main</directory>
+            <outputDirectory>src</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <includes>
+                <include>readme*</include>
+                <include>license*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+    <files>
+        <file>
+            <source>target/gldapo-${project.version}.jar</source>
+        </file>
+        <file>
+            <source>src/test/resources/gldapoexample.groovy</source>
+        </file>
+    </files>
+</assembly>

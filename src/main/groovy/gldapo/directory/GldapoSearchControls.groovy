@@ -110,10 +110,12 @@ class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable
 	static newInstance(Map config)
 	{
 		def cs = new GldapoSearchControls()
-		if (config.containsKey("countLimit")) cs.countLimit = config.countLimit
-		if (config.containsKey("derefLinkFlag")) cs.derefLinkFlag = config.derefLinkFlag
-		if (config.containsKey("searchScope")) cs.searchScope = config.searchScope
-		if (config.containsKey("timeLimit")) cs.timeLimit = config.timeLimit
+		if (config) {
+    		if (config.containsKey("countLimit")) cs.countLimit = config.countLimit
+    		if (config.containsKey("derefLinkFlag")) cs.derefLinkFlag = config.derefLinkFlag
+    		if (config.containsKey("searchScope")) cs.searchScope = config.searchScope
+    		if (config.containsKey("timeLimit")) cs.timeLimit = config.timeLimit
+		}
 		return cs
 	}
 }
