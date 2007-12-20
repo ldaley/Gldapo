@@ -4,13 +4,15 @@ contents = download_html.text
 writable = download_html as Writable
 writable.write(contents.replaceAll('PROJECT_VERSION', project.version))
 
-log.info "Removing download/*"
-ant.delete() {
-	fileset(dir: "${project.basedir}/target/site/download", includes: "**/*") 
-}
+def download_dir = "${project.basedir}/target/site/download"
+log.info "Removing download dir"
+ant.delete(dir: download_dir, failonerror: false)
+
+log.info "Making download dir"
+ant.mkdir(dir: download_dir) 
 
 log.info "Copying standalone zip to /download"
-ant.copy(todir: "${project.basedir}/target/site/download") {
+ant.copy(todir: download_dir) {
 	fileset(dir: "${project.basedir}/target") {
 		include(name: "gldapo-${project.version}-standalone.zip")
 	}
