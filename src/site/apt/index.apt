@@ -18,3 +18,8 @@ Gldapo - Groovy LDAP Objects
     
     * Easy to use searching
 
+* Documentation
+
+    There is currently a problem with generating API docs from Groovy source using Maven. As such, the API docs are currently not available. The extent of the documentation is what is listed on this site. If in doubt, you can always {{{source-repository.html}check out the source}}.
+
+    The online version of this site contains the documentation for the latest development release. The version included in the distribution is relevant to the version of the distribution.

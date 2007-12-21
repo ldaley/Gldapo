@@ -12,7 +12,7 @@ Attributes
 
     * The cardinality of the attribute (single valued or multi valued in LDAP)
 
-    This information is harvested via introspection (with the help of some {{{schema annotations package}annotations}}).
+    This information is harvested via introspection (with the help of some {{{${project.scm.url}/src/main/java/gldapo/schema/annotation/}annotations}}).
 
 * Naming
 
@@ -26,7 +26,7 @@ class MySchemaClass {
 
     So in this example, the user is expecting an attribute called 'myAttribute' to exist on the target LDAP entry.
     
-    Sometimes you might want the object property to have a different name to the LDAP entry attribute. The {{{../api/GldapoSynonymFor}GldapoSynonymFor}} attribute allows you to use a different name ...
+    Sometimes you might want the object property to have a different name to the LDAP entry attribute. The {{{${project.scm.url}/src/main/java/gldapo/schema/annotation/GldapoSynonymFor.java}GldapoSynonymFor}} attribute allows you to use a different name ...
 
 +-------------------------------+
 import gldapo.schema.annotation.GldapoSynonymFor
@@ -56,7 +56,7 @@ class MySchemaClass {
     
 ** Pseudo Types
 
-    It is common for LDAP attributes to be stored in interesting and/or proprietary ways. A typical example of this is the plethora of date formats out there. In this situation, simply declaring your object property as <<<Date>>> is insufficient. To remedy this, we need to use the {{{../api/GldapoPseudoType}GldapoPseudoType}} annotation to specify how to convert to and from the type.
+    It is common for LDAP attributes to be stored in interesting and/or proprietary ways. A typical example of this is the plethora of date formats out there. In this situation, simply declaring your object property as <<<Date>>> is insufficient. To remedy this, we need to use the {{{${project.scm.url}/src/main/java/gldapo/schema/annotation/GldapoPseudoType.java}GldapoPseudoType}} annotation to specify how to convert to and from the type.
 
         Microsoft's Active Directory uses two (sometimes more) different representations of dates. Gldapo can accommodate this easily with pseudo types ...
 

@@ -1,0 +1,39 @@
+    -----------------------------
+    Initialization - Programmatic
+    -----------------------------
+
+    
+Initialization - Programmatic
+
+    If you don't wish to use the {{{configscript.html}config script}} mechanism, you can initialize Gldapo by passing a <<<Map>>> to <<<Gldapo.initialize()>>>
+        
++-------------------------------+
+import gldapo.*
+
+Gldapo.initialize(
+    directories: [
+        myDirectory: [:]
+            url: ""
+            base: ""
+            userDn: ""
+        ]
+    ],
+    schemas: [my.app.MySchemaClass],
+    typemappings: [my.app.MyTypeMappings],
+    settings: [:]
+)
++-------------------------------+
+
+    The javadoc for the classes that make up the Gldapo config serve as the reference of config options. Javadoc is currently not available so I am afraid the source is the current reference. See the <<<newInstance(Map)>>> method of the following classes ...
+
+    * {{{${project.scm.url}/src/main/groovy/gldapo/GldapoDirectoryRegistry.groovy}GldapoDirectoryRegistry}}
+
+        * {{{${project.scm.url}/src/main/groovy/gldapo/directory/GldapoDirectory.groovy}GldapoDirectory}}
+
+            * {{{${project.scm.url}/src/main/groovy/gldapo/directory/GldapoSearchControls.groovy}GldapoSearchControls}}
+
+    * {{{${project.scm.url}/src/main/groovy/gldapo/GldapoSchemaRegistry.groovy}GldapoSchemaRegistry}}
+
+    * {{{${project.scm.url}/src/main/groovy/gldapo/GldapoTypeMappingRegistry.groovy}GldapoTypeMappingRegistry}}
+
+    * {{{${project.scm.url}/src/main/groovy/gldapo/GldapoSettings.groovy}GldapoSettings}}

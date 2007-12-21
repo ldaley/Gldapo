@@ -19,7 +19,7 @@
     <groupId>com.ldaley</groupId>
     <artifactId>gldapo</artifactId>
     <packaging>jar</packaging>
-    <version>0.4b2-SNAPSHOT</version>
+    <version>0.4b2</version>
     <name>Gldapo</name>
     <description>An Object Oriented LDAP interface for the Groovy programming language</description>
     <url>http://ldaley.com/gldapo</url>
@@ -28,8 +28,8 @@
         <url>http://ldaley.com</url>
     </organization>
     <scm>
-        <connection>scm:svn:http://svn.ldaley.com/gldapo</connection>
-        <url>http://websvn.ldaley.com/wsvn/gldapo/</url>
+        <connection>scm:svn:http://svn.ldaley.com/gldapo/tags/gldapo-0.4b2</connection>
+        <url>http://websvn.ldaley.com/wsvn/gldapo/tags/gldapo-0.4b2</url>
     </scm>
     <licenses>
         <license>
@@ -79,6 +79,11 @@
             <version>1.0</version>
         </dependency>
     </dependencies>
+    <properties>
+        <stableVersion>0.4b2</stableVersion>
+        <releaseBase>http://mvn.ldaley.com/release/com/ldaley/gldapo</releaseBase>
+        <releaseAssembly>dist</releaseAssembly>
+    </properties>
     <repositories>
         <repository>
             <releases>
@@ -127,15 +132,18 @@
                             <goal>testCompile</goal>
                         </goals>
                     </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>2.0-beta-6</version>
+                <executions>
                     <execution>
-                        <id>updatedownloadlink</id>
-                        <phase>post-site</phase>
+                        <phase>package</phase>
                         <goals>
-                            <goal>execute</goal>
+                            <goal>site</goal>
                         </goals>
-                        <configuration>
-                            <source>${pom.basedir}/src/scripts/copydownloadstosite.groovy</source>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -143,26 +151,13 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>package</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>assembly</goal>
+                            <goal>attached</goal>
                         </goals>
                         <configuration>
                             <descriptors>
-                                <descriptor>src/assembly/standalone.xml</descriptor>
-                            </descriptors>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>pre-site</id>
-                        <phase>pre-site</phase>
-                        <goals>
-                            <goal>assembly</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>src/assembly/standalone.xml</descriptor>
+                                <descriptor>src/assembly/dist.xml</descriptor>
                             </descriptors>
                         </configuration>
                     </execution>
@@ -181,8 +176,9 @@
                 <artifactId>taglist-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
+                <groupId>org.codehaus.mojo.groovy</groupId>
+                <artifactId>groovy-maven-plugin</artifactId>
+                <version>1.0-beta-1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -192,7 +188,7 @@
                         <link>http://static.springframework.org/spring-ldap/docs/1.2.1/api/spring-ldap</link>
                         <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
                     </links>
-                    <sourcepath>target/groovy-stubs/main:src/main/java</sourcepath>
+                    <sourcepath>src/main/java</sourcepath>
                 </configuration>
             </plugin>
         </plugins>
@@ -218,4 +214,13 @@
             <url>scp://ldaley.com/home/ldaley/ldaley.com/gldapo/</url>
         </site>
     </distributionManagement>
+    <mailingLists>
+        <mailingList>
+            <name>User List</name>
+            <subscribe>http://lists.ldaley.com/listinfo.cgi/gldapo-user-ldaley.com</subscribe>
+            <unsubscribe>http://lists.ldaley.com/listinfo.cgi/gldapo-user-ldaley.com</unsubscribe>
+            <post>gldapo-user@lists.cqu.edu.au</post>
+            <archive>http://lists.ldaley.com/private.cgi/gldapo-user-ldaley.com/</archive>
+        </mailingList>
+    </mailingLists>
 </project>

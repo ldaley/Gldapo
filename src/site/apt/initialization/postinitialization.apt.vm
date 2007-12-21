@@ -1,0 +1,18 @@
+    -------------------
+    Post Initialization
+    -------------------
+
+Post Initialization
+
+    After initialization, the various registry classes and bits and pieces can be accessed via the singleton instance of the {{{${project.scm.url}/src/main/groovy/gldapo/Gldapo.groovy}Gldapo}} class.
+
++-------------------------------+
+import gldapo.*
+
+Gldapo.initialize(...)
+
+assert(Gldapo.instance.directories instanceof GldapoDirectoryRegistry)
+assert(Gldapo.instance.schemas instanceof GldapoSchemaRegistry)
+assert(Gldapo.instance.typemappings instanceof GldapoTypeMappingRegistry)
+assert(Gldapo.instance.settings instanceof GldapoSettings)
++-------------------------------+

@@ -1,0 +1,11 @@
+    -----------
+    Directories
+    -----------
+
+Directories
+
+    Directories in Gldapo are instances of the {{{${project.scm.url}/src/main/groovy/gldapo/directory/GldapoDirectory.groovy}GldapoDirectory}} class. They represent a paritcular connection to a particular directory.
+
+* Spring LDAP - LdapTemplate
+
+    Gldapo uses {{{http://www.springframework.org/ldap}Spring LDAP}} underneath the covers to do the actual LDAP connectivity. Each instance of <<<GldapoDirectory>>> contains an instance of the Spring LDAP class {{{http://static.springframework.org/spring-ldap/docs/1.2.1/api/spring-ldap/org/springframework/ldap/core/LdapTemplate.html}LdapTemplate}}. This instance is available via calling <<<getTemplate()>>> on directory objects.

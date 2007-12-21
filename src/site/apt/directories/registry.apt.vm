@@ -1,0 +1,45 @@
+    ------------------
+    Directory Registry
+    ------------------
+
+Directory Registry
+
+    Gldapo keeps a registry of {{{${project.scm.url}/src/main/groovy/gldapo/directory/GldapoDirectory.groovy}GldapoDirectory}} instances that can be referenced by name for operations.
+
+    This registry is an instance of {{{${project.scm.url}/src/main/groovy/gldapo/GldapoDirectoryRegistry.groovy}GldapoDirectoryRegistry}}, and is available from the gldapo instance ...
+
++-------------------------------+
+Gldapo.instance.directories
++-------------------------------+
+
+* Adding a directory to the registry
+
+    In most cases it makes sense to specify the directories to use during {{{../initialization/}initialization}}, but you can create and register extra directories at run time.
+
+    To register a new directory you simply create a new instance of GldapoDirectory ...
+
++-------------------------------+
+import gldapo.Gldapo
+import gldapo.directory.GldapoDirectory
+
+def d = GldapoDirectory.newInstance(
+    "myDirectory", [
+        url: "ldap://example.com"
+        base: "dc=example, dc=com"
+    ]
+)
++-------------------------------+
+
+    Then add it to the registry ...
+
++-------------------------------+
+Gldapo.instance.directories << d
++-------------------------------+
+
+* Retrieving a directory
+
+    Directories can be retrieved from the directory registry by their name ...
+    
++-------------------------------+
+assert(Gldapo.instance.directories["myDirectory"] is d)
++-------------------------------+

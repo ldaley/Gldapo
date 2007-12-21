@@ -1,51 +1,51 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<site>
-	<bannerLeft>
-		<name>Gldapo</name>
-		<src>images/gldapo.png</src>
-	</bannerLeft>
-	<bannerRight>
-		<name>Made With TextMate</name>
-		<src>images/textmate.png</src>
-		<href>http://macromates.com</href>
-	</bannerRight>
-	<body>
-		<menu name="Gldapo">
-			<item name="Introduction" href="/index.html"/>
-			<item name="Download" href="/download.html"/>
-		</menu>
-		<menu name="Initialization">
-			<item name="About" href="/initialization/index.html" />
-			<item name="Config Script" href="/initialization/configscript.html" />
-			<item name="Programmatic" href="/initialization/programmatic.html" />
-			<item name="Post Initialization" href="/initialization/postinitialization.html" />
-		</menu>
-		<menu name="Directories">
-			<item name="About" href="/directories/index.html" />
-			<item name="Registry" href="/directories/registry.html" />
-			<item name="Search Controls" href="/directories/searchcontrols.html" />
-		</menu>
-		<menu name="Schema Classes">
-			<item name="About" href="/schemaclasses/index.html" />
-			<item name="Attributes" href="/schemaclasses/attributes.html"/>
-			<item name="Filters" href="/schemaclasses/filters.html"/>
-			<item name="Searching" href="schemaclasses/searching.html" />
-			<item name="Method Reference" href="schemaclasses/methodreference.html" />
-		</menu>
-		<menu name="Type Mapping">
-			<item name="About" href="/typemapping/index.html" />
-			<item name="Global Mappings" href="/typemapping/globalmappings.html" />
-			<item name="Per Schema Mappings" href="/typemapping/perschemamappings.html" />
-			<item name="Default Mappings" href="/typemapping/defaultmappings.html" />
-		</menu>
-		<menu name="Settings">
-			<item name="About" href="/settings/index.html" />
-		</menu>
-		${reports}
-  </body>
-	<skin>
-	    <groupId>org.apache.maven.skins</groupId>
-	    <artifactId>maven-stylus-skin</artifactId>
-	    <version>1.0.1</version>
-	  </skin>
-</site>
+<?xml version="1.0"?>
+<project name="Gldapo">
+    <bannerLeft>
+        <name>Gldapo</name>
+        <src>images/gldapo.png</src>
+    </bannerLeft>
+    <bannerRight>
+        <name>Made With TextMate</name>
+        <src>images/textmate.png</src>
+        <href>http://macromates.com</href>
+    </bannerRight>
+    <body>
+        <menu name="Gldapo">
+            <item name="Introduction" href="/index.html"/>
+            <item name="Download" href="/download.html"/>
+        </menu>
+        <menu name="Initialization">
+            <item name="About" href="/initialization/index.html"/>
+            <item name="Config Script" href="/initialization/configscript.html"/>
+            <item name="Programmatic" href="/initialization/programmatic.html"/>
+            <item name="Post Initialization" href="/initialization/postinitialization.html"/>
+        </menu>
+        <menu name="Directories">
+            <item name="About" href="/directories/index.html"/>
+            <item name="Registry" href="/directories/registry.html"/>
+            <item name="Search Controls" href="/directories/searchcontrols.html"/>
+        </menu>
+        <menu name="Schema Classes">
+            <item name="About" href="/schemaclasses/index.html"/>
+            <item name="Attributes" href="/schemaclasses/attributes.html"/>
+            <item name="Filters" href="/schemaclasses/filters.html"/>
+            <item name="Searching" href="schemaclasses/searching.html"/>
+            <item name="Method Reference" href="schemaclasses/methodreference.html"/>
+        </menu>
+        <menu name="Type Mapping">
+            <item name="About" href="/typemapping/index.html"/>
+            <item name="Global Mappings" href="/typemapping/globalmappings.html"/>
+            <item name="Per Schema Mappings" href="/typemapping/perschemamappings.html"/>
+            <item name="Default Mappings" href="/typemapping/defaultmappings.html"/>
+        </menu>
+        <menu name="Settings">
+            <item name="About" href="/settings/index.html"/>
+        </menu>
+        ${reports}
+    </body>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-stylus-skin</artifactId>
+        <version>1.0.1</version>
+    </skin>
+</project>
