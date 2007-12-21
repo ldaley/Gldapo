@@ -4,7 +4,7 @@
 
 Settings
 
-    The {{{../api/Gldapo.getSettings()}settings object}} holds some global values which are used as default values.
+    The {{{${project.scm.url}/src/main/groovy/gldapo/GldapoSettings.groovy}settings object}} holds some global values which are used as default values.
 
     The available settings are ...
 

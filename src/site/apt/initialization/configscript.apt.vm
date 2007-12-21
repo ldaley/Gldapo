@@ -10,7 +10,7 @@ Initialization - Config Script
 
 ** Default
 
-    By default, Gldapo will look for a file called <<gldapo-conf.groovy>> on the classpath. To initialize Gldapo using such a file simple call <<<initialize()>>> with no arguments ...
+    By default, Gldapo will look for a file called <<gldapo-conf.groovy>> on the classpath. To initialize Gldapo using such a file, simply call <<<initialize()>>> with no arguments ...
 
 +-------------------------------+
 import gldapo.Gldapo
@@ -71,8 +71,22 @@ settings {
 
     When config scripts are parsed, they are parsed into <<<groovy.util.ConfigObjects>>> which implement the <<<java.util.Map>>> interface.
     
-    See {{{Gldapo.initialize(Map)}Gldapo.initialize(Map)}} for the available options for the config.
-        
+** Reference
+
+    The javadoc for the classes that make up the Gldapo config serve as the reference of config options. Javadoc is currently not available so I am afraid the source is the current reference. See the <<<newInstance(Map)>>> method of the following classes ...
+
+    * {{{${project.scm.url}/src/main/groovy/gldapo/GldapoDirectoryRegistry.groovy}GldapoDirectoryRegistry}}
+
+        * {{{${project.scm.url}/src/main/groovy/gldapo/directory/GldapoDirectory.groovy}GldapoDirectory}}
+
+            * {{{${project.scm.url}/src/main/groovy/gldapo/directory/GldapoSearchControls.groovy}GldapoSearchControls}}
+
+    * {{{${project.scm.url}/src/main/groovy/gldapo/GldapoSchemaRegistry.groovy}GldapoSchemaRegistry}}
+
+    * {{{${project.scm.url}/src/main/groovy/gldapo/GldapoTypeMappingRegistry.groovy}GldapoTypeMappingRegistry}}
+
+    * {{{${project.scm.url}/src/main/groovy/gldapo/GldapoSettings.groovy}GldapoSettings}}
+
 * Environment Sensitivity 
 
     One handy feature of the Groovy {{{http://groovy.codehaus.org/ConfigSlurper}Config}} mechanism is the ability to set different values depending on the environment.

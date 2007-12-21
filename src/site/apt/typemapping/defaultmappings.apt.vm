@@ -24,4 +24,4 @@ Default Mappings
 
 []
 
-    These mappings are provided by the {{{../api/DefaultTypeMappings}DefaultTypeMappings}} class which is installed into the {{{globalmappings.html}global type mapping}} registry.
+    These mappings are provided by the {{{${project.scm.url}/src/main/groovy/gldapo/schema/attribute/type/DefaultTypeMappings.groovy}DefaultTypeMappings}} class which is installed into the {{{globalmappings.html}global type mapping}} registry.

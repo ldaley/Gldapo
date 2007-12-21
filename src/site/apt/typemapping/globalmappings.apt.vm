@@ -1,0 +1,22 @@
+    -------------------------------
+    Type Mappings - Global Mappings
+    -------------------------------
+
+Global Mappings
+
+    To make a type mapping available to all schema classes, it can be added to the {{{${project.scm.url}/src/main/groovy/gldapo/GldapoTypeMappingRegistry.groovy}type mapping registry}}.
+
+    Global mappings are {{{perschemamappings.html#Per_Type}per type}} mappings. They are packaged into classes and then registered with the registry, either at {{{../initialization/}initialization time}} or at run time.
+
++-------------------------------+
+import gldapo.Gldapo
+
+class MyTypeMappings {
+    
+    mapToStringType(value) {
+        value.toUpperCase()
+    }
+}
+
+Gldapo.instance.typemappings << MyTypeMappings
++-------------------------------+

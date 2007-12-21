@@ -10,9 +10,9 @@ Type Mappings
 
     * {{{globalmappings.html}Global per type}}
 
-    * {{{perschemamappings.html}Per schema per type}}
+    * {{{perschemamappings.html#Per_Type}Per schema per type}}
 
-    * {{{perschemamappings.html}Per schema per attribute}}
+    * {{{perschemamappings.html#Per_AttributeProperty}Per schema per attribute}}
     
 []
 

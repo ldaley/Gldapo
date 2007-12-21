@@ -1,8 +1,0 @@
-    ---------------
-    Search Controls
-    ---------------
-
-Search Controls
-
-    Each <<<GldapDirectory>>> has an instance of the {{{GldapoSearchControls}GldapoSearchControls}} class that controls the default options to be used for {{{../searching/}searching}} operations. For details of the available options see the {{{GldapoSearchControls}javadocs}}.
-~~ TODO Link to GldapoSearchControls API
