@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto
-import gldapo.directory.GldapoDirectory
+import gldapo.GldapoDirectory
 import injecto.*
 
 class DirectoryInjectoTest extends GroovyTestCase {
@@ -25,7 +25,7 @@ class DirectoryInjectoTest extends GroovyTestCase {
     
     void testDirectory() {
         def o = new DirectoryInjectoTestSchema()
-        def d = new GldapoDirectory()
+        def d = new GldapoDirectory("test", [url: "ldap://example.com"])
         o.directory = d
         assertSame(d, o.directory)
     }

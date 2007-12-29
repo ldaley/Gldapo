@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.directory
+package gldapo
 import gldapo.exception.GldapoException
 import javax.naming.directory.SearchControls
  
-class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable
-{
+class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable {
+
 	public static final OBJECT_SEARCHSCOPE = "object"
 	public static final ONELEVEL_SEARCHSCOPE = "onelevel"
 	public static final SUBTREE_SEARCHSCOPE = "subtree"
@@ -30,69 +30,58 @@ class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable
 	]
 	
 	Integer countLimit
-	
-	Integer getCountLimit() {
-		this.countLimit
-	}
-	
 	Boolean derefLinkFlag
-	
-	Boolean getDerefLinkFlag() {
-		this.derefLinkFlag
-	}
-	
 	String searchScope
-	
-	String getSearchScope() {
-		this.searchScope
-	}
-	
 	Integer timeLimit
-	
-	Integer getTimeLimit() {
-		this.timeLimit
+	Integer pageSize
+		
+	GldapoSearchControls(Map config) {
+		if (config) {
+    		if (config.containsKey("countLimit")) this.countLimit = config.countLimit
+    		if (config.containsKey("derefLinkFlag")) this.derefLinkFlag = config.derefLinkFlag
+    		if (config.containsKey("searchScope")) this.searchScope = config.searchScope
+    		if (config.containsKey("timeLimit")) this.timeLimit = config.timeLimit
+    		if (config.containsKey("pageSize")) this.pageSize = config.pageSize
+		}
 	}
-	
-	def clone()
-	{
+
+	def clone() {
 		def n = new GldapoSearchControls()
 		if (this.countLimit != null) n.countLimit = this.countLimit
 		if (this.derefLinkFlag != null) n.derefLinkFlag = this.derefLinkFlag
 		if (this.searchScope != null) n.searchScope = this.searchScope
 		if (this.timeLimit != null) n.timeLimit = this.timeLimit
+		if (this.pageSize != null) n.pageSize = this.pageSize
 		return n
 	}
 	
 	/**
 	 * @todo Use an inspector or something to do this dynamically
 	 */
-	GldapoSearchControls mergeWith(controls)
-	{
+	GldapoSearchControls mergeWith(controls) {
 		def m = this.clone()
 		
 		if (controls.countLimit != null) m.countLimit = controls.countLimit
 		if (controls.derefLinkFlag != null) m.derefLinkFlag = controls.derefLinkFlag
 		if (controls.searchScope != null) m.searchScope = controls.searchScope
 		if (controls.timeLimit != null) m.timeLimit = controls.timeLimit
+		if (controls.pageSize != null) m.pageSize = controls.pageSize
 		
 		return m
 	}
 	
-	void setSearchScope(String sc)
-	{
+	void setSearchScope(String sc) {
 		if (!SEARCHSCOPE_MAPPING.containsKey(sc)) throw new GldapoException("'$sc' is not a valid search scope")
 		this.searchScope = sc
 	}
 
-	Integer getSearchScopeAsInteger()
-	{
+	Integer getSearchScopeAsInteger() {
 		SEARCHSCOPE_MAPPING[this.searchScope]
 	}
 	
 	def asType(Class c)
 	{
-		if (c.equals(SearchControls))
-		{
+		if (c.equals(SearchControls)) {
 			def controls = new SearchControls()
 			if (this.countLimit != null) controls.countLimit = this.countLimit
 			if (this.derefLinkFlag != null) controls.derefLinkFlag = this.derefLinkFlag
@@ -101,21 +90,8 @@ class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable
 			controls.returningObjFlag = true
 			return controls
 		}
-		else
-		{
+		else {
 			super(c)
 		}
-	}
-	
-	static newInstance(Map config)
-	{
-		def cs = new GldapoSearchControls()
-		if (config) {
-    		if (config.containsKey("countLimit")) cs.countLimit = config.countLimit
-    		if (config.containsKey("derefLinkFlag")) cs.derefLinkFlag = config.derefLinkFlag
-    		if (config.containsKey("searchScope")) cs.searchScope = config.searchScope
-    		if (config.containsKey("timeLimit")) cs.timeLimit = config.timeLimit
-		}
-		return cs
 	}
 }

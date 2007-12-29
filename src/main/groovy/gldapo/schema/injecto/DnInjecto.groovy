@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto
-import gldapo.directory.GldapoDirectory
+import gldapo.GldapoDirectory
 import injecto.annotation.InjectoProperty
 import injecto.annotation.InjectoDependency
 

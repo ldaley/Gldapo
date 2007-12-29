@@ -32,12 +32,12 @@ class LiveTest extends GroovyTestCase
 			countLimit: 2 // Only get two so we don't hit their server hard
 		)
 		
-		people.each {
-		    println it.dn
-		    println it.rdn
-			println it.uid
-			println it.telephoneNumber	
-		}
+/*      people.each {
+            println it.dn
+            println it.rdn
+            println it.uid
+            println it.telephoneNumber  
+        }*/
 		
 		assertEquals(2, people.size())
 	}

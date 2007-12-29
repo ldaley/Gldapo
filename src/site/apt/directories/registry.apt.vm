@@ -20,7 +20,7 @@ Gldapo.instance.directories
 
 +-------------------------------+
 import gldapo.Gldapo
-import gldapo.directory.GldapoDirectory
+import gldapo.GldapoDirectory
 
 def d = GldapoDirectory.newInstance(
     "myDirectory", [

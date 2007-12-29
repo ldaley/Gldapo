@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.directory;
+package gldapo;
+import java.util.List;
 
-public interface GldapoSearchControlProvider
+public interface GldapoSearchProvider
 {
-	public Integer getCountLimit();
-	public Boolean getDerefLinkFlag();
-	public String getSearchScope();
-	public Integer getTimeLimit();
+	public List search(Class schema, String base, String filter, GldapoSearchControlProvider controls);
+	public GldapoSearchControlProvider getSearchControls();
+	public String getBase();
 }

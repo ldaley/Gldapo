@@ -19,20 +19,13 @@ import gldapo.exception.GldapoDirectoryNotFoundException
 import gldapo.exception.GldapoNoDefaultDirectoryException
 import gldapo.exception.GldapoException
 import gldapo.exception.GldapoInvalidConfigException
-import gldapo.directory.*
+import gldapo.*
 
 /**
  * A directory registry holds instances of {@link GldapoDirectory}, retrievable by their {@link GldapoDirectory#getName()}.
  */
 class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
 
-	/**
-	 * The key that the config entry is expected to be under ({@value})
-	 * 
-	 * @see newInstance(Map)
-	 */
-	static final CONFIG_DIRECTORIES_KEY = 'directories'
-	
 	/**
 	 * The default directory is the directory used when no directory is specified for an operation.
 	 */
@@ -81,44 +74,5 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
 		} else { 
 			throw new IllegalArgumentException("Can only add GldapoDirectory objects to GldapoDirectoryRegistry")
 		}
-	}
-	
-	/**
-	 * Creates an instance from a Map
-	 * <p>
-	 * The map should contain a key of {@link CONFIG_DIRECTORIES_KEY} ({@value #CONFIG_DIRECTORIES_KEY}) with a value that is also a map.
-	 * <p>
-	 * The value map should be <em>N</em> number of entries where the key is the name of a directory, and the value being a config map
-	 * suitable for {@link GldapoDirectory#newInstance(String,Map)}.
-	 * <p>
-	 * Example:
-	 * <pre>
-	 * [
-	 * 	directory1: [
-	 * 		// directory config here 
-	 * 	],
-	 * 	directory2: [
-	 * 		// directory config here
-	 * 		defaultDirectory: true
-	 * 	]
-	 * ]
-	 * </pre>
-	 * For the directory configs themselves, in addition to directory config, you can indicate the default directory by adding a entry of
-	 * {@code defaultDirectory} with a value of {@code true}
-	 * 
-	 * @return The new instance from the config
-	 */
-	static newInstance(Map config)
-	{
-		def registry = new GldapoDirectoryRegistry()
-		
-		if (config) {
-    		config[CONFIG_DIRECTORIES_KEY]?.each { dirName, dirConfig -> 
-    			registry << GldapoDirectory.newInstance(dirName, dirConfig)
-    			if (dirConfig.defaultDirectory) registry.defaultDirectoryName = dirName
-    		}
-		}
-		
-		return registry
 	}
 }

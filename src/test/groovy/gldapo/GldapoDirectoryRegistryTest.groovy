@@ -16,21 +16,17 @@
 package gldapo
 import gldapo.exception.GldapoNoDefaultDirectoryException
 import gldapo.exception.GldapoException
-import gldapo.directory.GldapoDirectory
-import gldapo.directory.GldapoDirectory
 
-class GldapoDirectoryRegistryTest extends GroovyTestCase 
-{
-	void testGetDefaultWhenIsNone() 
-	{
+class GldapoDirectoryRegistryTest extends GroovyTestCase {
+
+	void testGetDefaultWhenIsNone() {
 		def registry = new GldapoDirectoryRegistry()
 		shouldFail (GldapoNoDefaultDirectoryException) {
 			registry.defaultDirectory
 		}
 	}
 	
-	void testGetDefaultWhenDoesntExist() 
-	{
+	void testGetDefaultWhenDoesntExist() {
 		def registry = new GldapoDirectoryRegistry()
 		registry.defaultDirectoryName = "abc"
 		shouldFail (GldapoException) {
@@ -38,41 +34,18 @@ class GldapoDirectoryRegistryTest extends GroovyTestCase
 		}
 	}
 	
-	void testGetDefault()
-	{
+	void testGetDefault() {
 		def registry = new GldapoDirectoryRegistry()
-		def directory = new GldapoDirectory(beanName: "test")
+		def directory = new GldapoDirectory("test", [url: "ldap://example.com"])
 
 		registry.defaultDirectoryName = "test"
 		registry << directory
 		assertSame(directory, registry.defaultDirectory)
 	}
-	
-	void testNewFromOkConfig()
-	{
-		def c = new ConfigObject()
 		
-		c.directories.t1.url = "ldap://example.com"
-		c.directories.t1.defaultDirectory = true
-		c.directories.t2.url = "ldap://example2.com"
-	
-		def r = GldapoDirectoryRegistry.newInstance(c)
-		
-		assert(r instanceof GldapoDirectoryRegistry)
-		assertEquals(2, r.size())
-		assertNotNull(r["t1"])
-		assertNotNull(r["t2"])
-		assert(r["t1"] instanceof GldapoDirectory)
-		assertSame(r.defaultDirectory, r["t1"])
-	}
-	
-	void testNewFromNullConfig() {
-	   GldapoDirectoryRegistry.newInstance(null)
-	}
-	
 	void testLeftShift() {
 		def registry = new GldapoDirectoryRegistry()
-		registry << new GldapoDirectory()
+		registry << new GldapoDirectory("test", [url: "ldap://example.com"])
 		shouldFail(IllegalArgumentException) { registry << "" }
 	}
 }

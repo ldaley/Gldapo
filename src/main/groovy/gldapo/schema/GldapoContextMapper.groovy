@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package gldapo.schema
-import gldapo.directory.GldapoDirectory
+import gldapo.GldapoDirectory
 import org.springframework.ldap.core.ContextMapper
 import org.springframework.ldap.core.DirContextAdapter
 

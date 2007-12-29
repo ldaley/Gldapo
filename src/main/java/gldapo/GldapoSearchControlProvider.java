@@ -13,22 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.directory
+package gldapo;
 
-class GldapoContextSourceTest extends GroovyTestCase 
+public interface GldapoSearchControlProvider
 {
-	void testNewFromConfig() 
-	{
-		def c = new ConfigObject()
-		
-		c.url = "ldap://example.com"
-		c.base = "ou=example,ou=com"
-		c.userDn = "cn=user"
-		c.password = "password"
-		
-		def cs = GldapoContextSource.newInstance(c)
-		
-		// The LdapTemplate class puts that space in.
-		assertEquals("ou=example, ou=com", cs.base.toString())
-	}
+	public Integer getCountLimit();
+	public Boolean getDerefLinkFlag();
+	public String getSearchScope();
+	public Integer getTimeLimit();
+	public Integer getPageSize();
 }

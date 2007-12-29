@@ -15,6 +15,7 @@
  */
 package gldapo
 import gldapo.exception.GldapoInitializationException
+import gldapo.exception.GldapoInvalidConfigException
 
 /**
  * The singleton instance of this class provides access to the various registries and settings at runtime. 
@@ -26,36 +27,51 @@ class Gldapo {
 	 * The name of the file that is looked for if initialize is called with no URL for the config file ({@value})
 	 */
 	static final DEFAULT_CONFIG_FILENAME = 'gldapo-conf.groovy'
+	
+    /**
+     * 
+     */
+    static final CONFIG_KEY_TYPEMAPPINGS = 'typemappings'
+    
+    /**
+     *
+     */
+    static final CONFIG_KEY_DIRECTORIES = 'directories'
+    
+    /**
+     * 
+     */
+    static final CONFIG_KEY_DEFAULT_DIRECTORY = 'defaultdirectory'
+
+    /**
+     * 
+     */
+    static final CONFIG_KEY_SCHEMAS = 'schemas'
 
 	/**
 	 * The singleton instance
 	 */
-	static private Gldapo instance
+	static Gldapo instance = new Gldapo()
 
 	/**
 	 * 
 	 */
-	private GldapoDirectoryRegistry directories
+	GldapoDirectoryRegistry directories = new GldapoDirectoryRegistry()
 	
 	/**
 	 * 
 	 */
-	private GldapoSchemaRegistry schemas
+	GldapoSchemaRegistry schemas = new GldapoSchemaRegistry()
 	
 	/**
 	 * 
 	 */
-	private GldapoSettings settings
-	
-	/**
-	 * 
-	 */
-	private GldapoTypeMappingRegistry typemappings
+	GldapoTypeMappingRegistry typemappings = new GldapoTypeMappingRegistry()
 
 	/**
 	 * 
 	 */
-	private GldapoOperationRegistry operations
+	GldapoOperationRegistry operations = new GldapoOperationRegistry()
 	
 		
 	/**
@@ -64,57 +80,25 @@ class Gldapo {
 	private Gldapo() {
 		
 	}
+	
+	void consumeConfig(Map config) {
+        if (config) {
+            def directories = extractDirectoriesFromConfig(config)
+            if (directories) directories.each { this.directories << it }
 
-	/**
-	 * The directory registry holds all the known about {@link GldapoDirectory directory objects}.
-	 */
-	GldapoDirectoryRegistry getDirectories() {
-		return this.directories
-	}
+            def typemappings = extractTypeMappingsFromConfig(config)
+            if (typemappings) typemappings.each { this.typemappings << it }
 
-	/**
-	 * The schema registry holds all schema classes. 
-	 * <p>
-	 * Schema classes <strong>must</strong> be registered with the registry before they can be used.
-	 */
-	GldapoSchemaRegistry getSchemas() {
-		return this.schemas
+            def schemas = extractSchemasFromConfig(config)
+            if (schemas) schemas.each { this.schemas << it }
+        }
 	}
 	
-	/**
-	 * The type mapping registry holds global type mappings for converting data between the LDAP and Java worlds.
-	 */
-	GldapoTypeMappingRegistry getTypeMappings() {
-		return this.typemappings
-	}
-
-	/**
-	 * A collection of run time global settings.
-	 */
-	GldapoSettings getSettings() { 
-		return this.settings
-	}
-
-	/**
-	 * The operation registry contains objects that performing LDAP operations
-	 */
-	GldapoOperationRegistry getOperations() {
-		return this.operations
-	}
-
-	/**
-	 * Retrieves the instance.
-	 * Must be called <strong>after</strong> {@link #initialize(Map)}.
-	 * 
-	 * @return The singleton instance of {@code Gldapo}
-	 * @throws GldapoInitializationException if intialize hasn't been called
-	 */
-	static Gldapo getInstance() throws GldapoInitializationException {
-		if (instance != null) {
-			return instance
-		} else {
-			throw new GldapoInitializationException("Gldapo not initialized")
-		}
+	void resetWithConfig(Map config) {
+	   this.directories.clear()
+	   this.schemas.clear()
+	   this.typemappings.clear()
+	   this.consumeConfig(config)
 	}
 	
 	/**
@@ -180,7 +164,6 @@ class Gldapo {
 	 * 	<li>{@link GldapoSchemaRegistry#newInstance(Map)}
 	 * 	<li>{@link GldapoDirectoryRegistry#newInstance(Map)}
 	 * 	<li>{@link GldapoTypeMappingRegistry#newInstance(Map)}
-	 * 	<li>{@link GldapoSettings#newInstance(Map)}
 	 * </ul>
 	 * For the details of the config map format, see the above methods.
 	 * <p>
@@ -190,12 +173,46 @@ class Gldapo {
 	 * @throws GldapoInitializationException If there is something wrong with the config
 	 */
 	static initialize(Map config) throws GldapoInitializationException {
-		
-		instance = new Gldapo()
-		instance.typemappings = GldapoTypeMappingRegistry.newInstance(config)
-		instance.schemas = GldapoSchemaRegistry.newInstance(config)
-		instance.directories = GldapoDirectoryRegistry.newInstance(config)
-		instance.settings = GldapoSettings.newInstance(config)
-		instance.operations = GldapoOperationRegistry.newInstance()
+		this.instance.resetWithConfig(config)
+	}
+
+	static extractSchemasFromConfig(Map config) {
+	    if (config.containsKey(CONFIG_KEY_SCHEMAS)) {
+	        def schemas = config[CONFIG_KEY_SCHEMAS]
+	        if (schemas instanceof Collection) {
+	            return schemas
+	        }
+	        else {
+                throw new GldapoInvalidConfigException("Key '${CONFIG_KEY_SCHEMAS}' in config is not a collection")
+	        }
+	    }
+	}
+
+	static extractTypeMappingsFromConfig(Map config) {
+	    if (config.containsKey(CONFIG_KEY_TYPEMAPPINGS)) {
+	        def typemappings = config[CONFIG_KEY_TYPEMAPPINGS]
+	        if (typemappings instanceof Collection) {
+	            return typemappings
+	        }
+	        else {
+                throw new GldapoInvalidConfigException("Key '${CONFIG_KEY_TYPEMAPPINGS}' in config is not a collection")
+	        }
+	    }
+	}
+	
+	static extractDirectoriesFromConfig(Map config) {
+	    if (config.containsKey(CONFIG_KEY_DIRECTORIES)) {
+	        def directoryConfigs = config[CONFIG_KEY_DIRECTORIES]
+	        if (directoryConfigs instanceof Map) {
+	            def directories = []
+	            directoryConfigs.each { dirName, dirConfig -> 
+	                directories << new GldapoDirectory(dirName, dirConfig)
+	            }
+	            return directories
+	        }
+	        else {
+                throw new GldapoInvalidConfigException("Key '${CONFIG_KEY_DIRECTORIES}' in config is not a map")
+	        }
+	    }   
 	}
 }

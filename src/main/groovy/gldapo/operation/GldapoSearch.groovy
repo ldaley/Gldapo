@@ -15,8 +15,8 @@
  */
 package gldapo.operation
 import gldapo.Gldapo
-import gldapo.directory.GldapoSearchProvider
-import gldapo.directory.GldapoSearchControls
+import gldapo.GldapoSearchProvider
+import gldapo.GldapoSearchControls
 import gldapo.schema.annotation.GldapoSchemaFilter
 
 /**
@@ -28,13 +28,12 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
 	GldapoSearch() {
 		super()
 		required = ["schema"]
-		optionals = ["directory", "filter", "pageSize", "base", "absoluteBase", "countLimit", "derefLinkFlag", "searchScope", "timeLimit"]
+		optionals = ["directory", "filter", "base", "absoluteBase", "countLimit", "derefLinkFlag", "searchScope", "timeLimit"]
 	}
 	
 	void inspectOptions() {
 		this.options.directory = this.calculateDirectory()
 		this.options.filter = this.calculateFilter()
-		this.options.pageSize = this.calculatePageSize()
 		this.options.searchControls = this.calculateSearchControls()
 		this.options.base = this.calculateBase()
 	}
@@ -65,12 +64,6 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
 		else return (schemaFilter) ? schemaFilter : "(objectclass=*)"
 	}
 	
-	def calculatePageSize()
-	{
-		if (options.pageSize != null) return options.pageSize
-		else return Gldapo.instance.settings.pageSize
-	}
-	
 	def calculateSearchControls()
 	{
 		def specificControls = GldapoSearchControls.newInstance(this.options)
@@ -86,6 +79,6 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
 	
 	def execute()
 	{
-		this.options.directory.search(this.options.schema, this.options.base, this.options.filter, this.options.searchControls, this.options.pageSize)
+		this.options.directory.search(this.options.schema, this.options.base, this.options.filter, this.options.searchControls)
 	}
 }

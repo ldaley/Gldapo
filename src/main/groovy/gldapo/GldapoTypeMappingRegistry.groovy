@@ -23,19 +23,17 @@ import gldapo.schema.attribute.AbstractAttributeMapping
  * @see Gldapo#getTypemappings()
  */
 class GldapoTypeMappingRegistry extends LinkedList<Class> {
-    
-	/**
-	 * The key under which the array of type mapping classes is excepted to be in the {@link newInstance(Map) config}.
-	 * Is '{@value}'
-	 */
-	static String CONFIG_KEY = "typemappings"
 	
 	/**
 	 * Installs {@link DefaultTypeMappings} into the registry.
 	 */
 	GldapoTypeMappingRegistry()	{
 		super()
-		this << DefaultTypeMappings
+		installDefaults()
+	}
+	
+	void installDefaults() {
+	   this << DefaultTypeMappings
 	}
 	
 	/**
@@ -48,8 +46,7 @@ class GldapoTypeMappingRegistry extends LinkedList<Class> {
 		findMapper(AbstractAttributeMapping.toFieldByTypeMapperName(type), Object)
 	}
 	
-	def findMapper(String mapperName, Class[] argTypes)
-	{
+	def findMapper(String mapperName, Class[] argTypes) {
 		def mapping
 		def provider = this.reverse().find {
 			mapping = it.metaClass.getMetaMethod(mapperName, argTypes)
@@ -59,16 +56,8 @@ class GldapoTypeMappingRegistry extends LinkedList<Class> {
 		(provider && mapping) ? { mapping.invoke(provider, it) } : null
 	}
 	
-	/**
-	 * 
-	 */
-	static newInstance(Map config) {
-		def tmr = new GldapoTypeMappingRegistry()
-		if (config != null && config[CONFIG_KEY] != null && config[CONFIG_KEY] instanceof Collection) {
-			config[CONFIG_KEY].each {
-				tmr << it
-			}
-		}
-		return tmr
+	void clear() {
+	   super.clear()
+       installDefaults()
 	}
 }

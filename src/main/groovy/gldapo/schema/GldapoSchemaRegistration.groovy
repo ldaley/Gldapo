@@ -44,4 +44,8 @@ class GldapoSchemaRegistration
 	{
 		Injecto.inject(schema, GldapoSchemaMetaInjecto)
 	}
+	
+	boolean equals(Class clazz) {
+	   this.schema.equals(clazz)
+	}
 }

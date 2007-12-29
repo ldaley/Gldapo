@@ -18,8 +18,7 @@ import java.lang.reflect.Field
 
 class GldapoTypeMappingRegistryTest extends GroovyTestCase 
 {
-	void testGetFromDefaults() 
-	{
+	void testGetFromDefaults() {
 		def r = new GldapoTypeMappingRegistry()
 		
 		def m = r.getToFieldMapperForType("String")
@@ -31,8 +30,7 @@ class GldapoTypeMappingRegistryTest extends GroovyTestCase
 		assertEquals(3, i.call("3"))
 	}
 	
-	void testGetNonExistantReturnsNull()
-	{
+	void testGetNonExistantReturnsNull() {
 		def r = new GldapoTypeMappingRegistry()
 		
 		assertNull(r.getToFieldMapperForType("BollocksType"))
@@ -42,8 +40,7 @@ class GldapoTypeMappingRegistryTest extends GroovyTestCase
 	 * Test that the last added mapping provider is checked first
 	 * i.e order is most recently added to least recently
 	 */
-	void testOrderingIsCorrect()
-	{
+	void testOrderingIsCorrect() {
 		// GldapoTypeMappingRegistryTest1 should respond here
 		def r1 = new GldapoTypeMappingRegistry()
 		r1 << GldapoTypeMappingRegistryTest2
@@ -62,24 +59,16 @@ class GldapoTypeMappingRegistryTest extends GroovyTestCase
 		assertNotNull(m2)
 		assertEquals(2, m2.call(""))
 	}
-	
-	void testNewFromNullConfig() {
-	   GldapoTypeMappingRegistry.newInstance(null)
-	}
 }
 
-class GldapoTypeMappingRegistryTest1
-{
-	static mapToTestType(value)
-	{
+class GldapoTypeMappingRegistryTest1 {
+	static mapToTestType(value) {
 		return 1
 	}
 }
 
-class GldapoTypeMappingRegistryTest2
-{
-	static mapToTestType(value)
-	{
+class GldapoTypeMappingRegistryTest2 {
+	static mapToTestType(value) {
 		return 2
 	}
 }

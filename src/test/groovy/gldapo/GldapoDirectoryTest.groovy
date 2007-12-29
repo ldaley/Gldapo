@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.directory
+package gldapo
 import gldapo.exception.GldapoInvalidConfigException
 
 /**
@@ -32,14 +32,14 @@ class GldapoDirectoryTest extends GroovyTestCase
 		
 		c.searchControls.countLimit = 50
 		
-		def d = GldapoDirectory.newInstance("testTemplate", c)
+		def d = new GldapoDirectory("testTemplate", c)
 		assertNotNull(d)
-		assertEquals(true, d instanceof GldapoDirectory)
 		assertEquals(50, d.searchControls.countLimit)
+		assertEquals("ou=example, ou=com", d.template.contextSource.base as String)
 		assertEquals("testTemplate", d.name)
 	}
 	
 	void testNewFromNullConfig() {
-        shouldFail(GldapoInvalidConfigException) { GldapoDirectory.newInstance("test", null) }
+        shouldFail(GldapoInvalidConfigException) { new GldapoDirectory("test", null) }
 	}
 }

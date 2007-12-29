@@ -15,36 +15,23 @@
  */
 package gldapo.operation
 import gldapo.Gldapo
-import gldapo.directory.GldapoSearchProvider
-import gldapo.directory.GldapoDirectory
-import gldapo.directory.GldapoSearchControls
+import gldapo.GldapoSearchProvider
+import gldapo.GldapoDirectory
+import gldapo.GldapoSearchControls
 import gldapo.schema.annotation.GldapoSchemaFilter
 
-class GldapoSearchTest extends GroovyTestCase 
-{
+class GldapoSearchTest extends GroovyTestCase {
 	
 	def mockDirectory = [getSearchControls: { new GldapoSearchControls() }, getBase: {->"dc=example,dc=com"}] as GldapoSearchProvider
-	def getSearch(Map options)
-	{
+	
+	def getSearch(Map options) {
 		if (!options.containsKey("directory")) options.directory = mockDirectory
 		if (!options.containsKey("schema")) options.schema = GldapoSearchTestDummySchema
 		new GldapoSearch(options: options)
 	}
 	
-	void testPageSize()
-	{
-		def withPageSize = getSearch(pageSize: 30)
-		assertNotNull(withPageSize.options.pageSize)
-		assertEquals(30, withPageSize.options.pageSize)
-		
-		def withoutPageSize = getSearch([:])
-		assertNotNull(withoutPageSize.options.pageSize)
-		assertEquals(Gldapo.instance.settings.pageSize, withoutPageSize.options.pageSize)
-	}
-	
-	void testDirectory()
-	{
-		def td = new GldapoDirectory(beanName: "t")
+	void testDirectory() {
+		def td = new GldapoDirectory("t", [url: "ldap://example.com"])
 		Gldapo.instance.directories << td
 		
 		def withDirectoryName = getSearch(directory: "t")
@@ -59,8 +46,7 @@ class GldapoSearchTest extends GroovyTestCase
 		assertSame(md, withDirectory.options.directory)
 	}
 	
-	void testBase()
-	{
+	void testBase() {
 		def noBase = getSearch([:])
 		assertEquals("", noBase.options.base)
 
@@ -72,8 +58,7 @@ class GldapoSearchTest extends GroovyTestCase
 		
 	}
 	
-	void testSearchControls()
-	{
+	void testSearchControls() {
 		def sc = new GldapoSearchControls(countLimit: 50)
 		def d = [getSearchControls: { sc }, getBase: {->"dc=example,dc=com"}] as GldapoSearchProvider
 		
@@ -88,8 +73,7 @@ class GldapoSearchTest extends GroovyTestCase
 		}
 	}
 	
-	void testFilter()
-	{
+	void testFilter() {
 		def withFilter = getSearch(filter: "(a=b)")
 		assertEquals("(a=b)", withFilter.options.filter)
 		

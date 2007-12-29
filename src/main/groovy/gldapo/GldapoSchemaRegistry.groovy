@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package gldapo
-
 import gldapo.schema.GldapoSchemaRegistration
 
 /**
@@ -33,15 +32,7 @@ import gldapo.schema.GldapoSchemaRegistration
  * 
  * @see #add(Object)
  */
-class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration>
-{
-	
-	/**
-	 * Is the key that the list of schema classes is expected to be under in the config ('{@value}')
-	 * 
-	 * @see #newInstance(Map)
-	 */
-	static final CONFIG_SCHEMAS_KEY = 'schemas'
+class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration> {
 
 	/**
 	 * Registers a new schema class.
@@ -82,34 +73,5 @@ class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration>
 	 */
 	def getAt(Class schema) {
 		return this.find { it.schema == schema }
-	}
-	
-	/**
-	 * Creates a new registry from a config map.
-	 * The config map should contain an entry under the key '{@value #CONFIG_SCHEMAS_KEY}' where the value is a List of 
-	 * Class objects. The class objects are the desired schema classes.
-	 * <p>
-	 * Example ...
-	 * <pre>
-	 * [
-	 * 	schemas: [
-	 * 		MySchemaClass1,
-	 * 		MySchemaClass2
-	 * 	]
-	 * ]
-	 * </pre>
-	 * 
-	 * @param config the map
-	 * @return the newly created registry
-	 */
-	static newInstance(Map config)
-	{
-		def registry = new GldapoSchemaRegistry()
-		
-		if (config != null && config.containsKey(CONFIG_SCHEMAS_KEY)) {
-			config[CONFIG_SCHEMAS_KEY].each { registry << it }
-		}
-
-		return registry
 	}
 }

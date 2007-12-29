@@ -16,28 +16,46 @@
 package gldapo
 import gldapo.schema.GldapoSchemaRegistration
 
-class GldapoSchemaRegistryTest extends GroovyTestCase 
-{	
-	void testNewInstanceFromConfig()
-	{
-		def c = new ConfigObject()
-		c[GldapoSchemaRegistry.CONFIG_SCHEMAS_KEY] = [RegistryTestSchema1, RegistryTestSchema2]
-		
-		def r = GldapoSchemaRegistry.newInstance(c)
-		assertEquals(2, r.size())
-		
-		def t1 = r[RegistryTestSchema1]
-		def t2 = r[RegistryTestSchema2]
-		
-		assertNotNull(t1)
-		assertNotNull(t2)
+class GldapoSchemaRegistryTest extends GroovyTestCase {
 
-		assertEquals(true, t1 instanceof GldapoSchemaRegistration)
-	}
-	
-	void testNewFromNullConfig() {
-	   GldapoSchemaRegistry.newInstance(null)
-	}
+    void testAddClass() {
+        def registry = new GldapoSchemaRegistry()
+        registry << RegistryTestSchema1
+        assertEquals(1, registry.size())
+        assertEquals(GldapoSchemaRegistration, registry[0].class)
+        assertSame(RegistryTestSchema1, registry[0].schema)
+    }
+
+    void testAddRegistration() {
+        def registry = new GldapoSchemaRegistry()
+        registry << new GldapoSchemaRegistration(RegistryTestSchema1)
+        assertEquals(1, registry.size())
+        assertEquals(GldapoSchemaRegistration, registry[0].class)
+        assertSame(RegistryTestSchema1, registry[0].schema)
+    }
+
+    void testAddRubbish() {
+        shouldFail(IllegalArgumentException) { new GldapoSchemaRegistry() << "" }
+    }
+
+    void testIsRegistered() {
+        def registry = new GldapoSchemaRegistry()
+        registry << RegistryTestSchema1
+        assertTrue(registry.isRegistered(RegistryTestSchema1))
+        assertFalse(registry.isRegistered(RegistryTestSchema2))
+        registry << RegistryTestSchema2
+        assertTrue(registry.isRegistered(RegistryTestSchema2))
+    }
+
+    void testGetAt() {
+        def registry = new GldapoSchemaRegistry()
+        registry << RegistryTestSchema1
+        registry << RegistryTestSchema2
+        assertNotNull(registry[RegistryTestSchema1])
+        assertEquals(GldapoSchemaRegistration, registry[RegistryTestSchema1].class)
+        
+        assertNull(registry[String])
+    }
 }
 
 class RegistryTestSchema1 {}
