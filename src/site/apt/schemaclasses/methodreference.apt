@@ -79,7 +79,7 @@ static List findAll(Map options)
 *--*--+
 | <<searchScope>> | A string indicating the scope of the search (either <<<object>>>, <<<onelevel>>> and <<<subtree>>>). Default is <<<onelevel>>> |
 *--*--+
-| <<pageSize>> | The number of entries to return in one page. The {{{../settings/}global setting}} is used if not specified for the search |
+| <<pageSize>> | The number of entries to return in one page. Overrides the target directories setting. If omitted or less than 1, paging will <<not>> be used |
 *--*--+
 | <<countLimit>> | The maximum amount of entries for the server to return. No limit is used if omitted. (be mindful that some servers set limits server side)|
 *--*--+

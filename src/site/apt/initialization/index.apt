@@ -12,8 +12,6 @@ Initialization
 
     * Sets up the {{{../directories/index.html}Directories}}
 
-    * Prepares the {{{../schemaclasses/index.html}Schema Classes}}
-
     * Registers any {{{../typemappings/index.html}Type Mappings}}
 
-    * Sets any {{{../settings/index.html}Global Settings}}
+    * Prepares the {{{../schemaclasses/index.html}Schema Classes}}

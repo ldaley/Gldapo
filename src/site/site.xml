@@ -11,8 +11,8 @@
     </bannerRight>
     <body>
         <menu name="Gldapo">
-            <item name="Introduction" href="/index.html"/>
-            <item name="Download" href="/download.html"/>
+            <item name="Introduction" href="index.html"/>
+            <item name="Download" href="gldapo/download.html"/>
         </menu>
         <menu name="Initialization">
             <item name="About" href="/initialization/index.html"/>
@@ -37,9 +37,6 @@
             <item name="Global Mappings" href="/typemapping/globalmappings.html"/>
             <item name="Per Schema Mappings" href="/typemapping/perschemamappings.html"/>
             <item name="Default Mappings" href="/typemapping/defaultmappings.html"/>
-        </menu>
-        <menu name="Settings">
-            <item name="About" href="/settings/index.html"/>
         </menu>
         ${reports}
     </body>
