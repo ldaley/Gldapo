@@ -24,7 +24,6 @@
         </fileSet>
         <fileSet>
             <includes>
-                <include>readme*</include>
                 <include>license*</include>
             </includes>
         </fileSet>
