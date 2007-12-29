@@ -17,25 +17,25 @@ package gldapo.schema
 
 class GldapoContextMapperTest extends GroovyTestCase 
 {
-	def registration = new GldapoSchemaRegistration(GldapoContextMapperTestSubject)
+    def registration = new GldapoSchemaRegistration(GldapoContextMapperTestSubject)
 
-	def contextMapper = new GldapoContextMapper(schemaRegistration: registration)
-		
-	def fakeContext = new Expando([
-		getStringAttribute: { assertEquals("attr1", it); return "attr1Value" },
-		getStringAttributes: { assertEquals("attr2", it); return ["attr2Value1", "attr2Value2"] as String[] }
-	])
-	
-	void testMapFromContext() 
-	{
-		def o = contextMapper.mapFromContext(fakeContext)
-		assertEquals("attr1Value", o.attr1)
-		assertEquals(["attr2Value1", "attr2Value2"], o.attr2)
-	}
+    def contextMapper = new GldapoContextMapper(schemaRegistration: registration)
+        
+    def fakeContext = new Expando([
+        getStringAttribute: { assertEquals("attr1", it); return "attr1Value" },
+        getStringAttributes: { assertEquals("attr2", it); return ["attr2Value1", "attr2Value2"] as String[] }
+    ])
+    
+    void testMapFromContext() 
+    {
+        def o = contextMapper.mapFromContext(fakeContext)
+        assertEquals("attr1Value", o.attr1)
+        assertEquals(["attr2Value1", "attr2Value2"], o.attr2)
+    }
 }
 
 class GldapoContextMapperTestSubject
 {
-	String attr1
-	List<String> attr2
+    String attr1
+    List<String> attr2
 }

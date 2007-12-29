@@ -19,33 +19,33 @@ import gldapo.exception.GldapoException
 
 class GldapoDirectoryRegistryTest extends GroovyTestCase {
 
-	void testGetDefaultWhenIsNone() {
-		def registry = new GldapoDirectoryRegistry()
-		shouldFail (GldapoNoDefaultDirectoryException) {
-			registry.defaultDirectory
-		}
-	}
-	
-	void testGetDefaultWhenDoesntExist() {
-		def registry = new GldapoDirectoryRegistry()
-		registry.defaultDirectoryName = "abc"
-		shouldFail (GldapoException) {
-			registry.defaultDirectory
-		}
-	}
-	
-	void testGetDefault() {
-		def registry = new GldapoDirectoryRegistry()
-		def directory = new GldapoDirectory("test", [url: "ldap://example.com"])
+    void testGetDefaultWhenIsNone() {
+        def registry = new GldapoDirectoryRegistry()
+        shouldFail (GldapoNoDefaultDirectoryException) {
+            registry.defaultDirectory
+        }
+    }
+    
+    void testGetDefaultWhenDoesntExist() {
+        def registry = new GldapoDirectoryRegistry()
+        registry.defaultDirectoryName = "abc"
+        shouldFail (GldapoException) {
+            registry.defaultDirectory
+        }
+    }
+    
+    void testGetDefault() {
+        def registry = new GldapoDirectoryRegistry()
+        def directory = new GldapoDirectory("test", [url: "ldap://example.com"])
 
-		registry.defaultDirectoryName = "test"
-		registry << directory
-		assertSame(directory, registry.defaultDirectory)
-	}
-		
-	void testLeftShift() {
-		def registry = new GldapoDirectoryRegistry()
-		registry << new GldapoDirectory("test", [url: "ldap://example.com"])
-		shouldFail(IllegalArgumentException) { registry << "" }
-	}
+        registry.defaultDirectoryName = "test"
+        registry << directory
+        assertSame(directory, registry.defaultDirectory)
+    }
+        
+    void testLeftShift() {
+        def registry = new GldapoDirectoryRegistry()
+        registry << new GldapoDirectory("test", [url: "ldap://example.com"])
+        shouldFail(IllegalArgumentException) { registry << "" }
+    }
 }

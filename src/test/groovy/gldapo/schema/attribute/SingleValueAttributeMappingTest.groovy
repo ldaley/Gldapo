@@ -19,52 +19,52 @@ import gldapo.schema.annotation.GldapoSynonymFor
 
 class SingleValueAttributeMappingTest extends AbstractAttributeMappingTest
 {
-	def mappingClass = SingleValueAttributeMapping
-	def mappingSubjectClass = SingleValueAttributeMappingTestSubject
-	
-	def getFakeContext(val)
-	{
-		new Expando(getStringAttribute: { return val })
-	}
-	
-	void testSimpleString() 
-	{
-		doMappingTest("simpleString", "simpleString", "String", "test", "test")
-	}
-	
-	void testPseudoType() 
-	{
-		doMappingTest("pseudoType", "pseudoType", "Integer", "3", 3)
-	}
-	
-	void testSynonym() 
-	{
-		doMappingTest("synonym", "other", "String", "o", "o")
-	}
-	
-	void testNullValue() 
-	{
-		doMappingTest("simpleString", "simpleString", "String", null, null)
-	}
-	
-	void testBogusType()
-	{
-		shouldFail() {
-			mappingForField("bogusType")
-		}
-	}
+    def mappingClass = SingleValueAttributeMapping
+    def mappingSubjectClass = SingleValueAttributeMappingTestSubject
+    
+    def getFakeContext(val)
+    {
+        new Expando(getStringAttribute: { return val })
+    }
+    
+    void testSimpleString() 
+    {
+        doMappingTest("simpleString", "simpleString", "String", "test", "test")
+    }
+    
+    void testPseudoType() 
+    {
+        doMappingTest("pseudoType", "pseudoType", "Integer", "3", 3)
+    }
+    
+    void testSynonym() 
+    {
+        doMappingTest("synonym", "other", "String", "o", "o")
+    }
+    
+    void testNullValue() 
+    {
+        doMappingTest("simpleString", "simpleString", "String", null, null)
+    }
+    
+    void testBogusType()
+    {
+        shouldFail() {
+            mappingForField("bogusType")
+        }
+    }
 }
 
 class SingleValueAttributeMappingTestSubject
 {
-	String simpleString
-	
-	@GldapoPseudoType("Integer")
-	String pseudoType
-	
-	@GldapoSynonymFor("other")
-	String synonym
-	
-	@GldapoPseudoType("BogusType")
-	String bogusType
+    String simpleString
+    
+    @GldapoPseudoType("Integer")
+    String pseudoType
+    
+    @GldapoSynonymFor("other")
+    String synonym
+    
+    @GldapoPseudoType("BogusType")
+    String bogusType
 }

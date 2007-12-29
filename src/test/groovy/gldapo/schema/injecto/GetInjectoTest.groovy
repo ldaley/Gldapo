@@ -23,17 +23,17 @@ import gldapo.test.GldapoMockOperationInstaller
  */
 class GetInjectoTest extends GroovyTestCase 
 {
-	GetInjectoTest()
-	{
-		use(Injecto) { GetInjectoTestSchema.inject(GetInjecto) }
-	}
-	
-	
-	void testGetWithResult()
-	{
-		GldapoMockOperationInstaller.installSearchWithResult([1,2,3])
-		assertEquals(1, GetInjectoTestSchema.getByDn("abc"))
-	}
+    GetInjectoTest()
+    {
+        use(Injecto) { GetInjectoTestSchema.inject(GetInjecto) }
+    }
+    
+    
+    void testGetWithResult()
+    {
+        GldapoMockOperationInstaller.installSearchWithResult([1,2,3])
+        assertEquals(1, GetInjectoTestSchema.getByDn("abc"))
+    }
 }
 
 class GetInjectoTestSchema {}

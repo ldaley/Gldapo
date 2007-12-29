@@ -23,41 +23,41 @@ import gldapo.schema.attribute.AbstractAttributeMapping
  * @see Gldapo#getTypemappings()
  */
 class GldapoTypeMappingRegistry extends LinkedList<Class> {
-	
-	/**
-	 * Installs {@link DefaultTypeMappings} into the registry.
-	 */
-	GldapoTypeMappingRegistry()	{
-		super()
-		installDefaults()
-	}
-	
-	void installDefaults() {
-	   this << DefaultTypeMappings
-	}
-	
-	/**
-	 * Returns a closure that can be used to convert a LDAP value to a particular type.
-	 * <p>
-	 * Uses {@link AbstractAttributeMapping#toFieldByTypeMapperName(Object)} to calculate the name of the
-	 * suitable mapping method
-	 */
-	def getToFieldMapperForType(String type) {
-		findMapper(AbstractAttributeMapping.toFieldByTypeMapperName(type), Object)
-	}
-	
-	def findMapper(String mapperName, Class[] argTypes) {
-		def mapping
-		def provider = this.reverse().find {
-			mapping = it.metaClass.getMetaMethod(mapperName, argTypes)
-			return mapping?.isStatic()
-		}
-		
-		(provider && mapping) ? { mapping.invoke(provider, it) } : null
-	}
-	
-	void clear() {
-	   super.clear()
+    
+    /**
+     * Installs {@link DefaultTypeMappings} into the registry.
+     */
+    GldapoTypeMappingRegistry()    {
+        super()
+        installDefaults()
+    }
+    
+    void installDefaults() {
+       this << DefaultTypeMappings
+    }
+    
+    /**
+     * Returns a closure that can be used to convert a LDAP value to a particular type.
+     * <p>
+     * Uses {@link AbstractAttributeMapping#toFieldByTypeMapperName(Object)} to calculate the name of the
+     * suitable mapping method
+     */
+    def getToFieldMapperForType(String type) {
+        findMapper(AbstractAttributeMapping.toFieldByTypeMapperName(type), Object)
+    }
+    
+    def findMapper(String mapperName, Class[] argTypes) {
+        def mapping
+        def provider = this.reverse().find {
+            mapping = it.metaClass.getMetaMethod(mapperName, argTypes)
+            return mapping?.isStatic()
+        }
+        
+        (provider && mapping) ? { mapping.invoke(provider, it) } : null
+    }
+    
+    void clear() {
+       super.clear()
        installDefaults()
-	}
+    }
 }

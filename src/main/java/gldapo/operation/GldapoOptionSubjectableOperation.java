@@ -18,5 +18,5 @@ import java.util.Map;
 
 public interface GldapoOptionSubjectableOperation extends GldapoOperation
 {
-	public void setOptions(Map options);
+    public void setOptions(Map options);
 }

@@ -17,17 +17,17 @@ package gldapo.exception
 
 class GldapoException extends Exception
 {
-	GldapoException() {
-		super()
-	}
-	
-	GldapoException(String message)
-	{
-		super(message)
-	}
-	
-	GldapoException(String message, Exception cause)
-	{
-		super(message, cause)
-	}
+    GldapoException() {
+        super()
+    }
+    
+    GldapoException(String message)
+    {
+        super(message)
+    }
+    
+    GldapoException(String message, Exception cause)
+    {
+        super(message, cause)
+    }
 }

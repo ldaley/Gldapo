@@ -17,8 +17,8 @@ package gldapo.exception
 
 class GldapoOperationException extends GldapoException
 {
-	GldapoOperationException(String msg)
-	{
-		super(msg)
-	}
+    GldapoOperationException(String msg)
+    {
+        super(msg)
+    }
 }

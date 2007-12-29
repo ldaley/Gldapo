@@ -19,19 +19,19 @@ import gldapo.exception.GldapoInvalidConfigException
 
 class GldapoTest extends GroovyTestCase 
 {
-	void testInitialiseDefaultConf()  {
-		Gldapo.initialize("dev")
-		assertEquals(2, Gldapo.instance.directories.size())
-		assertEquals(50, Gldapo.instance.directories["t1"].searchControls.countLimit) // Tests env collapse
-	}
-	
-	void testNullUrlExplodes() {
-		shouldFail {
-			Gldapo.initialize(new File("2853kgmpv0").toURL())
-		}
-	}
-	
-	void testExtractDirectoriesFromConfig() {
+    void testInitialiseDefaultConf()  {
+        Gldapo.initialize("dev")
+        assertEquals(2, Gldapo.instance.directories.size())
+        assertEquals(50, Gldapo.instance.directories["t1"].searchControls.countLimit) // Tests env collapse
+    }
+    
+    void testNullUrlExplodes() {
+        shouldFail {
+            Gldapo.initialize(new File("2853kgmpv0").toURL())
+        }
+    }
+    
+    void testExtractDirectoriesFromConfig() {
         def directories = Gldapo.extractDirectoriesFromConfig(
             directories: [
                 d1: [
@@ -58,26 +58,26 @@ class GldapoTest extends GroovyTestCase
             typemappings: [
                 SimpleSchemaClass, WashingtonEduPerson
             ]
-	    )
-	    assertEquals(2, typemappings.size())
-	    assertTrue(typemappings.contains(SimpleSchemaClass))
-	    assertTrue(typemappings.contains(WashingtonEduPerson))
-	    
-	    shouldFail(GldapoInvalidConfigException) { Gldapo.extractTypeMappingsFromConfig(typemappings: "blah") }
+        )
+        assertEquals(2, typemappings.size())
+        assertTrue(typemappings.contains(SimpleSchemaClass))
+        assertTrue(typemappings.contains(WashingtonEduPerson))
+        
+        shouldFail(GldapoInvalidConfigException) { Gldapo.extractTypeMappingsFromConfig(typemappings: "blah") }
     }
-	
-	void testExtractSchemasFromConfig() {
+    
+    void testExtractSchemasFromConfig() {
         def schemas = Gldapo.extractSchemasFromConfig(
             schemas: [
                 SimpleSchemaClass, WashingtonEduPerson
             ]
-	    )
-	    assertEquals(2, schemas.size())
-	    assertTrue(schemas.contains(SimpleSchemaClass))
-	    assertTrue(schemas.contains(WashingtonEduPerson))
+        )
+        assertEquals(2, schemas.size())
+        assertTrue(schemas.contains(SimpleSchemaClass))
+        assertTrue(schemas.contains(WashingtonEduPerson))
 
-	    shouldFail(GldapoInvalidConfigException) { Gldapo.extractSchemasFromConfig(schemas: "blah") }
-	}
+        shouldFail(GldapoInvalidConfigException) { Gldapo.extractSchemasFromConfig(schemas: "blah") }
+    }
     
     void testConsumeConfig() {
         def gldapo = new Gldapo()

@@ -17,14 +17,14 @@ package gldapo.exception
 
 class GldapoInitializationException extends GldapoException
 {
-	/**
-	 * The current stub generator for groovy requires default constructors for super classes
-	 */
-	GldapoInitializationException() {
-		
-	}
-	
-	GldapoInitializationException(String message) {
-		super(message)
-	}
+    /**
+     * The current stub generator for groovy requires default constructors for super classes
+     */
+    GldapoInitializationException() {
+        
+    }
+    
+    GldapoInitializationException(String message) {
+        super(message)
+    }
 }

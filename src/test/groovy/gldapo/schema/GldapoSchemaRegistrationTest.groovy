@@ -19,28 +19,28 @@ import injecto.Injecto
 
 class GldapoSchemaRegistrationTest extends GroovyTestCase 
 {
-	def r
-	
-	GldapoSchemaRegistrationTest()
-	{
-		r = new GldapoSchemaRegistration(GldapoSchemaRegistrationTestSubject)
-	}
-	
-	void testItGotInjected() 
-	{
-		assertTrue(Injecto.isInjected(GldapoSchemaRegistrationTestSubject, GldapoSchemaMetaInjecto))
-	}
-	
-	void testReturnsRightClass()
-	{
-		assertEquals(GldapoSchemaRegistrationTestSubject, r.schema)
-	}
-	
-	void testGetsAttributeMappings()
-	{
-		assertTrue(r.attributeMappings instanceof Map)
-		assertNotNull(r.attributeMappings)
-	}
+    def r
+    
+    GldapoSchemaRegistrationTest()
+    {
+        r = new GldapoSchemaRegistration(GldapoSchemaRegistrationTestSubject)
+    }
+    
+    void testItGotInjected() 
+    {
+        assertTrue(Injecto.isInjected(GldapoSchemaRegistrationTestSubject, GldapoSchemaMetaInjecto))
+    }
+    
+    void testReturnsRightClass()
+    {
+        assertEquals(GldapoSchemaRegistrationTestSubject, r.schema)
+    }
+    
+    void testGetsAttributeMappings()
+    {
+        assertTrue(r.attributeMappings instanceof Map)
+        assertNotNull(r.attributeMappings)
+    }
 }
 
 class GldapoSchemaRegistrationTestSubject {}

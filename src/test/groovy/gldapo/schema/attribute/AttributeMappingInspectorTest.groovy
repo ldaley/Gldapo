@@ -16,69 +16,69 @@
 package gldapo.schema.attribute
 
 class AttributeMappingInspectorTest extends GroovyTestCase
-{	
-	def mappings
-	
-	AttributeMappingInspectorTest()
-	{
-		mappings = AttributeMappingInspector.getAttributeMappings(AttributeMappingInspectorTestSubject)
-	}
-	
-	void testCorrectNumberOfMappings()
-	{
-		assertEquals(3, mappings.size())
-	}
-	
-	void testSimpleSingleValue() 
-	{
-		def m = mappings.simpleSingleValue
-		assertNotNull(m)
-		assertEquals(SingleValueAttributeMapping, m.class)
-	}
-	
-	void testSimpleMultiValue() 
-	{
-		def m = mappings.simpleMultiValue
-		assertNotNull(m)
-		assertEquals(MultiValueAttributeMapping, m.class)
-	}
+{    
+    def mappings
+    
+    AttributeMappingInspectorTest()
+    {
+        mappings = AttributeMappingInspector.getAttributeMappings(AttributeMappingInspectorTestSubject)
+    }
+    
+    void testCorrectNumberOfMappings()
+    {
+        assertEquals(3, mappings.size())
+    }
+    
+    void testSimpleSingleValue() 
+    {
+        def m = mappings.simpleSingleValue
+        assertNotNull(m)
+        assertEquals(SingleValueAttributeMapping, m.class)
+    }
+    
+    void testSimpleMultiValue() 
+    {
+        def m = mappings.simpleMultiValue
+        assertNotNull(m)
+        assertEquals(MultiValueAttributeMapping, m.class)
+    }
 
-	void testPrivateProperty()
-	{
-		assertNull(mappings.privateProperty)
-	}
-	
-	void testPrivateReadOnly()
-	{
-		assertNull(mappings.privateReadOnly)
-	}
-	
-	void testPrivateWriteOnly()
-	{
-		assertNull(mappings.privateWriteOnly)
-	}
-	
-	void testPrivateReadWrite()
-	{
-		assertNotNull(mappings.privateReadWrite)
-	}
+    void testPrivateProperty()
+    {
+        assertNull(mappings.privateProperty)
+    }
+    
+    void testPrivateReadOnly()
+    {
+        assertNull(mappings.privateReadOnly)
+    }
+    
+    void testPrivateWriteOnly()
+    {
+        assertNull(mappings.privateWriteOnly)
+    }
+    
+    void testPrivateReadWrite()
+    {
+        assertNotNull(mappings.privateReadWrite)
+    }
 }
 
 class AttributeMappingInspectorTestSubject
 {
-	String simpleSingleValue
-	
-	List<String> simpleMultiValue
-	
-	private privateProperty
-	
-	private privateReadOnly
-	def getPrivateReadOnly() { }
-	
-	private privateWriteOnly
-	void setPrivateWriteOnly(Object it) { }
-		
-	String privateReadWrite
-	def getPrivateReadWrite() { null }
-	void setPrivateReadWrite(String it) { }
+    String simpleSingleValue
+    
+    List<String> simpleMultiValue
+    
+    private privateProperty
+    
+    private privateReadOnly
+    def getPrivateReadOnly() { }
+    
+    private privateWriteOnly
+    void setPrivateWriteOnly(Object it) { }
+        
+    String privateReadWrite
+    def getPrivateReadWrite() { null }
+    void setPrivateReadWrite(String it) { }
 }

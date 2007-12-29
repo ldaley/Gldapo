@@ -21,66 +21,66 @@ import java.lang.reflect.ParameterizedType
 
 class MultiValueAttributeMapping extends AbstractAttributeMapping
 {
-	static DEFAULT_COLLECTION_ELEMENT_TYPE = String
-	
-	static SUPPORTED_COLLECTION_TYPE_MAP = [
-		(List): LinkedList,
-		(Set): LinkedHashSet,
-		(SortedSet): TreeSet
-	]
-	
-	/**
-	 * Multivalue attributes are declared by List<T>, Set<T> or SortedSet<T>
-	 */
-	Class collectionType
-	
-	/**
-	 * @todo Check that this is actually a collection type, maybe
-	 */
-	MultiValueAttributeMapping(Class schema, Field field)
-	{
-		super(schema, field)
-		this.collectionType = this.calculateCollectionType()
-	}
-	
-	/**
-	 * @todo Need to use a better exception
-	 */
-	def calculateCollectionType()
-	{
-		def t = this.field.type
-		if (!SUPPORTED_COLLECTION_TYPE_MAP.containsKey(t)) throw new GldapoException("$t is not a supported collection type, supported values are ${SUPPORTED_COLLECTION_TYPE_MAP.keys}")
-		return SUPPORTED_COLLECTION_TYPE_MAP[t]
-	}
-		
-	def calculateTypeMappingFromFieldType()
-	{
-		def t = this.field.genericType
-		
-		if (t instanceof ParameterizedType) 
-		{
-			return t.actualTypeArguments[0].simpleName
-		}
-		else
-		{
-			return DEFAULT_COLLECTION_ELEMENT_TYPE.simpleName
-		}
-	}
-	
-	def getFieldValue(Object context)
-	{		
-		def rawValues = context.getStringAttributes(this.attributeName)
-		if (rawValues == null || rawValues.size() < 1)
-		{
-			return null
-		}
-		else
-		{
-			def mappedValue = this.collectionType.newInstance()
-			0.upto(rawValues.size() - 1) {
-				mappedValue << this.toFieldTypeMapper.call(rawValues[it])
-			}
-			return mappedValue
-		}
-	}
+    static DEFAULT_COLLECTION_ELEMENT_TYPE = String
+    
+    static SUPPORTED_COLLECTION_TYPE_MAP = [
+        (List): LinkedList,
+        (Set): LinkedHashSet,
+        (SortedSet): TreeSet
+    ]
+    
+    /**
+     * Multivalue attributes are declared by List<T>, Set<T> or SortedSet<T>
+     */
+    Class collectionType
+    
+    /**
+     * @todo Check that this is actually a collection type, maybe
+     */
+    MultiValueAttributeMapping(Class schema, Field field)
+    {
+        super(schema, field)
+        this.collectionType = this.calculateCollectionType()
+    }
+    
+    /**
+     * @todo Need to use a better exception
+     */
+    def calculateCollectionType()
+    {
+        def t = this.field.type
+        if (!SUPPORTED_COLLECTION_TYPE_MAP.containsKey(t)) throw new GldapoException("$t is not a supported collection type, supported values are ${SUPPORTED_COLLECTION_TYPE_MAP.keys}")
+        return SUPPORTED_COLLECTION_TYPE_MAP[t]
+    }
+        
+    def calculateTypeMappingFromFieldType()
+    {
+        def t = this.field.genericType
+        
+        if (t instanceof ParameterizedType) 
+        {
+            return t.actualTypeArguments[0].simpleName
+        }
+        else
+        {
+            return DEFAULT_COLLECTION_ELEMENT_TYPE.simpleName
+        }
+    }
+    
+    def getFieldValue(Object context)
+    {        
+        def rawValues = context.getStringAttributes(this.attributeName)
+        if (rawValues == null || rawValues.size() < 1)
+        {
+            return null
+        }
+        else
+        {
+            def mappedValue = this.collectionType.newInstance()
+            0.upto(rawValues.size() - 1) {
+                mappedValue << this.toFieldTypeMapper.call(rawValues[it])
+            }
+            return mappedValue
+        }
+    }
 }

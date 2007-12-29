@@ -30,58 +30,58 @@ import gldapo.operation.*
  * @see GldapoOptionSubjectableOption
  */
 class GldapoOperationRegistry {
-	
-	/**
-	 * Operation name for the search operation. 
-	 */
-	public static final SEARCH = "search"
-	
-	/**
-	 * The store of operations. Is initialised with the default operations ...
-	 * <pre>
-	 * [GldapoOperationRegistry.SEARCH: GldapoSearch]
-	 * </pre>
-	 */
-	private operations = [
-		(SEARCH): GldapoSearch
-	]
-	
-	/**
-	 * Creates a new instance of the operation that is registered under {@code name} and returns it. 
-	 * If the target operation is a {@link GldapoOptionSubjectableOperation}, the {@code options} are given to the new
-	 * operation instance.
-	 * 
-	 * @param opname The name of the operation to retrieve (e.g. 'search')
-	 * @param options The operation options to use if the operation is a GldapoOptionSubjectableOperation
-	 * @return A new instance of the operation Class, or null if there is no operation registered for that name
-	 */
-	GldapoOperation getAt(String opname, Map options)
-	{
-		
-		def op = this.operations[opname]?.newInstance()
-		if (op != null && op instanceof GldapoOptionSubjectableOperation) op.options = (options == null) ? [:] : options
-		return op
-	}
-	
-	/**
-	 * Calls {@link #getAt(String,Map)} with null for the options map
-	 */
-	GldapoOperation getAt(String opname)
-	{
-		this.getAt(opname, null)
-	}	
-	
-	/**
-	 * Installs a new operation for {@code opname}
-	 * 
-	 * @param opname The name of the operation
-	 * @param opclass The class to make the operation objects from
-	 * @return the added operation class ({@code opclass})
-	 */
-	def putAt(String opname, Object opclass)
-	{
-		this.operations[opname] = opclass
-		return opclass
-	}
-	
+    
+    /**
+     * Operation name for the search operation. 
+     */
+    public static final SEARCH = "search"
+    
+    /**
+     * The store of operations. Is initialised with the default operations ...
+     * <pre>
+     * [GldapoOperationRegistry.SEARCH: GldapoSearch]
+     * </pre>
+     */
+    private operations = [
+        (SEARCH): GldapoSearch
+    ]
+    
+    /**
+     * Creates a new instance of the operation that is registered under {@code name} and returns it. 
+     * If the target operation is a {@link GldapoOptionSubjectableOperation}, the {@code options} are given to the new
+     * operation instance.
+     * 
+     * @param opname The name of the operation to retrieve (e.g. 'search')
+     * @param options The operation options to use if the operation is a GldapoOptionSubjectableOperation
+     * @return A new instance of the operation Class, or null if there is no operation registered for that name
+     */
+    GldapoOperation getAt(String opname, Map options)
+    {
+        
+        def op = this.operations[opname]?.newInstance()
+        if (op != null && op instanceof GldapoOptionSubjectableOperation) op.options = (options == null) ? [:] : options
+        return op
+    }
+    
+    /**
+     * Calls {@link #getAt(String,Map)} with null for the options map
+     */
+    GldapoOperation getAt(String opname)
+    {
+        this.getAt(opname, null)
+    }    
+    
+    /**
+     * Installs a new operation for {@code opname}
+     * 
+     * @param opname The name of the operation
+     * @param opclass The class to make the operation objects from
+     * @return the added operation class ({@code opclass})
+     */
+    def putAt(String opname, Object opclass)
+    {
+        this.operations[opname] = opclass
+        return opclass
+    }
+    
 }

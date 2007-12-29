@@ -6,19 +6,19 @@ import gldapo.schema.annotation.*
  */
 @GldapoSchemaFilter("(objectclass=person)")
 class ExamplePerson 
-{	
-	String cn
-	String givenName
-	String mail
-	Integer mailstop
-	List<String> objectclass
-	String postalAddress
-	String sn
-	String telephoneNumber
-	String title
-	
-	@GldapoSynonymFor("uid")
-	String username
+{    
+    String cn
+    String givenName
+    String mail
+    Integer mailstop
+    List<String> objectclass
+    String postalAddress
+    String sn
+    String telephoneNumber
+    String title
+    
+    @GldapoSynonymFor("uid")
+    String username
 }
 
 /*
@@ -31,7 +31,7 @@ Gldapo.initialize(
             base: "ou=people,o=University of Washington,c=US", // <-- Change to be your search base
             // userDn: "uid=someuser ...", // Change to be the full dn of the user to bind as
             // password: "password" // Your bind user password
-        ]	
+        ]    
     ],
     schemas: [ExamplePerson]
 )

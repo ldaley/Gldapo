@@ -23,25 +23,25 @@ import injecto.*
  */
 class SearchingInjectoTest extends GroovyTestCase 
 {
-	SearchingInjectoTest()
-	{
-		use (Injecto) { SearchingInjectoTestSchema.inject(SearchingInjecto) }
-	}
-	
-	void testFindAll() 
-	{
-		GldapoMockOperationInstaller.installSearchWithResult([1,2,3])
-		assertEquals([1,2,3], SearchingInjectoTestSchema.findAll())
-	}
-	
-	void testFind()
-	{
-		GldapoMockOperationInstaller.installSearchWithResult([1,2,3])
-		assertEquals(1, SearchingInjectoTestSchema.find())
-		
-		GldapoMockOperationInstaller.installSearchWithResult([])
-		assertEquals(null, SearchingInjectoTestSchema.find())
-	}
+    SearchingInjectoTest()
+    {
+        use (Injecto) { SearchingInjectoTestSchema.inject(SearchingInjecto) }
+    }
+    
+    void testFindAll() 
+    {
+        GldapoMockOperationInstaller.installSearchWithResult([1,2,3])
+        assertEquals([1,2,3], SearchingInjectoTestSchema.findAll())
+    }
+    
+    void testFind()
+    {
+        GldapoMockOperationInstaller.installSearchWithResult([1,2,3])
+        assertEquals(1, SearchingInjectoTestSchema.find())
+        
+        GldapoMockOperationInstaller.installSearchWithResult([])
+        assertEquals(null, SearchingInjectoTestSchema.find())
+    }
 }
 
 class SearchingInjectoTestSchema {}

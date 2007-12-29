@@ -23,62 +23,62 @@ import gldapo.schema.annotation.GldapoSchemaFilter
  * Represents an actual search operation. Sanitises the search options then calls {@link GldapoDirectory#search}.
  */
 class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
-{	
+{    
     
-	GldapoSearch() {
-		super()
-		required = ["schema"]
-		optionals = ["directory", "filter", "base", "absoluteBase", "countLimit", "derefLinkFlag", "searchScope", "timeLimit"]
-	}
-	
-	void inspectOptions() {
-		this.options.directory = this.calculateDirectory()
-		this.options.filter = this.calculateFilter()
-		this.options.searchControls = this.calculateSearchControls()
-		this.options.base = this.calculateBase()
-	}
-	
-	def calculateDirectory()
-	{
-		if (options.directory != null)
-		{
-			def directoryValue = options.directory
-			if (directoryValue instanceof String) return Gldapo.instance.directories[directoryValue]
-			
-			if (directoryValue instanceof GldapoSearchProvider) return directoryValue
+    GldapoSearch() {
+        super()
+        required = ["schema"]
+        optionals = ["directory", "filter", "base", "absoluteBase", "countLimit", "derefLinkFlag", "searchScope", "timeLimit"]
+    }
+    
+    void inspectOptions() {
+        this.options.directory = this.calculateDirectory()
+        this.options.filter = this.calculateFilter()
+        this.options.searchControls = this.calculateSearchControls()
+        this.options.base = this.calculateBase()
+    }
+    
+    def calculateDirectory()
+    {
+        if (options.directory != null)
+        {
+            def directoryValue = options.directory
+            if (directoryValue instanceof String) return Gldapo.instance.directories[directoryValue]
+            
+            if (directoryValue instanceof GldapoSearchProvider) return directoryValue
 
-			// TODO more suitable exception needed
-			throw new IllegalArgumentException()
-		}
-		else
-		{
-			return Gldapo.instance.directories.defaultDirectory
-		}		
-	}
-	
-	def calculateFilter()
-	{
-		def schemaFilter = this.options.schema.getAnnotation(GldapoSchemaFilter)?.value()
-		
-		if (this.options.filter) return (schemaFilter) ? "(&${schemaFilter}${this.options.filter})" : this.options.filter
-		else return (schemaFilter) ? schemaFilter : "(objectclass=*)"
-	}
-	
-	def calculateSearchControls()
-	{
-		def specificControls = GldapoSearchControls.newInstance(this.options)
-		(this.options.directory.searchControls) ? this.options.directory.searchControls.mergeWith(specificControls) : specificControls
-	}
-	
-	def calculateBase()
-	{
-		if (options.containsKey("absoluteBase")) return options.absoluteBase - ",${this.options.directory.base}"
-		else if (options.containsKey("base")) return options.base
-		else return ""
-	}
-	
-	def execute()
-	{
-		this.options.directory.search(this.options.schema, this.options.base, this.options.filter, this.options.searchControls)
-	}
+            // TODO more suitable exception needed
+            throw new IllegalArgumentException()
+        }
+        else
+        {
+            return Gldapo.instance.directories.defaultDirectory
+        }        
+    }
+    
+    def calculateFilter()
+    {
+        def schemaFilter = this.options.schema.getAnnotation(GldapoSchemaFilter)?.value()
+        
+        if (this.options.filter) return (schemaFilter) ? "(&${schemaFilter}${this.options.filter})" : this.options.filter
+        else return (schemaFilter) ? schemaFilter : "(objectclass=*)"
+    }
+    
+    def calculateSearchControls()
+    {
+        def specificControls = GldapoSearchControls.newInstance(this.options)
+        (this.options.directory.searchControls) ? this.options.directory.searchControls.mergeWith(specificControls) : specificControls
+    }
+    
+    def calculateBase()
+    {
+        if (options.containsKey("absoluteBase")) return options.absoluteBase - ",${this.options.directory.base}"
+        else if (options.containsKey("base")) return options.base
+        else return ""
+    }
+    
+    def execute()
+    {
+        this.options.directory.search(this.options.schema, this.options.base, this.options.filter, this.options.searchControls)
+    }
 }

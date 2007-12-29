@@ -18,43 +18,43 @@ import gldapo.schema.annotation.GldapoSchemaFilter
 
 class FilterUtil 
 {
-	static final public NO_FILTER_FILTER = "(objectclass=*)"
-		
-	static getSchemaFilter(Class schemaClass)
-	{
-		def filterAnnotation = schemaClass.getAnnotation(GldapoSchemaFilter)
-		if (filterAnnotation)
-		{
-			return filterAnnotation.value()
-		}
-		else
-		{
-			return NO_FILTER_FILTER
-		}
-	}
-	
-	static andSchemaFilterWithFilter(Class schemaClass, String filter)
-	{
-		String schemaFilter = schemaClass.schemaFilter
-		if (filter == null)
-		{
-			if (schemaFilter == null || schemaFilter.equals(NO_FILTER_FILTER))
-			{
-				filter = NO_FILTER_FILTER
-			}
-			else
-			{
-				filter = schemaFilter
-			}
-		}
-		else
-		{
-			if (schemaFilter != null && schemaFilter.equals(NO_FILTER_FILTER) == false)
-			{
-				filter = "(&${schemaFilter}${filter})"
-			}	
-		}
-		
-		return filter
-	}
+    static final public NO_FILTER_FILTER = "(objectclass=*)"
+        
+    static getSchemaFilter(Class schemaClass)
+    {
+        def filterAnnotation = schemaClass.getAnnotation(GldapoSchemaFilter)
+        if (filterAnnotation)
+        {
+            return filterAnnotation.value()
+        }
+        else
+        {
+            return NO_FILTER_FILTER
+        }
+    }
+    
+    static andSchemaFilterWithFilter(Class schemaClass, String filter)
+    {
+        String schemaFilter = schemaClass.schemaFilter
+        if (filter == null)
+        {
+            if (schemaFilter == null || schemaFilter.equals(NO_FILTER_FILTER))
+            {
+                filter = NO_FILTER_FILTER
+            }
+            else
+            {
+                filter = schemaFilter
+            }
+        }
+        else
+        {
+            if (schemaFilter != null && schemaFilter.equals(NO_FILTER_FILTER) == false)
+            {
+                filter = "(&${schemaFilter}${filter})"
+            }    
+        }
+        
+        return filter
+    }
 }

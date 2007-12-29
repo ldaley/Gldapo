@@ -34,44 +34,44 @@ import gldapo.schema.GldapoSchemaRegistration
  */
 class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration> {
 
-	/**
-	 * Registers a new schema class.
-	 * <p>
-	 * If {@code registration} is a {@link java.lang.Class}  (implicitly creating a {@link GldapoSchemaRegistration} for it), 
-	 * or just adding {@code registration} if it is a schema registration. 
-	 * <p>
-	 * If the schema class in question is already registered, this will silently do nothing.
-	 * 
-	 * @param registration Either the schema class, or a {@link GldapoSchemaRegistration registration} for a schema class
-	 * @throws IllegalArgumentException if {@code registration} is not a Class or GldapoSchemaRegistration object
-	 */
-	boolean add(registration) {
-		if (registration instanceof GldapoSchemaRegistration) {
-			if (this.isRegistered(registration.schema) == false) super.add(registration)
-		} else if (registration instanceof Class) {
-			if (this.isRegistered(registration) == false) super.add(new GldapoSchemaRegistration(registration))
-		} else {
-			throw new IllegalArgumentException("Only Class objects or GldapoSchemaRegistration objects can be added to the GldapoSchemaRegistry")
-		}		
-	}
-	
-	/**
-	 * Test to see if a particular schema class is already registered.
-	 * 
-	 * @param schema the Class in question
-	 * @return whether it is registered or not
-	 */
-	boolean isRegistered(Class schema) {
-		this.find { it.schema == schema } != null
-	}
-	
-	/**
-	 * Allows fetching of the registration of a schema class, by the schema class
-	 * 
-	 * @param schema the schema class in question
-	 * @return A {@link GldapoSchemaRegistration} object for the schema class, or null if that class is not registered
-	 */
-	def getAt(Class schema) {
-		return this.find { it.schema == schema }
-	}
+    /**
+     * Registers a new schema class.
+     * <p>
+     * If {@code registration} is a {@link java.lang.Class}  (implicitly creating a {@link GldapoSchemaRegistration} for it), 
+     * or just adding {@code registration} if it is a schema registration. 
+     * <p>
+     * If the schema class in question is already registered, this will silently do nothing.
+     * 
+     * @param registration Either the schema class, or a {@link GldapoSchemaRegistration registration} for a schema class
+     * @throws IllegalArgumentException if {@code registration} is not a Class or GldapoSchemaRegistration object
+     */
+    boolean add(registration) {
+        if (registration instanceof GldapoSchemaRegistration) {
+            if (this.isRegistered(registration.schema) == false) super.add(registration)
+        } else if (registration instanceof Class) {
+            if (this.isRegistered(registration) == false) super.add(new GldapoSchemaRegistration(registration))
+        } else {
+            throw new IllegalArgumentException("Only Class objects or GldapoSchemaRegistration objects can be added to the GldapoSchemaRegistry")
+        }        
+    }
+    
+    /**
+     * Test to see if a particular schema class is already registered.
+     * 
+     * @param schema the Class in question
+     * @return whether it is registered or not
+     */
+    boolean isRegistered(Class schema) {
+        this.find { it.schema == schema } != null
+    }
+    
+    /**
+     * Allows fetching of the registration of a schema class, by the schema class
+     * 
+     * @param schema the schema class in question
+     * @return A {@link GldapoSchemaRegistration} object for the schema class, or null if that class is not registered
+     */
+    def getAt(Class schema) {
+        return this.find { it.schema == schema }
+    }
 }

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 directories {
-	washington {
-		url = "ldap://directory.washington.edu"
-		base = "o=University of Washington,c=US"
-	}
+    washington {
+        url = "ldap://directory.washington.edu"
+        base = "o=University of Washington,c=US"
+    }
 }
 
 schemas = [WashingtonEduPerson]

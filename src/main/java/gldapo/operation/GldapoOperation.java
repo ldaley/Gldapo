@@ -17,5 +17,5 @@ package gldapo.operation;
 
 public interface GldapoOperation
 {
-	public Object execute() throws Exception;
+    public Object execute() throws Exception;
 }

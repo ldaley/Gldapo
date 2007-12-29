@@ -17,9 +17,9 @@ package gldapo;
 
 public interface GldapoSearchControlProvider
 {
-	public Integer getCountLimit();
-	public Boolean getDerefLinkFlag();
-	public String getSearchScope();
-	public Integer getTimeLimit();
-	public Integer getPageSize();
+    public Integer getCountLimit();
+    public Boolean getDerefLinkFlag();
+    public String getSearchScope();
+    public Integer getTimeLimit();
+    public Integer getPageSize();
 }

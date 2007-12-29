@@ -21,25 +21,25 @@ import gldapo.exception.GldapoInvalidConfigException
  */
 class GldapoDirectoryTest extends GroovyTestCase 
 {
-	void testNewFromConfig() 
-	{
-		def c = new ConfigObject()
-		
-		c.url = "ldap://example.com"
-		c.base = "ou=example,ou=com"
-		c.userDn = "cn=user"
-		c.password = "password"
-		
-		c.searchControls.countLimit = 50
-		
-		def d = new GldapoDirectory("testTemplate", c)
-		assertNotNull(d)
-		assertEquals(50, d.searchControls.countLimit)
-		assertEquals("ou=example, ou=com", d.template.contextSource.base as String)
-		assertEquals("testTemplate", d.name)
-	}
-	
-	void testNewFromNullConfig() {
+    void testNewFromConfig() 
+    {
+        def c = new ConfigObject()
+        
+        c.url = "ldap://example.com"
+        c.base = "ou=example,ou=com"
+        c.userDn = "cn=user"
+        c.password = "password"
+        
+        c.searchControls.countLimit = 50
+        
+        def d = new GldapoDirectory("testTemplate", c)
+        assertNotNull(d)
+        assertEquals(50, d.searchControls.countLimit)
+        assertEquals("ou=example, ou=com", d.template.contextSource.base as String)
+        assertEquals("testTemplate", d.name)
+    }
+    
+    void testNewFromNullConfig() {
         shouldFail(GldapoInvalidConfigException) { new GldapoDirectory("test", null) }
-	}
+    }
 }

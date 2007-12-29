@@ -18,38 +18,38 @@ import java.lang.reflect.Field
 
 abstract class AbstractAttributeMappingTest extends GroovyTestCase 
 {
-	abstract def getMappingClass()
-	abstract def getMappingSubjectClass()
-	
-	AbstractAttributeMappingTest() {
-		gldapo.Gldapo.initialize([:])
-	}
-	
-	def mappingForField(String fieldName)
-	{
-		def m = this.mappingClass
-		m.getConstructor(Class, Field).newInstance(this.mappingSubjectClass, this.mappingSubjectClass.getDeclaredField(fieldName))
-	}
-	
-	def getFakeContext(val)
-	{
-		new Expando(getStringAttribute: { return val })
-	}
-	
-	void doMappingTest(fieldName, attributeName, typeMapping, contextValue, mappedValue) 
-	{
-		def m = mappingForField(fieldName)
-		verifyMapping(m, fieldName, attributeName, typeMapping, contextValue, mappedValue)
-	}
-	
-	void verifyMapping(mapping, fieldName, attributeName, typeMapping, contextValue, mappedValue)
-	{
-		def e = new Expando()
-		
-		assertEquals(attributeName, mapping.attributeName)
-		assertEquals(typeMapping, mapping.typeMapping)
-		
-		mapping.mapFromContext(getFakeContext(contextValue), e)
-		assertEquals(mappedValue, e."$fieldName")
-	}
+    abstract def getMappingClass()
+    abstract def getMappingSubjectClass()
+    
+    AbstractAttributeMappingTest() {
+        gldapo.Gldapo.initialize([:])
+    }
+    
+    def mappingForField(String fieldName)
+    {
+        def m = this.mappingClass
+        m.getConstructor(Class, Field).newInstance(this.mappingSubjectClass, this.mappingSubjectClass.getDeclaredField(fieldName))
+    }
+    
+    def getFakeContext(val)
+    {
+        new Expando(getStringAttribute: { return val })
+    }
+    
+    void doMappingTest(fieldName, attributeName, typeMapping, contextValue, mappedValue) 
+    {
+        def m = mappingForField(fieldName)
+        verifyMapping(m, fieldName, attributeName, typeMapping, contextValue, mappedValue)
+    }
+    
+    void verifyMapping(mapping, fieldName, attributeName, typeMapping, contextValue, mappedValue)
+    {
+        def e = new Expando()
+        
+        assertEquals(attributeName, mapping.attributeName)
+        assertEquals(typeMapping, mapping.typeMapping)
+        
+        mapping.mapFromContext(getFakeContext(contextValue), e)
+        assertEquals(mappedValue, e."$fieldName")
+    }
 }

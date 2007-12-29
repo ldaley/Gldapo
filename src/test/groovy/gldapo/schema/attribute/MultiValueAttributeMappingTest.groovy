@@ -20,57 +20,57 @@ import gldapo.schema.annotation.GldapoSynonymFor
 
 class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest
 {
-	def mappingClass = MultiValueAttributeMapping
-	def mappingSubjectClass = MultiValueAttributeMappingTestSubject
-	
-	def getFakeContext(val)
-	{
-		new Expando(getStringAttributes: { return val as String[] })
-	}
+    def mappingClass = MultiValueAttributeMapping
+    def mappingSubjectClass = MultiValueAttributeMappingTestSubject
+    
+    def getFakeContext(val)
+    {
+        new Expando(getStringAttributes: { return val as String[] })
+    }
 
-	void doMappingTest(fieldName, attributeName, typeMapping, collectionType, contextValue, mappedValue) 
-	{
-		def m = mappingForField(fieldName)
-		verifyMapping(m, fieldName, attributeName, typeMapping, collectionType, contextValue, mappedValue)
-	}
-	
-	void verifyMapping(mapping, fieldName, attributeName, typeMapping, collectionType, contextValue, mappedValue)
-	{
-		verifyMapping(mapping, fieldName, attributeName, typeMapping, contextValue, mappedValue)
-		assertTrue("Collection type test", collectionType.isAssignableFrom(mapping.collectionType))
-	}
-	
-	void testStringList() 
-	{
-		doMappingTest("stringList", "stringList", "String", List, ["1", "2", "3"], ["1", "2", "3"])
-	}
-	
-	void testSortedIntSet() 
-	{
-		doMappingTest("sortedIntSet", "sortedIntSet", "Integer", Set, ["3", "1", "2"], [1, 2, 3] as Set)
-	}
-	
-	void testPseudoTypeSet() 
-	{
-		doMappingTest("pseudoTypeSet", "pseudoTypeSet", "Integer", Set, ["1", "2", "3"], [1, 2, 3] as Set)
-	}
-	
-	void testBogusType()
-	{
-		shouldFail {
-			mappingForField("badCollectionType")
-		}
-	}
+    void doMappingTest(fieldName, attributeName, typeMapping, collectionType, contextValue, mappedValue) 
+    {
+        def m = mappingForField(fieldName)
+        verifyMapping(m, fieldName, attributeName, typeMapping, collectionType, contextValue, mappedValue)
+    }
+    
+    void verifyMapping(mapping, fieldName, attributeName, typeMapping, collectionType, contextValue, mappedValue)
+    {
+        verifyMapping(mapping, fieldName, attributeName, typeMapping, contextValue, mappedValue)
+        assertTrue("Collection type test", collectionType.isAssignableFrom(mapping.collectionType))
+    }
+    
+    void testStringList() 
+    {
+        doMappingTest("stringList", "stringList", "String", List, ["1", "2", "3"], ["1", "2", "3"])
+    }
+    
+    void testSortedIntSet() 
+    {
+        doMappingTest("sortedIntSet", "sortedIntSet", "Integer", Set, ["3", "1", "2"], [1, 2, 3] as Set)
+    }
+    
+    void testPseudoTypeSet() 
+    {
+        doMappingTest("pseudoTypeSet", "pseudoTypeSet", "Integer", Set, ["1", "2", "3"], [1, 2, 3] as Set)
+    }
+    
+    void testBogusType()
+    {
+        shouldFail {
+            mappingForField("badCollectionType")
+        }
+    }
 }
 
 class MultiValueAttributeMappingTestSubject
 {
-	List stringList
-	
-	SortedSet<Integer> sortedIntSet
-	
-	@GldapoPseudoType("Integer")
-	Set pseudoTypeSet
-	
-	LinkedList badCollectionType
+    List stringList
+    
+    SortedSet<Integer> sortedIntSet
+    
+    @GldapoPseudoType("Integer")
+    Set pseudoTypeSet
+    
+    LinkedList badCollectionType
 }

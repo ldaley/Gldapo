@@ -20,32 +20,32 @@ import injecto.Injecto
 
 class GldapoSchemaRegistration 
 {
-	private schema
-	private attributeMappings
-	
-	GldapoSchemaRegistration(schema)
-	{
-		prepareSchemaClass(schema)
-		this.schema = schema
-		this.attributeMappings = AttributeMappingInspector.getAttributeMappings(schema)
-	}
-	
-	def getSchema()
-	{
-		return this.schema
-	}
-	
-	def getAttributeMappings()
-	{
-		return this.attributeMappings
-	}
-	
-	static prepareSchemaClass(schema)
-	{
-		Injecto.inject(schema, GldapoSchemaMetaInjecto)
-	}
-	
-	boolean equals(Class clazz) {
-	   this.schema.equals(clazz)
-	}
+    private schema
+    private attributeMappings
+    
+    GldapoSchemaRegistration(schema)
+    {
+        prepareSchemaClass(schema)
+        this.schema = schema
+        this.attributeMappings = AttributeMappingInspector.getAttributeMappings(schema)
+    }
+    
+    def getSchema()
+    {
+        return this.schema
+    }
+    
+    def getAttributeMappings()
+    {
+        return this.attributeMappings
+    }
+    
+    static prepareSchemaClass(schema)
+    {
+        Injecto.inject(schema, GldapoSchemaMetaInjecto)
+    }
+    
+    boolean equals(Class clazz) {
+       this.schema.equals(clazz)
+    }
 }

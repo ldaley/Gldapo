@@ -30,114 +30,114 @@ import gldapo.Gldapo
  */
 abstract class AbstractAttributeMapping
 {
-	
-	/**
-	 * 
-	 */
-	Class schema
-	
-	/**
-	 * 
-	 */
-	Field field
-	
-	/**
-	 * The name on the LDAP side
-	 */
-	String attributeName
+    
+    /**
+     * 
+     */
+    Class schema
+    
+    /**
+     * 
+     */
+    Field field
+    
+    /**
+     * The name on the LDAP side
+     */
+    String attributeName
 
-	/**
-	 * pseudo property type
-	 */
-	String typeMapping
-	
-	/**
-	 * 
-	 */
-	Closure toFieldTypeMapper
+    /**
+     * pseudo property type
+     */
+    String typeMapping
+    
+    /**
+     * 
+     */
+    Closure toFieldTypeMapper
 
-	/**
-	 * The current stub generator requires default constructors for some reason
-	 */
-	AbstractAttributeMapping() {}
-	
-	/**
-	 * 
-	 */
-	AbstractAttributeMapping(Class schema, Field field)
-	{
-		this.schema = schema
-		this.field = field
-		
-		this.attributeName = this.calculateAttributeName()
-		this.typeMapping = this.calculateTypeMapping()
-		this.toFieldTypeMapper = this.calculateToFieldTypeMapper()
-	}
-	
-	protected calculateAttributeName()
-	{
-		def synonymAnnotation = this.field.getAnnotation(GldapoSynonymFor)
-		(synonymAnnotation) ? synonymAnnotation.value() : this.field.name
-	}
-	
-	protected calculateTypeMapping()
-	{
-		def pseudoTypeAnnotation = this.field.getAnnotation(GldapoPseudoType)
-		if (pseudoTypeAnnotation)
-		{
-			return pseudoTypeAnnotation.value()
-		}
-		else
-		{
-			return this.calculateTypeMappingFromFieldType()
-		}
-	}
-	
-	/**
-	 * @todo Need some caching here
-	 */	
-	protected calculateToFieldTypeMapper()
-	{	
-		Class[] p = [String] as Class[]
-		
-		def byFieldMapperName = toFieldByFieldMapperName(this.field.name)
-		def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
-		if (classByFieldMapper) return { classByFieldMapper.invoke(schema, it) }
-		
-		def byTypeMapperName = toFieldByTypeMapperName(this.typeMapping)
-		def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
-		if (classByTypeMapper) return { classByTypeMapper.invoke(schema, it) }
-		
-		def defaultByTypeMapper = Gldapo.instance.typemappings.getToFieldMapperForType(this.typeMapping)
-		if (defaultByTypeMapper) return defaultByTypeMapper
+    /**
+     * The current stub generator requires default constructors for some reason
+     */
+    AbstractAttributeMapping() {}
+    
+    /**
+     * 
+     */
+    AbstractAttributeMapping(Class schema, Field field)
+    {
+        this.schema = schema
+        this.field = field
+        
+        this.attributeName = this.calculateAttributeName()
+        this.typeMapping = this.calculateTypeMapping()
+        this.toFieldTypeMapper = this.calculateToFieldTypeMapper()
+    }
+    
+    protected calculateAttributeName()
+    {
+        def synonymAnnotation = this.field.getAnnotation(GldapoSynonymFor)
+        (synonymAnnotation) ? synonymAnnotation.value() : this.field.name
+    }
+    
+    protected calculateTypeMapping()
+    {
+        def pseudoTypeAnnotation = this.field.getAnnotation(GldapoPseudoType)
+        if (pseudoTypeAnnotation)
+        {
+            return pseudoTypeAnnotation.value()
+        }
+        else
+        {
+            return this.calculateTypeMappingFromFieldType()
+        }
+    }
+    
+    /**
+     * @todo Need some caching here
+     */    
+    protected calculateToFieldTypeMapper()
+    {    
+        Class[] p = [String] as Class[]
+        
+        def byFieldMapperName = toFieldByFieldMapperName(this.field.name)
+        def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
+        if (classByFieldMapper) return { classByFieldMapper.invoke(schema, it) }
+        
+        def byTypeMapperName = toFieldByTypeMapperName(this.typeMapping)
+        def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
+        if (classByTypeMapper) return { classByTypeMapper.invoke(schema, it) }
+        
+        def defaultByTypeMapper = Gldapo.instance.typemappings.getToFieldMapperForType(this.typeMapping)
+        if (defaultByTypeMapper) return defaultByTypeMapper
 
-		throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, "No available type mapping")
-		
-	}
-	
-	def mapFromContext(context, subject)
-	{
-		try
-		{
-			subject."${this.field.name}" = this.getFieldValue(context)
-		} 
-		catch (Exception cause)
-		{
-			throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, cause)
-		}
-	}
-	
-	static toFieldByFieldMapperName(String fieldName)
-	{
-		"mapTo" + WordUtils.capitalize(fieldName) + "Field"
-	}
-	
-	static toFieldByTypeMapperName(String typeName)
-	{
-		"mapTo" + WordUtils.capitalize(typeName) + "Type"
-	}
-	
-	abstract protected calculateTypeMappingFromFieldType()
-	
-	abstract protected getFieldValue(Object context)
+        throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, "No available type mapping")
+        
+    }
+    
+    def mapFromContext(context, subject)
+    {
+        try
+        {
+            subject."${this.field.name}" = this.getFieldValue(context)
+        } 
+        catch (Exception cause)
+        {
+            throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, cause)
+        }
+    }
+    
+    static toFieldByFieldMapperName(String fieldName)
+    {
+        "mapTo" + WordUtils.capitalize(fieldName) + "Field"
+    }
+    
+    static toFieldByTypeMapperName(String typeName)
+    {
+        "mapTo" + WordUtils.capitalize(typeName) + "Type"
+    }
+    
+    abstract protected calculateTypeMappingFromFieldType()
+    
+    abstract protected getFieldValue(Object context)
 }

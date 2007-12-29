@@ -17,27 +17,27 @@ package gldapo.schema.attribute
 import java.lang.reflect.Field
 
 class SingleValueAttributeMapping extends AbstractAttributeMapping
-{	
-	SingleValueAttributeMapping(Class schema, Field field)
-	{
-		super(schema,field)
-	}
-	
-	protected calculateTypeMappingFromFieldType()
-	{
- 		return this.field.type.simpleName
-	}
-	
-	protected getFieldValue(context)
-	{
-		def rawValue = context.getStringAttribute(this.attributeName)
-		if (rawValue == null)
-		{
-			return null
-		}
-		else
-		{
-			return this.toFieldTypeMapper.call(rawValue)
-		}
-	}
+{    
+    SingleValueAttributeMapping(Class schema, Field field)
+    {
+        super(schema,field)
+    }
+    
+    protected calculateTypeMappingFromFieldType()
+    {
+         return this.field.type.simpleName
+    }
+    
+    protected getFieldValue(context)
+    {
+        def rawValue = context.getStringAttribute(this.attributeName)
+        if (rawValue == null)
+        {
+            return null
+        }
+        else
+        {
+            return this.toFieldTypeMapper.call(rawValue)
+        }
+    }
 }

@@ -19,27 +19,27 @@ import gldapo.GldapoOperationRegistry
 import injecto.annotation.InjectAs
 
 class SearchingInjecto 
-{	
-	static findAll = { Map options ->
-		def searchOptions = options.clone()
-		searchOptions.schema = delegate
-		
-		Gldapo.instance.operations[GldapoOperationRegistry.SEARCH, searchOptions].execute()
-	}
-	
-	@InjectAs("findAll")
-	static findAllNoArgs = { -> 
-		delegate.findAll([:])
-	}
-	
-	static find = { Map options ->
-		options.countLimit = 1
-		def r = delegate.findAll(options)
-		(r.size() > 0) ? r[0] : null
-	}
-	
-	@InjectAs("find")
-	static findNoArgs = { -> 
-		delegate.find([:])
-	}
+{    
+    static findAll = { Map options ->
+        def searchOptions = options.clone()
+        searchOptions.schema = delegate
+        
+        Gldapo.instance.operations[GldapoOperationRegistry.SEARCH, searchOptions].execute()
+    }
+    
+    @InjectAs("findAll")
+    static findAllNoArgs = { -> 
+        delegate.findAll([:])
+    }
+    
+    static find = { Map options ->
+        options.countLimit = 1
+        def r = delegate.findAll(options)
+        (r.size() > 0) ? r[0] : null
+    }
+    
+    @InjectAs("find")
+    static findNoArgs = { -> 
+        delegate.find([:])
+    }
 }

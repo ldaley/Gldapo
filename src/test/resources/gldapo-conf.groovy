@@ -14,28 +14,28 @@
  * limitations under the License.
  */
 directories {
-	t1 {
-		url = "ldap://example.com"
-		base = "ou=example,dc=com"
-		defaultDirectory = true
-		searchControls {
-			countLimit = 40
-		}
-	}
-	t2 {
-		url = "ldap://example2.com"
-		base = "ou=example2,dc=com"
-	}
+    t1 {
+        url = "ldap://example.com"
+        base = "ou=example,dc=com"
+        defaultDirectory = true
+        searchControls {
+            countLimit = 40
+        }
+    }
+    t2 {
+        url = "ldap://example2.com"
+        base = "ou=example2,dc=com"
+    }
 
 }
 
 schemas = [
-	SimpleSchemaClass,
-	AttributeMappingWorkoutSchema
+    SimpleSchemaClass,
+    AttributeMappingWorkoutSchema
 ]
 
 environments {
-	dev {
-		directories.t1.searchControls.countLimit = 50
-	}
+    dev {
+        directories.t1.searchControls.countLimit = 50
+    }
 }

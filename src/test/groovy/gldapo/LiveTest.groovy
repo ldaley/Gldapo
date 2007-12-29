@@ -17,28 +17,28 @@ package gldapo
 
 class LiveTest extends GroovyTestCase 
 {
-	
-	LiveTest()
-	{
-		Gldapo.initialize(this.class.getClassLoader().findResource("washington-edu-conf.groovy"))
-	}
-	
-	void testFind() 
-	{
-		def people = WashingtonEduPerson.findAll(
-			filter: "(&(telephonenumber=*)(uid=*))",
-			base: "ou=Faculty and Staff, ou=People", 
-			searchScope: "subtree",
-			countLimit: 2 // Only get two so we don't hit their server hard
-		)
-		
+    
+    LiveTest()
+    {
+        Gldapo.initialize(this.class.getClassLoader().findResource("washington-edu-conf.groovy"))
+    }
+    
+    void testFind() 
+    {
+        def people = WashingtonEduPerson.findAll(
+            filter: "(&(telephonenumber=*)(uid=*))",
+            base: "ou=Faculty and Staff, ou=People", 
+            searchScope: "subtree",
+            countLimit: 2 // Only get two so we don't hit their server hard
+        )
+        
 /*      people.each {
             println it.dn
             println it.rdn
             println it.uid
             println it.telephoneNumber  
         }*/
-		
-		assertEquals(2, people.size())
-	}
+        
+        assertEquals(2, people.size())
+    }
 }
