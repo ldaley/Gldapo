@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.exception
+package gldapo.operation
+import gldapo.Gldapo
 
-public class GldapoSchemaInitializationException extends GldapoException
-{
-    GldapoSchemaInitializationException(String message) {
-        super(message)
-    }
-    
-    GldapoSchemaInitializationException(GString message) {
-        super(message as String)
-    }
-    GldapoSchemaInitializationException(Class schema, Exception cause)
-    {
-        super("Error initialising schema class {$schema.name}", cause)
+/**
+ * Provides basic support for implementers of {@link GldapoOperation}
+ */
+abstract class AbstractGldapoOperation implements GldapoOperation {
+
+    Gldapo gldapo
+
+    void setGldapo(gldapo) {
+        this.gldapo = gldapo
     }
 }

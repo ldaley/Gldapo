@@ -15,16 +15,13 @@
  */
 package gldapo
 
-class LiveTest extends GroovyTestCase 
-{
+class LiveTest extends GroovyTestCase {
     
-    LiveTest()
-    {
+    LiveTest() {
         Gldapo.initialize(this.class.getClassLoader().findResource("washington-edu-conf.groovy"))
     }
     
-    void testFind() 
-    {
+    void testFind() {
         def people = WashingtonEduPerson.findAll(
             filter: "(&(telephonenumber=*)(uid=*))",
             base: "ou=Faculty and Staff, ou=People", 

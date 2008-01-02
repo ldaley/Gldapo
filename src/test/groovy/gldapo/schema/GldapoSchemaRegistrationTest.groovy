@@ -15,29 +15,22 @@
  */
 package gldapo.schema
 import gldapo.schema.injecto.GldapoSchemaMetaInjecto
+import gldapo.Gldapo
 import injecto.Injecto
 
 class GldapoSchemaRegistrationTest extends GroovyTestCase 
 {
-    def r
-    
-    GldapoSchemaRegistrationTest()
-    {
-        r = new GldapoSchemaRegistration(GldapoSchemaRegistrationTestSubject)
-    }
-    
-    void testItGotInjected() 
-    {
+    static r = new GldapoSchemaRegistration(GldapoSchemaRegistrationTestSubject, new Gldapo())
+        
+    void testItGotInjected() {
         assertTrue(Injecto.isInjected(GldapoSchemaRegistrationTestSubject, GldapoSchemaMetaInjecto))
     }
     
-    void testReturnsRightClass()
-    {
+    void testReturnsRightClass() {
         assertEquals(GldapoSchemaRegistrationTestSubject, r.schema)
     }
     
-    void testGetsAttributeMappings()
-    {
+    void testGetsAttributeMappings() {
         assertTrue(r.attributeMappings instanceof Map)
         assertNotNull(r.attributeMappings)
     }

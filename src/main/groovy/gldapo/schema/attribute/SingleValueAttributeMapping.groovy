@@ -15,28 +15,25 @@
  */
 package gldapo.schema.attribute
 import java.lang.reflect.Field
+import gldapo.GldapoTypeMappingRegistry
+
 
 class SingleValueAttributeMapping extends AbstractAttributeMapping
-{    
-    SingleValueAttributeMapping(Class schema, Field field)
-    {
-        super(schema,field)
+{
+    
+    SingleValueAttributeMapping(Class schema, Field field, GldapoTypeMappingRegistry typemappings) {
+        super(schema, field, typemappings)
     }
     
-    protected calculateTypeMappingFromFieldType()
-    {
+    protected calculateTypeMappingFromFieldType() {
          return this.field.type.simpleName
     }
     
-    protected getFieldValue(context)
-    {
+    protected getFieldValue(context) {
         def rawValue = context.getStringAttribute(this.attributeName)
-        if (rawValue == null)
-        {
+        if (rawValue == null) {
             return null
-        }
-        else
-        {
+        } else {
             return this.toFieldTypeMapper.call(rawValue)
         }
     }

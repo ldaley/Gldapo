@@ -21,7 +21,7 @@ class AttributeMappingInspectorTest extends GroovyTestCase
     
     AttributeMappingInspectorTest()
     {
-        mappings = AttributeMappingInspector.getAttributeMappings(AttributeMappingInspectorTestSubject)
+        mappings = AttributeMappingInspector.getAttributeMappings(AttributeMappingInspectorTestSubject, gldapo.Gldapo.instance.typemappings)
     }
     
     void testCorrectNumberOfMappings()

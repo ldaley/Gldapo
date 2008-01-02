@@ -14,34 +14,30 @@
  * limitations under the License.
  */
 package gldapo.schema
+import gldapo.Gldapo
+import gldapo.exception.GldapoSchemaInitializationException
 import gldapo.schema.attribute.AttributeMappingInspector
 import gldapo.schema.injecto.GldapoSchemaMetaInjecto
 import injecto.Injecto
 
 class GldapoSchemaRegistration 
 {
-    private schema
-    private attributeMappings
+    Class schema
+    Map attributeMappings
+    Gldapo gldapo
     
-    GldapoSchemaRegistration(schema)
+    GldapoSchemaRegistration(Class schema, Gldapo gldapo)
     {
+        this.gldapo = gldapo
+
         prepareSchemaClass(schema)
+        schema.gldapo = gldapo
         this.schema = schema
-        this.attributeMappings = AttributeMappingInspector.getAttributeMappings(schema)
+        
+        this.attributeMappings = AttributeMappingInspector.getAttributeMappings(schema, gldapo.typemappings)
     }
-    
-    def getSchema()
-    {
-        return this.schema
-    }
-    
-    def getAttributeMappings()
-    {
-        return this.attributeMappings
-    }
-    
-    static prepareSchemaClass(schema)
-    {
+        
+    static prepareSchemaClass(schema) {
         Injecto.inject(schema, GldapoSchemaMetaInjecto)
     }
     

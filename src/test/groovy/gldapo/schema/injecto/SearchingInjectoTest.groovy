@@ -15,6 +15,7 @@
  */
 package gldapo.schema.injecto
 import gldapo.test.GldapoMockOperationInstaller
+import gldapo.Gldapo
 import injecto.*
 
 
@@ -23,23 +24,25 @@ import injecto.*
  */
 class SearchingInjectoTest extends GroovyTestCase 
 {
-    SearchingInjectoTest()
-    {
-        use (Injecto) { SearchingInjectoTestSchema.inject(SearchingInjecto) }
-    }
+    static gldapo = new Gldapo()
     
+    static {
+        use (Injecto) { SearchingInjectoTestSchema.inject(SearchingInjecto) }
+        SearchingInjectoTestSchema.gldapo = gldapo
+    }
+        
     void testFindAll() 
     {
-        GldapoMockOperationInstaller.installSearchWithResult([1,2,3])
+        GldapoMockOperationInstaller.installSearchWithResult([1,2,3], gldapo)
         assertEquals([1,2,3], SearchingInjectoTestSchema.findAll())
     }
     
     void testFind()
     {
-        GldapoMockOperationInstaller.installSearchWithResult([1,2,3])
+        GldapoMockOperationInstaller.installSearchWithResult([1,2,3], gldapo)
         assertEquals(1, SearchingInjectoTestSchema.find())
         
-        GldapoMockOperationInstaller.installSearchWithResult([])
+        GldapoMockOperationInstaller.installSearchWithResult([], gldapo)
         assertEquals(null, SearchingInjectoTestSchema.find())
     }
 }

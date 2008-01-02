@@ -22,13 +22,13 @@ import gldapo.Gldapo
  */
 class GldapoMockOperationInstaller
 {
-    static install(opName, opInstance)
+    static install(opName, opInstance, gldapo)
     {
-        Gldapo.instance.operations[opName] = new Expando(newInstance: { -> opInstance })
+        gldapo.operations[opName] = new Expando(newInstance: { -> opInstance })
     }
     
-    static installSearchWithResult(result)
+    static installSearchWithResult(result, gldapo)
     {
-        install(GldapoOperationRegistry.SEARCH, [execute: { -> result }] as GldapoOperation)
+        install(GldapoOperationRegistry.SEARCH, [execute: { -> result }, setGldapo: {}] as GldapoOperation, gldapo)
     }
 }

@@ -20,7 +20,7 @@ import gldapo.exception.GldapoTypeMappingException
 import gldapo.exception.GldapoException
 import gldapo.schema.annotation.GldapoSynonymFor
 import gldapo.schema.annotation.GldapoPseudoType
-import gldapo.Gldapo
+import gldapo.GldapoTypeMappingRegistry
 
 /**
  * Represents the bridging between the data of the LDAP world and the Groovy world
@@ -55,40 +55,29 @@ abstract class AbstractAttributeMapping
      * 
      */
     Closure toFieldTypeMapper
-
-    /**
-     * The current stub generator requires default constructors for some reason
-     */
-    AbstractAttributeMapping() {}
     
     /**
      * 
      */
-    AbstractAttributeMapping(Class schema, Field field)
-    {
+    AbstractAttributeMapping(Class schema, Field field, GldapoTypeMappingRegistry typemappings) {
         this.schema = schema
         this.field = field
         
         this.attributeName = this.calculateAttributeName()
         this.typeMapping = this.calculateTypeMapping()
-        this.toFieldTypeMapper = this.calculateToFieldTypeMapper()
+        this.toFieldTypeMapper = this.calculateToFieldTypeMapper(typemappings)
     }
     
-    protected calculateAttributeName()
-    {
+    protected calculateAttributeName() {
         def synonymAnnotation = this.field.getAnnotation(GldapoSynonymFor)
         (synonymAnnotation) ? synonymAnnotation.value() : this.field.name
     }
     
-    protected calculateTypeMapping()
-    {
+    protected calculateTypeMapping() {
         def pseudoTypeAnnotation = this.field.getAnnotation(GldapoPseudoType)
-        if (pseudoTypeAnnotation)
-        {
+        if (pseudoTypeAnnotation) {
             return pseudoTypeAnnotation.value()
-        }
-        else
-        {
+        } else {
             return this.calculateTypeMappingFromFieldType()
         }
     }
@@ -96,8 +85,7 @@ abstract class AbstractAttributeMapping
     /**
      * @todo Need some caching here
      */    
-    protected calculateToFieldTypeMapper()
-    {    
+    protected calculateToFieldTypeMapper(GldapoTypeMappingRegistry typemappings) {
         Class[] p = [String] as Class[]
         
         def byFieldMapperName = toFieldByFieldMapperName(this.field.name)
@@ -108,32 +96,25 @@ abstract class AbstractAttributeMapping
         def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
         if (classByTypeMapper) return { classByTypeMapper.invoke(schema, it) }
         
-        def defaultByTypeMapper = Gldapo.instance.typemappings.getToFieldMapperForType(this.typeMapping)
+        def defaultByTypeMapper = typemappings.getToFieldMapperForType(this.typeMapping)
         if (defaultByTypeMapper) return defaultByTypeMapper
 
         throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, "No available type mapping")
-        
     }
     
-    def mapFromContext(context, subject)
-    {
-        try
-        {
+    def mapFromContext(context, subject) {
+        try {
             subject."${this.field.name}" = this.getFieldValue(context)
-        } 
-        catch (Exception cause)
-        {
+        } catch (Exception cause) {
             throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, cause)
         }
     }
     
-    static toFieldByFieldMapperName(String fieldName)
-    {
+    static toFieldByFieldMapperName(String fieldName) {
         "mapTo" + WordUtils.capitalize(fieldName) + "Field"
     }
     
-    static toFieldByTypeMapperName(String typeName)
-    {
+    static toFieldByTypeMapperName(String typeName) {
         "mapTo" + WordUtils.capitalize(typeName) + "Type"
     }
     

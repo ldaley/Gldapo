@@ -15,10 +15,8 @@
  */
 package gldapo.exception
 
-class GldapoNoDefaultDirectoryException extends GldapoException
-{
-    GldapoNoDefaultDirectoryException()
-    {
-        super("A request was made for the default template but none has been specified")
+class GldapoNoDefaultDirectoryException extends GldapoException {
+    GldapoNoDefaultDirectoryException() {
+        super("A request was made for the default directory but none has been specified")
     }
 }

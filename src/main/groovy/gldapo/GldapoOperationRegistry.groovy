@@ -47,6 +47,19 @@ class GldapoOperationRegistry {
     ]
     
     /**
+     * The gldapo instance that owns this registry
+     */
+    Gldapo gldapo = null
+
+    /**
+     * 
+     */
+    GldapoOperationRegistry(Gldapo gldapo) {
+        if (gldapo == null) throw new IllegalArgumentException("gldapo cannot be null")
+        this.gldapo = gldapo
+    }
+    
+    /**
      * Creates a new instance of the operation that is registered under {@code name} and returns it. 
      * If the target operation is a {@link GldapoOptionSubjectableOperation}, the {@code options} are given to the new
      * operation instance.
@@ -55,19 +68,21 @@ class GldapoOperationRegistry {
      * @param options The operation options to use if the operation is a GldapoOptionSubjectableOperation
      * @return A new instance of the operation Class, or null if there is no operation registered for that name
      */
-    GldapoOperation getAt(String opname, Map options)
-    {
-        
+    GldapoOperation getAt(String opname, Map options) {
         def op = this.operations[opname]?.newInstance()
-        if (op != null && op instanceof GldapoOptionSubjectableOperation) op.options = (options == null) ? [:] : options
+
+        if (op) {
+            op.gldapo = this.gldapo
+            if (op instanceof GldapoOptionSubjectableOperation) op.options = (options == null) ? [:] : options
+        }
+        
         return op
     }
     
     /**
      * Calls {@link #getAt(String,Map)} with null for the options map
      */
-    GldapoOperation getAt(String opname)
-    {
+    GldapoOperation getAt(String opname) {
         this.getAt(opname, null)
     }    
     
@@ -78,10 +93,9 @@ class GldapoOperationRegistry {
      * @param opclass The class to make the operation objects from
      * @return the added operation class ({@code opclass})
      */
-    def putAt(String opname, Object opclass)
-    {
+    def putAt(String opname, Object opclass) {
         this.operations[opname] = opclass
         return opclass
     }
-    
+
 }

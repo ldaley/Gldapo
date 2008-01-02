@@ -15,7 +15,18 @@
  */
 package gldapo.operation;
 
+/**
+ * Operations are abstractions of particular LDAP functions.
+ */
 public interface GldapoOperation
 {
+    /**
+     * Invokes the operation.
+     */
     public Object execute() throws Exception;
+    
+    /**
+     * The operation registry that the operation comes from passes on the gldapo instance.
+     */
+    public void setGldapo(Object gldapo);
 }

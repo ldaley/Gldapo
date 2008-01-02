@@ -22,22 +22,27 @@ import gldapo.schema.annotation.GldapoSchemaFilter
 
 class GldapoSearchTest extends GroovyTestCase {
     
+    static gldapo = new Gldapo()
+    
     def mockDirectory = [getSearchControls: { new GldapoSearchControls() }, getBase: {->"dc=example,dc=com"}] as GldapoSearchProvider
     
     def getSearch(Map options) {
         if (!options.containsKey("directory")) options.directory = mockDirectory
         if (!options.containsKey("schema")) options.schema = GldapoSearchTestDummySchema
-        new GldapoSearch(options: options)
+        def s = new GldapoSearch()
+        s.gldapo = gldapo
+        s.options = options
+        return s
     }
     
     void testDirectory() {
         def td = new GldapoDirectory("t", [url: "ldap://example.com"])
-        Gldapo.instance.directories << td
+        gldapo.directories << td
         
         def withDirectoryName = getSearch(directory: "t")
         assertSame(td, withDirectoryName.options.directory)
         
-        Gldapo.instance.directories.defaultDirectoryName = "t"
+        gldapo.directories.defaultDirectoryName = "t"
         def withoutDirectory = getSearch([directory: null])
         assertSame(td, withoutDirectory.options.directory)
         

@@ -17,14 +17,16 @@ package gldapo.schema.injecto
 import gldapo.Gldapo
 import gldapo.GldapoOperationRegistry
 import injecto.annotation.InjectAs
+import injecto.annotation.InjectoDependency
 
+@InjectoDependency(GldapoInstanceInjecto)
 class SearchingInjecto 
 {    
     static findAll = { Map options ->
         def searchOptions = options.clone()
         searchOptions.schema = delegate
         
-        Gldapo.instance.operations[GldapoOperationRegistry.SEARCH, searchOptions].execute()
+        delegate.gldapo.operations[GldapoOperationRegistry.SEARCH, searchOptions].execute()
     }
     
     @InjectAs("findAll")

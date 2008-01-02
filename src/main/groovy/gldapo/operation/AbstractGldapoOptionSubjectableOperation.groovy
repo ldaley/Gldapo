@@ -21,7 +21,7 @@ import gldapo.exception.GldapoOperationException
  * <p>
  * Allows subclasses to specify their option list in terms or required and optionals.
  */
-abstract class AbstractGldapoOptionSubjectableOperation implements GldapoOptionSubjectableOperation {
+abstract class AbstractGldapoOptionSubjectableOperation extends AbstractGldapoOperation implements GldapoOptionSubjectableOperation {
     
     /**
      * A list of option names that are required by the operation

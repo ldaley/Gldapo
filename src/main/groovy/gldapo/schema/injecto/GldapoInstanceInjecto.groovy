@@ -13,19 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.exception
+package gldapo.schema.injecto
+import injecto.annotation.InjectoProperty
+import gldapo.Gldapo
 
-public class GldapoSchemaInitializationException extends GldapoException
-{
-    GldapoSchemaInitializationException(String message) {
-        super(message)
-    }
+class GldapoInstanceInjecto {
     
-    GldapoSchemaInitializationException(GString message) {
-        super(message as String)
-    }
-    GldapoSchemaInitializationException(Class schema, Exception cause)
-    {
-        super("Error initialising schema class {$schema.name}", cause)
-    }
+    @InjectoProperty
+    static Gldapo gldapo = null
+
 }

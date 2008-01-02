@@ -17,7 +17,7 @@ package gldapo.schema
 
 class GldapoContextMapperTest extends GroovyTestCase 
 {
-    def registration = new GldapoSchemaRegistration(GldapoContextMapperTestSubject)
+    def registration = new GldapoSchemaRegistration(GldapoContextMapperTestSubject, new gldapo.Gldapo())
 
     def contextMapper = new GldapoContextMapper(schemaRegistration: registration)
         

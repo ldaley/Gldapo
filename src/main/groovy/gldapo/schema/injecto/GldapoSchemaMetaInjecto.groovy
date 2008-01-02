@@ -16,5 +16,5 @@
 package gldapo.schema.injecto
 import injecto.annotation.InjectoDependencies
 
-@InjectoDependencies([SearchingInjecto, GetInjecto, DirectoryInjecto, DnInjecto])
+@InjectoDependencies([GldapoInstanceInjecto, SearchingInjecto, GetInjecto, DirectoryInjecto, DnInjecto])
 class GldapoSchemaMetaInjecto {}

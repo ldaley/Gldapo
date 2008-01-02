@@ -15,6 +15,8 @@
  */
 package gldapo.schema.attribute
 import java.lang.reflect.Field
+import gldapo.GldapoTypeMappingRegistry
+import gldapo.Gldapo
 
 abstract class AbstractAttributeMappingTest extends GroovyTestCase 
 {
@@ -27,8 +29,11 @@ abstract class AbstractAttributeMappingTest extends GroovyTestCase
     
     def mappingForField(String fieldName)
     {
-        def m = this.mappingClass
-        m.getConstructor(Class, Field).newInstance(this.mappingSubjectClass, this.mappingSubjectClass.getDeclaredField(fieldName))
+        this.mappingClass.getConstructor(Class, Field, GldapoTypeMappingRegistry).newInstance(
+            this.mappingSubjectClass, 
+            this.mappingSubjectClass.getDeclaredField(fieldName), 
+            Gldapo.instance.typemappings
+        )
     }
     
     def getFakeContext(val)

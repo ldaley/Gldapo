@@ -35,9 +35,22 @@ import gldapo.schema.GldapoSchemaRegistration
 class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration> {
 
     /**
+     * 
+     */
+    Gldapo gldapo
+    
+    /**
+     * 
+     */
+    GldapoSchemaRegistry(Gldapo gldapo) {
+        if (gldapo == null) throw new IllegalArgumentException("gldapo cannot be null")
+        this.gldapo = gldapo
+    }
+
+    /**
      * Registers a new schema class.
      * <p>
-     * If {@code registration} is a {@link java.lang.Class}  (implicitly creating a {@link GldapoSchemaRegistration} for it), 
+     * If {@code registration} is a {@link Class}  (implicitly creating a {@link GldapoSchemaRegistration} for it), 
      * or just adding {@code registration} if it is a schema registration. 
      * <p>
      * If the schema class in question is already registered, this will silently do nothing.
@@ -47,9 +60,10 @@ class GldapoSchemaRegistry extends LinkedList<GldapoSchemaRegistration> {
      */
     boolean add(registration) {
         if (registration instanceof GldapoSchemaRegistration) {
+            registration.gldapo = gldapo
             if (this.isRegistered(registration.schema) == false) super.add(registration)
         } else if (registration instanceof Class) {
-            if (this.isRegistered(registration) == false) super.add(new GldapoSchemaRegistration(registration))
+            if (this.isRegistered(registration) == false) super.add(new GldapoSchemaRegistration(registration, gldapo))
         } else {
             throw new IllegalArgumentException("Only Class objects or GldapoSchemaRegistration objects can be added to the GldapoSchemaRegistry")
         }        

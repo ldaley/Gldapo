@@ -16,7 +16,13 @@
 package gldapo.operation;
 import java.util.Map;
 
+/**
+ * Allows the using of an options map to augment the operation.
+ */
 public interface GldapoOptionSubjectableOperation extends GldapoOperation
 {
+    /**
+     * Is called by the operations registry that creates the operation instance.
+     */
     public void setOptions(Map options);
 }

@@ -19,7 +19,6 @@ import gldapo.exception.GldapoDirectoryNotFoundException
 import gldapo.exception.GldapoNoDefaultDirectoryException
 import gldapo.exception.GldapoException
 import gldapo.exception.GldapoInvalidConfigException
-import gldapo.*
 
 /**
  * A directory registry holds instances of {@link GldapoDirectory}, retrievable by their {@link GldapoDirectory#getName()}.

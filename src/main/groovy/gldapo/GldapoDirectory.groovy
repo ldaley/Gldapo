@@ -14,29 +14,40 @@
  * limitations under the License.
  */
 package gldapo
-
 import gldapo.schema.GldapoContextMapper
+import gldapo.schema.GldapoSchemaRegistration
 import gldapo.exception.GldapoException
 import gldapo.exception.GldapoInvalidConfigException
-import gldapo.exception.GldapoInvalidConfigException
-import gldapo.util.FilterUtil
 import org.springframework.ldap.core.LdapTemplate
 import org.springframework.ldap.core.support.LdapContextSource
-import org.springframework.ldap.filter.Filter
-import org.springframework.ldap.core.LdapOperations
-import org.springframework.ldap.core.CollectingNameClassPairCallbackHandler
 import org.springframework.ldap.core.ContextMapperCallbackHandler
 import org.springframework.ldap.control.PagedResultsRequestControl
-import org.springframework.ldap.core.AttributesMapper
 import org.springframework.ldap.LimitExceededException
 import org.springframework.ldap.core.ContextMapper
-import org.springframework.beans.factory.BeanNameAware
+import org.springframework.ldap.NamingException
 import javax.naming.directory.SearchControls
 
-class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
-{
+class GldapoDirectory implements GldapoSearchProvider {
+    
+    /**
+     * The key that the config for the directories search controls should be under ({@value})
+     * 
+     * @see #constructor(String,Map)
+     */
     static final CONFIG_SEARCH_CONTROLS_KEY = 'searchControls'
     
+    /**
+     * The attributes in the config that are for the underlying context source of the underlying template.
+     * <p>
+     * The properties and their meanings are ...
+     * <ul>
+     * <li>url - A string indicating the location of the directory (e.g. {@code "ldap://example.com"})
+     * <li>urls - A list of url strings
+     * <li>base - The base dn for operations for this directory (e.g. {@code "dc=example,dc=com"})
+     * <li>userDn - The distinguished name of the user to bind to the directory as
+     * <li>password - The password of the user to bind as
+     * </ul>
+     */
     static final CONTEXT_SOURCE_PROPS = ["url", "urls", "base", "userDn", "password"]
     
     /**
@@ -55,12 +66,22 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
     def template
     
     /**
+     * Creates a new instance via a config map. 
+     * <p>
+     * The config map contains the attributes for the underlying {@link LdapContextSource} 
+     * (see {@link #CONTEXT_SOURCE_PROPS}). The only mandatory attribute is {@code url} 
+     * (or {@code urls}). The rest are optional.
+     * <p>
+     * It can also contain a map under the key denoted by {@link #CONFIG_SEARCH_CONTROLS_KEY} 
+     * that is used to construct an instance of {@link GldapoSearchControls} using the 
+     * {@link GldapoSearchControls#constructor(Map)} constructor. If it is omitted, a search controls
+     * object with default values is used.
+     * <p>
      * 
      */
     GldapoDirectory(String name, Map config) {
         if (config == null) throw new GldapoInvalidConfigException("Config for directory '$name' is null" as String)
         this.name = name
-        
         def contextSource = new LdapContextSource()
         CONTEXT_SOURCE_PROPS.each {
             if (config.containsKey(it)) { 
@@ -76,23 +97,34 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
     }
     
     /**
-     * 
+     * Returns the base DN for operations for this directory
      */
-    void setBeanName(String beanName) {
-        this.name = beanName
-    }
-    
-    /**
-     * Simply retrieves the property from the context source
-     */
-    String getBase()
-    {
+    String getBase() {
         template?.contextSource?.base as String
     }
     
-    List search(Class schema, String base, String filter, GldapoSearchControlProvider controls)
-    {
-        def schemaRegistration = Gldapo.instance.schemas[schema]
+    /**
+     * Performs a search operation on the directory.
+     * <p>
+     * If the search control provider contains a {@code pageSize} that is greater than 1
+     * {@link #pagedSearch(String,String,SearchControls,ContextMapperCallbackHandler,Integer) pagedSearch()} is used,
+     * otherwise {@link #nonPagedSearch(String,String,SearchControls,ContextMapperCallbackHandler) nonPagedSearch()} is used.
+     * <p>
+     * An instance of {@link SearchControls} is made out of the gldapo search controls ({@code controls}) to be used by
+     * the {@link LdapTemplate} instance which does the actual searching.
+     * 
+     * @param schemaRegistration Provides the metadata about the target class in order to make objects (must be instance of GldapoSchemaRegistration)
+     * @param base The base of the search operation, relative to the base of the directory
+     * @param filter The LDAP filter string to use to restrict the search
+     * @param controls Provides several settings that augment the search
+     * @return A list of objects of the class that the schemaRegistration is for
+     * @throws NamingException If any LDAP related error occurs
+     */
+    List search(Object schemaRegistration, String base, String filter, GldapoSearchControlProvider controls) throws NamingException {
+        
+        if (schemaRegistration instanceof GldapoSchemaRegistration == false) {
+            throw new IllegalArgumentException("schemaRegistration must be an instance of GldapoSchemaRegistration")
+        }
         
         ContextMapper mapper = new GldapoContextMapper(schemaRegistration: schemaRegistration, directory: this)
         ContextMapperCallbackHandler handler = new ContextMapperCallbackHandler(mapper)
@@ -103,25 +135,44 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
         if (controls.pageSize == null || pageSize < 1) {
             return nonPagedSearch(base, filter, jndiControls, handler)
         } else { 
-            return pagedSearch(base, filter, jndiControls, handler, controls. pageSize)
+            return pagedSearch(base, filter, jndiControls, handler, controls.pageSize)
         }
     }
-    
-    private List nonPagedSearch(base, filter, jndiControls, handler) {
+
+    /**
+     * Performs a search operation on the directory not using paging.
+     * 
+     * @param base The base of the search operation, relative to the base of the directory
+     * @param filter The LDAP filter string to use to restrict the search
+     * @param jndiControls Provides several settings that augment the search
+     * @param handler responsible for processing the raw search results
+     * @return A list of objects of the class that the schemaRegistration is for
+     * @throws NamingException If any LDAP related error occurs
+     */
+    private List nonPagedSearch(String base, String filter, SearchControls jndiControls, ContextMapperCallbackHandler handler) throws NamingException {
         try {
             this.template.search(base, filter, jndiControls, handler)
-        }
-        catch (LimitExceededException e) {
+        } catch (LimitExceededException e) {
             // If the number have entries has hit the specified count limit OR
             // The server is unwilling to send more entries we will get here.
             // It's not really an error condition hence we just return what we found.
         }
         return handler.list       
     }
-    
-    private List pagedSearch(base, filter, jndiControls, handler, pageSize) {
-           try
-        {
+
+    /**
+     * Performs a search operation on the directory not using paging.
+     * 
+     * @param base The base of the search operation, relative to the base of the directory
+     * @param filter The LDAP filter string to use to restrict the search
+     * @param jndiControls Provides several settings that augment the search
+     * @param handler responsible for processing the raw search results
+     * @param pageSize The number of entries to be returned in one page from the LDAP directory
+     * @return A list of objects of the class that the schemaRegistration is for
+     * @throws NamingException If any LDAP related error occurs
+     */
+    private List pagedSearch(String base, String filter, SearchControls jndiControls, ContextMapperCallbackHandler handler, Integer pageSize) throws NamingException {
+        try {
             PagedResultsRequestControl requestControl = new PagedResultsRequestControl(pageSize)
             this.template.search(base, filter, jndiControls, handler, requestControl)
         
@@ -130,16 +181,13 @@ class GldapoDirectory implements BeanNameAware, GldapoSearchProvider
                 requestControl = new PagedResultsRequestControl(pageSize, requestControl.cookie)
                 this.template.search(base, filter, jndiControls, handler, requestControl)
             } 
-
-            return handler.list
-        }
-        catch (LimitExceededException e)
-        {
+        } catch (LimitExceededException e) {
             // If the number have entries has hit the specified count limit OR
             // The server is unwilling to send more entries we will get here.
             // It's not really an error condition hence we just return what we found.
-        
-            return handler.list
+
         }
+        
+        return handler.list
     }
 }

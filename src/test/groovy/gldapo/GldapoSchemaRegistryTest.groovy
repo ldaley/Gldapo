@@ -18,8 +18,11 @@ import gldapo.schema.GldapoSchemaRegistration
 
 class GldapoSchemaRegistryTest extends GroovyTestCase {
 
+    
+    
     void testAddClass() {
-        def registry = new GldapoSchemaRegistry()
+        def gldapo = new Gldapo()
+        def registry = gldapo.schemas
         registry << RegistryTestSchema1
         assertEquals(1, registry.size())
         assertEquals(GldapoSchemaRegistration, registry[0].class)
@@ -27,19 +30,25 @@ class GldapoSchemaRegistryTest extends GroovyTestCase {
     }
 
     void testAddRegistration() {
-        def registry = new GldapoSchemaRegistry()
-        registry << new GldapoSchemaRegistration(RegistryTestSchema1)
+        def gldapo = new Gldapo()
+        def registry = gldapo.schemas
+        registry << new GldapoSchemaRegistration(RegistryTestSchema1, new Gldapo())
         assertEquals(1, registry.size())
         assertEquals(GldapoSchemaRegistration, registry[0].class)
         assertSame(RegistryTestSchema1, registry[0].schema)
     }
 
     void testAddRubbish() {
-        shouldFail(IllegalArgumentException) { new GldapoSchemaRegistry() << "" }
+        shouldFail(IllegalArgumentException) { 
+            def gldapo = new Gldapo()
+            def registry = gldapo.schemas
+            registry << "" 
+        }
     }
 
     void testIsRegistered() {
-        def registry = new GldapoSchemaRegistry()
+        def gldapo = new Gldapo()
+        def registry = gldapo.schemas
         registry << RegistryTestSchema1
         assertTrue(registry.isRegistered(RegistryTestSchema1))
         assertFalse(registry.isRegistered(RegistryTestSchema2))
@@ -48,7 +57,9 @@ class GldapoSchemaRegistryTest extends GroovyTestCase {
     }
 
     void testGetAt() {
-        def registry = new GldapoSchemaRegistry()
+        def gldapo = new Gldapo()
+        def registry = gldapo.schemas
+        
         registry << RegistryTestSchema1
         registry << RegistryTestSchema2
         assertNotNull(registry[RegistryTestSchema1])

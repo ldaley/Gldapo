@@ -29,22 +29,28 @@ class Gldapo {
     static final DEFAULT_CONFIG_FILENAME = 'gldapo-conf.groovy'
     
     /**
+     * The key that the array of type mapping classes is expected to be under in the config ({@value})
      * 
+     * @see #extractTypeMappingsFromConfig()
      */
     static final CONFIG_KEY_TYPEMAPPINGS = 'typemappings'
     
     /**
-     *
+    * The key that the map of directories is expected to be under in the config ({@value})
+    * 
+    * @see #extractDirectoriesFromConfig()
      */
     static final CONFIG_KEY_DIRECTORIES = 'directories'
     
     /**
-     * 
+     * The config item that holds the name of the default directory ({@value})
      */
     static final CONFIG_KEY_DEFAULT_DIRECTORY = 'defaultdirectory'
 
     /**
-     * 
+    * The key that the array of schema classes is expected to be under in the config ({@value})
+    * 
+    * @see #extractSchemasFromConfig()
      */
     static final CONFIG_KEY_SCHEMAS = 'schemas'
 
@@ -54,33 +60,44 @@ class Gldapo {
     static Gldapo instance = new Gldapo()
 
     /**
-     * 
+     * Holds the directory objects
      */
     GldapoDirectoryRegistry directories = new GldapoDirectoryRegistry()
     
     /**
-     * 
+     * Holds the registrations for schema classes
      */
-    GldapoSchemaRegistry schemas = new GldapoSchemaRegistry()
+    GldapoSchemaRegistry schemas = new GldapoSchemaRegistry(this)
     
     /**
-     * 
+     * Holds classes that implement type mappings
      */
     GldapoTypeMappingRegistry typemappings = new GldapoTypeMappingRegistry()
 
     /**
-     * 
+     * Holds the operation abstractions
      */
-    GldapoOperationRegistry operations = new GldapoOperationRegistry()
-    
-        
+    GldapoOperationRegistry operations = new GldapoOperationRegistry(this)
+
     /**
-     * Does nothing.
+     * Calls {@code clear()} on the directory, schema and type mapping registries before passing the config to
+     * {@link #consumeConfig(Map)}
      */
-    private Gldapo() {
-        
+    void resetWithConfig(Map config) {
+       this.directories.clear()
+       this.schemas.clear()
+       this.typemappings.clear()
+       this.consumeConfig(config)
     }
-    
+
+    /**
+     * Uses the {@code extract*} methods to interpret the config, then iteratively add's the items
+     * to the respective registry.
+     * 
+     * @see #extractDirectoriesFromConfig(Map)
+     * @see #extractTypeMappingsFromConfig(Map)
+     * @see #extractSchemasFromConfig(Map)
+     */
     void consumeConfig(Map config) {
         if (config) {
             def directories = extractDirectoriesFromConfig(config)
@@ -94,12 +111,6 @@ class Gldapo {
         }
     }
     
-    void resetWithConfig(Map config) {
-       this.directories.clear()
-       this.schemas.clear()
-       this.typemappings.clear()
-       this.consumeConfig(config)
-    }
     
     /**
      * Calls {@link #initialize(String)} with a null string.
@@ -157,26 +168,21 @@ class Gldapo {
     }
     
     /**
-     * Initializes Gldapo from the given config map.
-     * <p>
-     * This method simply passes the config to the following methods, setting the respective instance to the return value ...
-     * <ul>
-     *     <li>{@link GldapoSchemaRegistry#newInstance(Map)}
-     *     <li>{@link GldapoDirectoryRegistry#newInstance(Map)}
-     *     <li>{@link GldapoTypeMappingRegistry#newInstance(Map)}
-     * </ul>
-     * For the details of the config map format, see the above methods.
-     * <p>
-     * Also creates an instance of {@link GldapoOperationRegistry}
-     * 
-     * @param config A map containing the desired config for Gldapo
-     * @throws GldapoInitializationException If there is something wrong with the config
+     * Calls {@link #resetWithConfig(Map)} on the gldapo {@link #instance}
      */
     static initialize(Map config) throws GldapoInitializationException {
         this.instance.resetWithConfig(config)
     }
 
-    static extractSchemasFromConfig(Map config) {
+    /**
+     * Fetches the schema classes indictated by the config.
+     * <p>
+     * Looks in the config for a {@link Collection Collection} under the key indicated by {@link #CONFIG_KEY_SCHEMAS}
+     * 
+     * @return The schema classes
+     * @throws GldapoInvalidConfigException if the relevant item in the config is not a {@link Collection}
+     */
+    static Collection extractSchemasFromConfig(Map config) throws GldapoInvalidConfigException {
         if (config.containsKey(CONFIG_KEY_SCHEMAS)) {
             def schemas = config[CONFIG_KEY_SCHEMAS]
             if (schemas instanceof Collection) {
@@ -188,7 +194,15 @@ class Gldapo {
         }
     }
 
-    static extractTypeMappingsFromConfig(Map config) {
+    /**
+     * Fetches the type mapping classes indictated by the config.
+     * <p>
+     * Looks in the config for a {@link Collection} under the key indicated by {@link #CONFIG_KEY_TYPEMAPPINGS}
+     * 
+     * @return The type mapping classes
+     * @throws GldapoInvalidConfigException if the relevant item in the config is not a {@link Collection}
+     */
+    static Collection extractTypeMappingsFromConfig(Map config) throws GldapoInvalidConfigException {
         if (config.containsKey(CONFIG_KEY_TYPEMAPPINGS)) {
             def typemappings = config[CONFIG_KEY_TYPEMAPPINGS]
             if (typemappings instanceof Collection) {
@@ -199,8 +213,35 @@ class Gldapo {
             }
         }
     }
-    
-    static extractDirectoriesFromConfig(Map config) {
+
+    /**
+     * Creates a {@code List} of {@link GldapoDirectory} objects from the given config.
+     * <p>
+     * Looks in the config for a {@link Map} under the key indicated by {@link #CONFIG_KEY_DIRECTORIES}.
+     * <p>
+     * Each key/value pair in the directories config is turned into an instance of {@link GldapoDirectory} by using the
+     * {@link GldapoDirectory#constructor(String,Map)} constructor where the key is the {@link String} and the value is the
+     * {@link Map}.
+     * <p>
+     * An example config map for this method might look like this ...
+     * <pre>
+     * [
+     *  directories: [
+     *      d1: [
+     *          url: "ldap://example.com"
+     *      ],
+     *      d2: [
+     *          url: "ldap://example.com"
+     *      ]
+     *  ]
+     * ]
+     * </pre>
+     * See {@link GldapoDirectory#constructor(String,Map)} for the format of the directory map.
+     * 
+     * @return A list of {@link GldapoDirectory} objects
+     * @throws GldapoInvalidConfigException if the relevant item in the config is not a {@link Map}
+     */
+    static List extractDirectoriesFromConfig(Map config) throws GldapoInvalidConfigException {
         if (config.containsKey(CONFIG_KEY_DIRECTORIES)) {
             def directoryConfigs = config[CONFIG_KEY_DIRECTORIES]
             if (directoryConfigs instanceof Map) {

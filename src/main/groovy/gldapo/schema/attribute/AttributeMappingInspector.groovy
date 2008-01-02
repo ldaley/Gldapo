@@ -15,32 +15,33 @@
  */
 package gldapo.schema.attribute
 import java.lang.reflect.Field
+import gldapo.GldapoTypeMappingRegistry
 
 class AttributeMappingInspector 
 {
     static excludedFields = ["metaClass"]
     
-    static Map getAttributeMappings(Class schema)
+    static Map getAttributeMappings(Class schema, GldapoTypeMappingRegistry typemappings)
     {
         def mappings = [:]
         schema.declaredFields.each {
-            def mapping = getMappingForField(schema, it)
+            def mapping = getMappingForField(schema, it, typemappings)
             if (mapping) mappings[it.name] = mapping
         }
         return mappings
     }
     
-    static getMappingForField(Class schema, Field field)
+    static getMappingForField(Class schema, Field field, GldapoTypeMappingRegistry typemappings)
     {
         if (excludedFields.contains(field.name) || !fieldIsReadableAndWritable(schema, field)) return null
         
         if (Collection.isAssignableFrom(field.type))
         {
-            return new MultiValueAttributeMapping(schema, field)
+            return new MultiValueAttributeMapping(schema, field, typemappings)
         }
         else
         {
-            return new SingleValueAttributeMapping(schema, field)
+            return new SingleValueAttributeMapping(schema, field, typemappings)
         }
     }
     

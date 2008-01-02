@@ -43,7 +43,7 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
         if (options.directory != null)
         {
             def directoryValue = options.directory
-            if (directoryValue instanceof String) return Gldapo.instance.directories[directoryValue]
+            if (directoryValue instanceof String) return this.gldapo.directories[directoryValue]
             
             if (directoryValue instanceof GldapoSearchProvider) return directoryValue
 
@@ -52,7 +52,7 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
         }
         else
         {
-            return Gldapo.instance.directories.defaultDirectory
+            return this.gldapo.directories.defaultDirectory
         }        
     }
     
@@ -66,7 +66,7 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
     
     def calculateSearchControls()
     {
-        def specificControls = GldapoSearchControls.newInstance(this.options)
+        def specificControls = new GldapoSearchControls(this.options)
         (this.options.directory.searchControls) ? this.options.directory.searchControls.mergeWith(specificControls) : specificControls
     }
     
@@ -79,6 +79,6 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
     
     def execute()
     {
-        this.options.directory.search(this.options.schema, this.options.base, this.options.filter, this.options.searchControls)
+        this.options.directory.search(this.gldapo.schemas[this.options.schema], this.options.base, this.options.filter, this.options.searchControls)
     }
 }

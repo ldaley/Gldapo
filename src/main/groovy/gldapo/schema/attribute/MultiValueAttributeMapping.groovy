@@ -15,7 +15,7 @@
  */
 package gldapo.schema.attribute
 import gldapo.exception.GldapoException
-
+import gldapo.GldapoTypeMappingRegistry
 import java.lang.reflect.Field
 import java.lang.reflect.ParameterizedType
 
@@ -37,9 +37,8 @@ class MultiValueAttributeMapping extends AbstractAttributeMapping
     /**
      * @todo Check that this is actually a collection type, maybe
      */
-    MultiValueAttributeMapping(Class schema, Field field)
-    {
-        super(schema, field)
+    MultiValueAttributeMapping (Class schema, Field field, GldapoTypeMappingRegistry typemappings) {
+        super(schema, field, typemappings)
         this.collectionType = this.calculateCollectionType()
     }
     

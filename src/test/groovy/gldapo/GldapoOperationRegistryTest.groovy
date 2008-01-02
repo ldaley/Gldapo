@@ -20,28 +20,24 @@ class GldapoOperationRegistryTest extends GroovyTestCase
 {
     def ops
     
-    void setUp()
-    {
-        ops = new GldapoOperationRegistry()
+    void setUp() {
+        ops = new GldapoOperationRegistry(new Gldapo())
     }
     
-    void testInstall() 
-    {    
-        def o = [execute: {}] as GldapoOperation
+    void testInstall() {    
+        def o = [execute: {}, setGldapo: {}] as GldapoOperation
         def f = new Expando(newInstance: { -> o })
         ops["custom"] = f
         assertSame(o, ops["custom"])
     }
     
-    void testOptionPassing()
-    {
+    void testOptionPassing() {
         def options = [t: "t"]
         def passedInOptions
-        def o = [execute: {}, setOptions: { passedInOptions = it }] as GldapoOptionSubjectableOperation
+        def o = [execute: {}, setGldapo: {}, setOptions: { passedInOptions = it }] as GldapoOptionSubjectableOperation
         def f = new Expando(newInstance: { -> o })
         ops["custom"] = f
         def op = ops["custom", options]
         assertSame(options, passedInOptions)
     }
-    
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 public interface GldapoSearchProvider
 {
-    public List search(Class schema, String base, String filter, GldapoSearchControlProvider controls);
+    public List search(Object schemaRegistration, String base, String filter, GldapoSearchControlProvider controls);
     public GldapoSearchControlProvider getSearchControls();
     public String getBase();
 }
