@@ -23,7 +23,7 @@ import gldapo.exception.GldapoInvalidConfigException
 /**
  * A directory registry holds instances of {@link GldapoDirectory}, retrievable by their {@link GldapoDirectory#getName()}.
  */
-class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
+class GldapoDirectoryRegistry extends LinkedHashMap<String, GldapoDirectory> {
 
     /**
      * The default directory is the directory used when no directory is specified for an operation.
@@ -34,14 +34,14 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
      * Returns the current default directory.
      * <p>
      * If there is only one directory in the registry, it is returned regardless. Else the registry is searched for a directory with
-     * a name matching {@link #defaultDirectoryName}.
+        * a name matching {@link #defaultDirectoryName}.
      * 
      * @return The default directory
      * @throws GldapoNoDefaultDirectoryException If there is more then one registered directory, and {@link #defaultDirectoryName} is null.
      * @throws GldapoDirectoryNotFoundException If there is no directory registered that has a name of {@link #defaultDirectoryName}
      */
     GldapoDirectory getDefaultDirectory() throws GldapoNoDefaultDirectoryException, GldapoDirectoryNotFoundException {
-        if (this.size() == 1) return this[0]
+        if (this.size() == 1) return this.values().iterator().next()
         
         if (defaultDirectoryName == null) throw new GldapoNoDefaultDirectoryException()
         def defaultDirectory = this[defaultDirectoryName]
@@ -55,11 +55,21 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
      * @param name The target directory
      * @throws GldapoDirectoryNotFoundException If there is no directory registered with {@code name}
      */
-    def getAt(String name)
+    def get(name)
     {
-        def directory = this.find { it.name.equals(name) }
+        if (name == "defaultDirectory") return this.getDefaultDirectory()
+        if (name == "defaultDirectoryName") return this.getDefaultDirectoryName()
+        
+        def directory = super.get(name)
         if (directory == null) throw new GldapoDirectoryNotFoundException(name)
         return directory
+    }
+    
+    def put(key, value) {
+        if (key == "defaultDirectoryName") 
+            return this.setDefaultDirectoryName(value)
+        else
+            super.put(key, value)
     }
     
     /**
@@ -67,9 +77,9 @@ class GldapoDirectoryRegistry extends LinkedList<GldapoDirectory> {
      * 
      * @param directory
      */
-    boolean add(directory) {
+    void leftShift(directory) {
         if (directory instanceof GldapoDirectory) {
-            super.add(directory)
+            super.put(directory.name, directory)
         } else { 
             throw new IllegalArgumentException("Can only add GldapoDirectory objects to GldapoDirectoryRegistry")
         }

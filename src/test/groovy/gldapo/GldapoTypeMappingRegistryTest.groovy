@@ -21,11 +21,11 @@ class GldapoTypeMappingRegistryTest extends GroovyTestCase
     void testGetFromDefaults() {
         def r = new GldapoTypeMappingRegistry()
         
-        def m = r.getToFieldMapperForType("String")
+        def m = r.getToGroovyMapperForType("String")
         assertNotNull(m)
         assertEquals("test", m.call("test"))
         
-        def i = r.getToFieldMapperForType("Integer")
+        def i = r.getToGroovyMapperForType("Integer")
         assertNotNull(i)
         assertEquals(3, i.call("3"))
     }
@@ -33,7 +33,7 @@ class GldapoTypeMappingRegistryTest extends GroovyTestCase
     void testGetNonExistantReturnsNull() {
         def r = new GldapoTypeMappingRegistry()
         
-        assertNull(r.getToFieldMapperForType("BollocksType"))
+        assertNull(r.getToGroovyMapperForType("BollocksType"))
     }
     
     /**
@@ -46,7 +46,7 @@ class GldapoTypeMappingRegistryTest extends GroovyTestCase
         r1 << GldapoTypeMappingRegistryTest2
         r1 << GldapoTypeMappingRegistryTest1
         
-        def m1 = r1.getToFieldMapperForType("Test")
+        def m1 = r1.getToGroovyMapperForType("Test")
         assertNotNull(m1)
         assertEquals(1, m1.call(""))
         
@@ -55,7 +55,7 @@ class GldapoTypeMappingRegistryTest extends GroovyTestCase
         r2 << GldapoTypeMappingRegistryTest1
         r2 << GldapoTypeMappingRegistryTest2
 
-        def m2 = r2.getToFieldMapperForType("Test")
+        def m2 = r2.getToGroovyMapperForType("Test")
         assertNotNull(m2)
         assertEquals(2, m2.call(""))
     }

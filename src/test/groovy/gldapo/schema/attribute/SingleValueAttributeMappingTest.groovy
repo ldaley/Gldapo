@@ -16,39 +16,44 @@
 package gldapo.schema.attribute
 import gldapo.schema.annotation.GldapoPseudoType
 import gldapo.schema.annotation.GldapoSynonymFor
+import javax.naming.directory.DirContext
 
 class SingleValueAttributeMappingTest extends AbstractAttributeMappingTest
 {
     def mappingClass = SingleValueAttributeMapping
     def mappingSubjectClass = SingleValueAttributeMappingTestSubject
     
-    def getFakeContext(val)
-    {
+    static REP = DirContext.REPLACE_ATTRIBUTE
+    static REM = DirContext.REMOVE_ATTRIBUTE 
+    static ADD = DirContext.ADD_ATTRIBUTE
+    
+    def getFakeContext(val) {
         new Expando(getStringAttribute: { return val })
     }
     
-    void testSimpleString() 
-    {
-        doMappingTest("simpleString", "simpleString", "String", "test", "test")
+    void testSimpleString() {
+        def mapping = mappingForField("simpleString")
+        verifyProperties(mapping, "simpleString", "String")
+        verifyTypeConversion(mapping, "test", "test")
+        verifyMapFromContext(mapping, "test", "test")
+        verifyCalculateModificationItems(mapping, "a", "b", [[REP, "b"]])
+        verifyCalculateModificationItems(mapping, "a", "a", null)
+        verifyCalculateModificationItems(mapping, "a", null, [[REM, null]])
+        verifyCalculateModificationItems(mapping, null, "a", [[ADD, "a"]])
     }
     
-    void testPseudoType() 
-    {
-        doMappingTest("pseudoType", "pseudoType", "Integer", "3", 3)
+    void testPseudoType() {
+        def mapping = mappingForField("pseudoType")
+        verifyProperties(mapping, "pseudoType", "Integer")
+        verifyTypeConversion(mapping, "3", 3)
     }
     
-    void testSynonym() 
-    {
-        doMappingTest("synonym", "other", "String", "o", "o")
+    void testSynonym() {
+        def mapping = mappingForField("synonym")
+        verifyProperties(mapping, "other", "String")
     }
     
-    void testNullValue() 
-    {
-        doMappingTest("simpleString", "simpleString", "String", null, null)
-    }
-    
-    void testBogusType()
-    {
+    void testBogusType() {
         shouldFail() {
             mappingForField("bogusType")
         }

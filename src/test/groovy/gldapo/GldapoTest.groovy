@@ -16,6 +16,7 @@
 package gldapo
 import gldapo.exception.GldapoInitializationException
 import gldapo.exception.GldapoInvalidConfigException
+import org.springframework.ldap.core.DistinguishedName
 
 class GldapoTest extends GroovyTestCase 
 {
@@ -47,7 +48,7 @@ class GldapoTest extends GroovyTestCase
         assertTrue(directories instanceof List)
         assertEquals(1, directories.size())
         assertEquals("d1", directories[0].name)
-        assertEquals("dc=example, dc=com", directories[0].base)
+        assertEquals(new DistinguishedName("dc=example, dc=com"), directories[0].base)
         assertEquals(20, directories[0].searchControls.countLimit)
         
         shouldFail(GldapoInvalidConfigException) { Gldapo.extractDirectoriesFromConfig(directories: "blah") }
@@ -101,9 +102,9 @@ class GldapoTest extends GroovyTestCase
         )
         
         assertEquals(1, gldapo.directories.size())
-        assertEquals("d1", gldapo.directories[0].name)
-        assertEquals("dc=example, dc=com", gldapo.directories[0].base)
-        assertEquals(20, gldapo.directories[0].searchControls.countLimit)
+        assertNotNull("d1", gldapo.directories.d1)
+        assertEquals(new DistinguishedName("dc=example, dc=com"), gldapo.directories.d1.base)
+        assertEquals(20, gldapo.directories.d1.searchControls.countLimit)
         
         assertTrue(gldapo.typemappings.contains(String))
         assertNotNull(gldapo.schemas.find { it == SimpleSchemaClass })

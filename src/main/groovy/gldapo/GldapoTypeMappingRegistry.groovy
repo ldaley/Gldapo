@@ -39,21 +39,32 @@ class GldapoTypeMappingRegistry extends LinkedList<Class> {
     /**
      * Returns a closure that can be used to convert a LDAP value to a particular type.
      * <p>
-     * Uses {@link AbstractAttributeMapping#toFieldByTypeMapperName(Object)} to calculate the name of the
+     * Uses {@link AbstractAttributeMapping#toGroovyByTypeMapperName(Object)} to calculate the name of the
      * suitable mapping method
      */
-    def getToFieldMapperForType(String type) {
-        findMapper(AbstractAttributeMapping.toFieldByTypeMapperName(type), Object)
+    def getToGroovyMapperForType(String type) {
+        findMapper(AbstractAttributeMapping.toGroovyByTypeMapperName(type), Object)
+    }
+    
+    /**
+     * Returns a closure that can be used to convert a groovy value to an LDAP value (string)
+     * <p>
+     * Uses {@link AbstractAttributeMapping#toLdapByTypeMapperName(Object)} to calculate the name of the
+     * suitable mapping method
+     */
+    def getToLdapMapperForType(String type) {
+        findMapper(AbstractAttributeMapping.toLdapByTypeMapperName(type), Object)
     }
     
     def findMapper(String mapperName, Class[] argTypes) {
         def mapping
         def provider = this.reverse().find {
             mapping = it.metaClass.getMetaMethod(mapperName, argTypes)
+            MetaMethod
             return mapping?.isStatic()
         }
         
-        (provider && mapping) ? { mapping.invoke(provider, it) } : null
+        (provider && mapping) ? { mapping.invoke(provider, [it] as Object[]) } : null
     }
     
     void clear() {

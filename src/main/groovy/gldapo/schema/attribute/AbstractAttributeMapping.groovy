@@ -54,8 +54,28 @@ abstract class AbstractAttributeMapping
     /**
      * 
      */
-    Closure toFieldTypeMapper
+    Closure toGroovyTypeMapper
     
+    /**
+     *
+     */
+     Closure toLdapTypeMapper
+     
+    /**
+     * 
+     */
+    abstract protected calculateTypeMappingFromFieldType()
+
+    /**
+     * 
+     */
+    abstract protected getGroovyValueFromContext(context)
+
+    /**
+     * 
+     */
+    abstract protected calculateModificationItems(clean, dirty)
+     
     /**
      * 
      */
@@ -65,7 +85,8 @@ abstract class AbstractAttributeMapping
         
         this.attributeName = this.calculateAttributeName()
         this.typeMapping = this.calculateTypeMapping()
-        this.toFieldTypeMapper = this.calculateToFieldTypeMapper(typemappings)
+        this.toGroovyTypeMapper = this.calculateToGroovyTypeMapper(typemappings)
+        this.toLdapTypeMapper = this.calculateToLdapTypeMapper(typemappings)
     }
     
     protected calculateAttributeName() {
@@ -83,42 +104,96 @@ abstract class AbstractAttributeMapping
     }
     
     /**
-     * @todo Need some caching here
+     * 
      */    
-    protected calculateToFieldTypeMapper(GldapoTypeMappingRegistry typemappings) {
+    protected calculateToGroovyTypeMapper(GldapoTypeMappingRegistry typemappings) {
         Class[] p = [String] as Class[]
         
-        def byFieldMapperName = toFieldByFieldMapperName(this.field.name)
+        def byFieldMapperName = toGroovyByFieldMapperName(this.field.name)
         def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
         if (classByFieldMapper) return { classByFieldMapper.invoke(schema, it) }
         
-        def byTypeMapperName = toFieldByTypeMapperName(this.typeMapping)
+        def byTypeMapperName = toGroovyByTypeMapperName(this.typeMapping)
         def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
         if (classByTypeMapper) return { classByTypeMapper.invoke(schema, it) }
         
-        def defaultByTypeMapper = typemappings.getToFieldMapperForType(this.typeMapping)
+        def defaultByTypeMapper = typemappings.getToGroovyMapperForType(this.typeMapping)
         if (defaultByTypeMapper) return defaultByTypeMapper
 
         throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, "No available type mapping")
     }
     
+    /**
+     * 
+     */    
+    protected calculateToLdapTypeMapper(GldapoTypeMappingRegistry typemappings) {
+        Class[] p = [Object] as Class[]
+        
+        def byFieldMapperName = toLdapByTypeMapperName(this.field.name)
+        def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
+        if (classByFieldMapper) return { classByFieldMapper.invoke(schema, it) }
+        
+        def byTypeMapperName = toGroovyByTypeMapperName(this.typeMapping)
+        def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
+        if (classByTypeMapper) return { classByTypeMapper.invoke(schema, it) }
+        
+        def defaultByTypeMapper = typemappings.getToLdapMapperForType(this.typeMapping)
+        if (defaultByTypeMapper) return defaultByTypeMapper
+
+        throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_FROM_FIELD, "No available type mapping")
+    }
+
+    /**
+     * 
+     */
+    def mapToGroovyType(s) {
+        this.toGroovyTypeMapper.call(s)
+    }
+
+    /**
+     * 
+     */
+    def mapToLdapType(s) {
+        this.toLdapTypeMapper.call(s)
+    }
+
+    /**
+     * 
+     */
     def mapFromContext(context, subject) {
         try {
-            subject."${this.field.name}" = this.getFieldValue(context)
+            subject."${this.field.name}" = this.getGroovyValueFromContext(context)
         } catch (Exception cause) {
             throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_TO_FIELD, cause)
         }
     }
     
-    static toFieldByFieldMapperName(String fieldName) {
+    /**
+     * 
+     */
+    static toGroovyByFieldMapperName(String fieldName) {
         "mapTo" + WordUtils.capitalize(fieldName) + "Field"
     }
-    
-    static toFieldByTypeMapperName(String typeName) {
+
+    /**
+     * 
+     */
+    static toGroovyByTypeMapperName(String typeName) {
         "mapTo" + WordUtils.capitalize(typeName) + "Type"
     }
-    
-    abstract protected calculateTypeMappingFromFieldType()
-    
-    abstract protected getFieldValue(Object context)
+
+    /**
+     * 
+     */    
+    static toLdapByFieldMapperName(String fieldName) {
+        "mapFrom" + WordUtils.capitalize(fieldName) + "Field"
+    }
+
+    /**
+     * 
+     */
+    static toLdapByTypeMapperName(String typeName) {
+        "mapFrom" + WordUtils.capitalize(typeName) + "Type"
+    }
+
 }

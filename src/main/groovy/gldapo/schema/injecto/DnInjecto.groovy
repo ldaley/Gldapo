@@ -15,15 +15,31 @@
  */
 package gldapo.schema.injecto
 import gldapo.GldapoDirectory
+import org.springframework.ldap.core.DistinguishedName
 import injecto.annotation.InjectoProperty
 import injecto.annotation.InjectoDependency
 
 @InjectoDependency(DirectoryInjecto)
 class DnInjecto {
+    
     @InjectoProperty
-    String rdn = null
+    DistinguishedName rdn = null
+
+    def setRdn = { DistinguishedName rdn ->
+        delegate.setInjectoProperty('rdn', rdn)
+    }
+    
+    @InjectoProperty
+    DistinguishedName dn = null
     
     def getDn = { ->
-        return delegate.rdn.toString() + ", " + delegate.directory.base
+        def dn = delegate.getInjectoProperty('dn')
+        if (dn == null) {
+            dn = new DistinguishedName()
+            dn.append(delegate.directory.base)
+            dn.append(delegate.rdn)
+            delegate.setInjectoProperty('dn', dn)
+        }
+        return dn
     }
 }

@@ -7,7 +7,7 @@ class WashingtonEduPerson
     String givenName
     String mail
     Integer mailstop
-    List<String> objectclass
+    Set<String> objectclass
     String postalAddress
     String sn
     String telephoneNumber

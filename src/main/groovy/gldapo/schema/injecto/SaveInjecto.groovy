@@ -1,0 +1,43 @@
+/* 
+ * Copyright 2007 Luke Daley
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package gldapo.schema.injecto
+import injecto.annotation.InjectoDependencies
+import org.apache.commons.lang.WordUtils
+
+@InjectoDependencies([CleanValuesInjecto, SchemaRegistrationInjecto, DirectoryInjecto, DnInjecto])
+class SaveInjecto {
+    
+    def save = { ->
+        def schemaRegistration = delegate.class.schemaRegistration
+        def modificationItems = []
+        
+        schemaRegistration.attributeMappings.each { attribute, mapping ->
+            def clean = delegate._getCleanValue(attribute)
+            def dirty = delegate."$attribute"
+            def modificationItemsForAttribute = mapping.calculateModificationItems(clean,dirty)
+            if (modificationItemsForAttribute) {
+                modificationItems.addAll(modificationItemsForAttribute)
+            }
+        }
+        
+        if (modificationItems.empty == false) {
+            println modificationItems.toString()
+            delegate.directory.save(delegate.rdn, modificationItems)
+        }
+        
+        delegate._refreshCleanValues()
+    }
+}

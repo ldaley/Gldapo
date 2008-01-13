@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 package gldapo.schema.attribute
-import gldapo.exception.GldapoException
+import gldapo.exception.GldapoSchemaInitializationException
 import gldapo.GldapoTypeMappingRegistry
 import java.lang.reflect.Field
 import java.lang.reflect.ParameterizedType
+import javax.naming.directory.ModificationItem
+import javax.naming.directory.BasicAttribute
+import javax.naming.directory.DirContext
 
 class MultiValueAttributeMapping extends AbstractAttributeMapping
 {
     static DEFAULT_COLLECTION_ELEMENT_TYPE = String
     
     static SUPPORTED_COLLECTION_TYPE_MAP = [
-        (List): LinkedList,
         (Set): LinkedHashSet,
         (SortedSet): TreeSet
     ]
@@ -48,7 +50,8 @@ class MultiValueAttributeMapping extends AbstractAttributeMapping
     def calculateCollectionType()
     {
         def t = this.field.type
-        if (!SUPPORTED_COLLECTION_TYPE_MAP.containsKey(t)) throw new GldapoException("$t is not a supported collection type, supported values are ${SUPPORTED_COLLECTION_TYPE_MAP.keys}")
+        if (!SUPPORTED_COLLECTION_TYPE_MAP.containsKey(t)) 
+            throw new GldapoSchemaInitializationException("${this.schema.name}#${this.field.name}: $t is not a supported collection type, supported types are ${SUPPORTED_COLLECTION_TYPE_MAP.keySet()}")
         return SUPPORTED_COLLECTION_TYPE_MAP[t]
     }
         
@@ -66,20 +69,50 @@ class MultiValueAttributeMapping extends AbstractAttributeMapping
         }
     }
     
-    def getFieldValue(Object context)
+    def getGroovyValueFromContext(Object context)
     {        
         def rawValues = context.getStringAttributes(this.attributeName)
-        if (rawValues == null || rawValues.size() < 1)
-        {
-            return null
-        }
-        else
-        {
-            def mappedValue = this.collectionType.newInstance()
-            0.upto(rawValues.size() - 1) {
-                mappedValue << this.toFieldTypeMapper.call(rawValues[it])
+        def mappedValue = this.collectionType.newInstance()
+        
+        if (rawValues == null || rawValues.size() < 1) {
+            return mappedValue
+        } else {
+            rawValues.each {
+                mappedValue << this.toGroovyTypeMapper.call(it)
             }
             return mappedValue
         }
+    }
+    
+    protected calculateModificationItems(clean, dirty) {
+        def modificationItems = []
+        if ((clean != null && clean.empty == false) && (dirty == null || dirty.empty == true)) {
+            def attribute = new BasicAttribute(this.attributeName)
+            modificationItems << new ModificationItem(DirContext.REMOVE_ATTRIBUTE, attribute)
+        } else {
+            
+            def removeMod = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute(this.attributeName))
+            clean.each { obj ->                
+                if (dirty.contains(obj) == false) {
+                    removeMod.attribute.add(this.mapToLdapType(obj))
+                }
+            }
+            if (removeMod.attribute.size() > 0) {
+                modificationItems << removeMod
+            }
+            
+            def addMod = new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute(this.attributeName))
+            dirty.each { obj ->
+                if (clean == null || clean.contains(obj) == false) {
+                    addMod.attribute.add(this.mapToLdapType(obj))
+                }
+            }
+            if (addMod.attribute.size() > 0) {
+                modificationItems << addMod
+            }
+            
+        }
+        
+        return modificationItems
     }
 }

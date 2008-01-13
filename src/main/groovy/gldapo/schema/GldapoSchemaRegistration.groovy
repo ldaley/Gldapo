@@ -31,7 +31,10 @@ class GldapoSchemaRegistration
         this.gldapo = gldapo
 
         prepareSchemaClass(schema)
+        
         schema.gldapo = gldapo
+        schema.schemaRegistration = this
+        
         this.schema = schema
         
         this.attributeMappings = AttributeMappingInspector.getAttributeMappings(schema, gldapo.typemappings)

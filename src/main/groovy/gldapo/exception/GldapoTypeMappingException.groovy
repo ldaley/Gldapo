@@ -18,7 +18,7 @@ package gldapo.exception
 class GldapoTypeMappingException extends GldapoException
 {
     static Boolean MAPPING_TO_FIELD = Boolean.TRUE
-    static Boolean MAPPING_TO_ATTRIBUTE = Boolean.FALSE
+    static Boolean MAPPING_FROM_FIELD = Boolean.FALSE
     
     GldapoTypeMappingException(Class schema, String fieldName, String typeName, Boolean direction, Exception cause) 
     {

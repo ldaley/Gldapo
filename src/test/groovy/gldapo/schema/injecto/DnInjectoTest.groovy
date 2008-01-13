@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto
+import org.springframework.ldap.core.DistinguishedName
 import injecto.*
 
 class DnInjectoTest extends GroovyTestCase {
@@ -24,15 +25,15 @@ class DnInjectoTest extends GroovyTestCase {
     
     void testRdn() {
         def o = new DnInjectoTestSchema()
-        o.rdn = "test"
-        assertEquals("test", o.rdn)
+        o.rdn = new DistinguishedName("dc=test")
+        assertEquals(new DistinguishedName("dc=test"), o.rdn)
     }
     
     void testDn() {
         def o = new DnInjectoTestSchema()
-        o.directory = [base: "dc=example, dc=com"]
-        o.rdn = "ou=people"
-        assertEquals("ou=people, dc=example, dc=com", o.dn)
+        o.directory = [base: new DistinguishedName("dc=example, dc=com")]
+        o.rdn = new DistinguishedName("ou=people")
+        assertEquals(new DistinguishedName("ou=people, dc=example, dc=com"), o.dn)
     }
 }
 

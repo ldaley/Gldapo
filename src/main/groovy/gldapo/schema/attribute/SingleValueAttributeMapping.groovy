@@ -16,6 +16,9 @@
 package gldapo.schema.attribute
 import java.lang.reflect.Field
 import gldapo.GldapoTypeMappingRegistry
+import javax.naming.directory.ModificationItem
+import javax.naming.directory.BasicAttribute
+import javax.naming.directory.DirContext
 
 
 class SingleValueAttributeMapping extends AbstractAttributeMapping
@@ -29,12 +32,28 @@ class SingleValueAttributeMapping extends AbstractAttributeMapping
          return this.field.type.simpleName
     }
     
-    protected getFieldValue(context) {
+    protected getGroovyValueFromContext(context) {
         def rawValue = context.getStringAttribute(this.attributeName)
         if (rawValue == null) {
             return null
         } else {
-            return this.toFieldTypeMapper.call(rawValue)
+            return this.toGroovyTypeMapper.call(rawValue)
+        }
+    }
+    
+    protected calculateModificationItems(clean, dirty) {
+        if (dirty != clean) {
+            def dirtyAttribute = new BasicAttribute(this.attributeName, this.mapToLdapType(dirty))
+            if (clean == null && dirty != null) {
+                return [new ModificationItem(DirContext.ADD_ATTRIBUTE, dirtyAttribute)]
+            } else if (clean != null && dirty == null) {
+                return [new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute(this.attributeName))]
+            } else {
+                return [new ModificationItem(DirContext.REPLACE_ATTRIBUTE, dirtyAttribute)]
+            }
+        }
+        else {
+            return null
         }
     }
 }

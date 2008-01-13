@@ -19,12 +19,13 @@ import gldapo.GldapoSearchProvider
 import gldapo.GldapoDirectory
 import gldapo.GldapoSearchControls
 import gldapo.schema.annotation.GldapoSchemaFilter
+import org.springframework.ldap.core.DistinguishedName
 
 class GldapoSearchTest extends GroovyTestCase {
     
     static gldapo = new Gldapo()
     
-    def mockDirectory = [getSearchControls: { new GldapoSearchControls() }, getBase: {->"dc=example,dc=com"}] as GldapoSearchProvider
+    def mockDirectory = [getSearchControls: { new GldapoSearchControls() }, getBase: {-> new DistinguishedName("dc=example,dc=com") }] as GldapoSearchProvider
     
     def getSearch(Map options) {
         if (!options.containsKey("directory")) options.directory = mockDirectory
@@ -43,23 +44,22 @@ class GldapoSearchTest extends GroovyTestCase {
         assertSame(td, withDirectoryName.options.directory)
         
         gldapo.directories.defaultDirectoryName = "t"
-        def withoutDirectory = getSearch([directory: null])
+        def withoutDirectory = getSearch(directory: null)
         assertSame(td, withoutDirectory.options.directory)
         
         def md = [getSearchControls: { new GldapoSearchControls() }, getBase: {-> ""}] as GldapoSearchProvider
-        def withDirectory = getSearch([directory: md])
+        def withDirectory = getSearch(directory: md)
         assertSame(md, withDirectory.options.directory)
     }
     
     void testBase() {
         def noBase = getSearch([:])
-        assertEquals("", noBase.options.base)
+        assertEquals(new DistinguishedName(""), noBase.options.base)
 
         def withBase = getSearch([base: "ou=people"])
-        assertEquals("ou=people", withBase.options.base)
-        
+        assertEquals(new DistinguishedName("ou=people"), withBase.options.base)
         def withAbsoluteBase = getSearch([absoluteBase: "ou=people,dc=example,dc=com"])
-        assertEquals("ou=people", withAbsoluteBase.options.base)
+        assertEquals(new DistinguishedName("ou=people"), withAbsoluteBase.options.base)
         
     }
     

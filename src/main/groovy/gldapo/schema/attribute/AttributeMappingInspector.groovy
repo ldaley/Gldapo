@@ -16,6 +16,7 @@
 package gldapo.schema.attribute
 import java.lang.reflect.Field
 import gldapo.GldapoTypeMappingRegistry
+import org.apache.commons.lang.StringUtils
 
 class AttributeMappingInspector 
 {
@@ -47,7 +48,7 @@ class AttributeMappingInspector
     
     static fieldIsReadableAndWritable(Class schema, Field field)
     {
-        def capitalisedFieldName = (field.name.size() > 1) ? field.name[0].toUpperCase() + field.name[1..field.name.size() - 1] : field.name[0].toUpperCase()
+        def capitalisedFieldName = StringUtils.capitalize(field.name)
         return (schema.metaClass.hasMetaMethod("get${capitalisedFieldName}") && schema.metaClass.hasMetaMethod("set${capitalisedFieldName}", field.type))
     }
 }

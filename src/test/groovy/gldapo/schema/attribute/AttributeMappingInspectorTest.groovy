@@ -68,7 +68,7 @@ class AttributeMappingInspectorTestSubject
 {
     String simpleSingleValue
     
-    List<String> simpleMultiValue
+    Set<String> simpleMultiValue
     
     private privateProperty
     

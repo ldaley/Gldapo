@@ -18,6 +18,8 @@ import gldapo.Gldapo
 import gldapo.GldapoSearchProvider
 import gldapo.GldapoSearchControls
 import gldapo.schema.annotation.GldapoSchemaFilter
+import org.springframework.ldap.core.DistinguishedName
+import gldapo.exception.GldapoOperationException
 
 /**
  * Represents an actual search operation. Sanitises the search options then calls {@link GldapoDirectory#search}.
@@ -72,9 +74,28 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
     
     def calculateBase()
     {
-        if (options.containsKey("absoluteBase")) return options.absoluteBase - ",${this.options.directory.base}"
-        else if (options.containsKey("base")) return options.base
-        else return ""
+        if (options.containsKey("absoluteBase")) {
+            def absoluteBase
+            if (options.absoluteBase instanceof String) {
+                absoluteBase = new DistinguishedName(options.absoluteBase)
+            } else if (options.absoluteBase instanceof DistinguishedName) {
+                absoluteBase = options.absoluteBase.clone()
+            } else {
+                throw new GldapoOperationException("search(): 'absoluteBase' must be a String or DistinguishedName")
+            }
+            absoluteBase.removeFirst(this.options.directory.base)
+            return absoluteBase
+        } else if (options.containsKey("base")) {
+            if (options.base instanceof String) {
+                return new DistinguishedName(options.base)
+            } else if (options.base instanceof DistinguishedName) {
+                return options.base.clone()
+            } else {
+                throw new GldapoOperationException("search(): 'base' must be a String or DistinguishedName")
+            }
+        } else {
+            return new DistinguishedName("")
+        }
     }
     
     def execute()

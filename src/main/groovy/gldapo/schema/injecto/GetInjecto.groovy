@@ -17,21 +17,37 @@ package gldapo.schema.injecto
 import gldapo.GldapoDirectory
 import injecto.annotation.InjectoDependency
 import injecto.annotation.InjectAs
+import org.springframework.ldap.core.DistinguishedName
 
 @InjectoDependency(SearchingInjecto)
 class GetInjecto 
 {
-    static getByDn = { String dn, GldapoDirectory directory ->
+    static getByDn = { DistinguishedName dn, GldapoDirectory directory ->
+        delegate.find(absoluteBase: dn, searchScope: "object", directory: directory)
+    }
+
+    @InjectAs("getByDn")
+    static getByStringDn = { String dn, GldapoDirectory directory ->
         delegate.find(absoluteBase: dn, searchScope: "object", directory: directory)
     }
     
     @InjectAs("getByDn")
-    static getUsingDirectoryName = { String dn, String directoryName ->
+    static getUsingDirectoryName = { DistinguishedName dn, String directoryName ->
         delegate.find(absoluteBase: dn, searchScope: "object", directory: directoryName)
     }
     
     @InjectAs("getByDn")
-    static getUsingDefaultDirectory = { String dn -> 
+    static getUsingDirectoryNameAndStringDn = { String dn, String directoryName ->
+        delegate.find(absoluteBase: dn, searchScope: "object", directory: directoryName)
+    }
+
+    @InjectAs("getByDn")
+    static getUsingDefaultDirectory = { DistinguishedName dn -> 
+        delegate.getByDn(dn, (String)null)
+    }
+    
+    @InjectAs("getByDn")
+    static getUsingDefaultDirectoryAndStringDn = { String dn -> 
         delegate.getByDn(dn, (String)null)
     }
 }

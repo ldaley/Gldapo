@@ -34,6 +34,8 @@ class GldapoContextMapper implements ContextMapper
             mapping.mapFromContext(context, entry)
         }
         
+        entry._refreshCleanValues()
+        
         return entry
      }
 }

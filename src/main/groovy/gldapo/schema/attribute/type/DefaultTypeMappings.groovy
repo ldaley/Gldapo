@@ -17,6 +17,7 @@ package gldapo.schema.attribute.type
 
 import java.math.BigInteger
 import java.math.BigDecimal
+import org.springframework.ldap.core.DistinguishedName
 
 class DefaultTypeMappings 
 {
@@ -27,6 +28,13 @@ class DefaultTypeMappings
      * @return The exact same value that was passed in
      */
     static mapToStringType(value) {
+        return value
+    }
+
+    /**
+     * 
+     */
+    static mapFromStringType(value) {
         return value
     }
 
@@ -42,7 +50,14 @@ class DefaultTypeMappings
     static mapToIntegerType(value) throws NumberFormatException {
         new Integer(value)
     }
-    
+
+    /**
+     * 
+     */
+     static mapFromIntegerType(value) {
+        value.toString()
+     }
+     
     /**
      * Default type mapping for <strong>BigInteger<strong> type
      * 
@@ -96,6 +111,13 @@ class DefaultTypeMappings
     }
     
     /**
+     * 
+     */
+    static mapFromFloatType(value) {
+        value.toString()
+    }
+
+    /**
      * Default type mapping for <strong>Long<strong> type
      * 
      * Uses new Long(String) to convert.
@@ -108,6 +130,10 @@ class DefaultTypeMappings
         new Long(value)
     }
     
+    static mapFromLongType(value) {
+        value.toString()
+    }
+
     /**
      * Default type mapping for <strong>Short<strong> type
      * 
@@ -119,5 +145,17 @@ class DefaultTypeMappings
      */    
     static mapToShortType(value) throws NumberFormatException {
         new Short(value)
+    }
+    
+    static mapFromShortType(value) {
+        value.toString()
+    }
+    
+    static mapToDistinguishedNameType(value) {
+        new DistinguishedName(value)
+    }
+    
+    static mapFromDistinguishedNameType(value) {
+        value.toString()
     }
 }

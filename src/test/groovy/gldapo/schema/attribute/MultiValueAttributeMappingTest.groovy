@@ -17,55 +17,78 @@ package gldapo.schema.attribute
 import java.lang.reflect.Field
 import gldapo.schema.annotation.GldapoPseudoType
 import gldapo.schema.annotation.GldapoSynonymFor
+import javax.naming.directory.DirContext
 
-class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest
-{
+class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
+    
     def mappingClass = MultiValueAttributeMapping
     def mappingSubjectClass = MultiValueAttributeMappingTestSubject
     
-    def getFakeContext(val)
-    {
+    static REP = DirContext.REPLACE_ATTRIBUTE
+    static REM = DirContext.REMOVE_ATTRIBUTE 
+    static ADD = DirContext.ADD_ATTRIBUTE
+    
+    def getFakeContext(val) {
         new Expando(getStringAttributes: { return val as String[] })
     }
+    
+    void verifyProperties(mapping, attributeName, typeMapping, collectionType) {
 
-    void doMappingTest(fieldName, attributeName, typeMapping, collectionType, contextValue, mappedValue) 
-    {
-        def m = mappingForField(fieldName)
-        verifyMapping(m, fieldName, attributeName, typeMapping, collectionType, contextValue, mappedValue)
+        verifyProperties(mapping, attributeName, typeMapping)
+        assertTrue("[fieldName: ${mapping.field.name}] - collectionType", collectionType.isAssignableFrom(mapping.collectionType))
     }
     
-    void verifyMapping(mapping, fieldName, attributeName, typeMapping, collectionType, contextValue, mappedValue)
-    {
-        verifyMapping(mapping, fieldName, attributeName, typeMapping, contextValue, mappedValue)
-        assertTrue("Collection type test", collectionType.isAssignableFrom(mapping.collectionType))
+    void testStringSet() {
+        def mapping = mappingForField("stringSet")
+        verifyProperties(mapping, "stringSet", "String", Set)
+        verifyMapFromContext(mapping, ["1", "2", "3"], ["1", "2", "3"] as Set)        
     }
     
-    void testStringList() 
-    {
-        doMappingTest("stringList", "stringList", "String", List, ["1", "2", "3"], ["1", "2", "3"])
+    void testSortedIntSet() {
+        def mapping = mappingForField("sortedIntSet")
+        verifyProperties(mapping, "sortedIntSet", "Integer", SortedSet)
+        verifyMapFromContext(mapping, ["3", "1", "2"], [1, 2, 3] as Set)
     }
     
-    void testSortedIntSet() 
-    {
-        doMappingTest("sortedIntSet", "sortedIntSet", "Integer", Set, ["3", "1", "2"], [1, 2, 3] as Set)
+    void testPseudoTypeSet() {
+        def mapping = mappingForField("pseudoTypeSet")
+        verifyProperties(mapping, "pseudoTypeSet", "Integer", Set)
+        verifyMapFromContext(mapping, ["1", "2", "3"], [1, 2, 3] as Set)
+        
+        verifyCalculateModificationItems(mapping, [1, 2, 3], [1, 2, 3], []) // same
+        
+        verifyCalculateModificationItems(mapping, null, [1, 2], [[ADD, ["1", "2"]]]) // from null
+        verifyCalculateModificationItems(mapping, [], [1, 2], [[ADD, ["1", "2"]]]) // from emptylist
+        
+        verifyCalculateModificationItems(mapping, [1, 2, 3], null, [[REM, null]]) // to null
+        verifyCalculateModificationItems(mapping, [1, 2, 3], [], [[REM, null]]) // to emptylist
+        
+        verifyCalculateModificationItems(mapping, [1, 2, 3], [1, 3], [[REM, "2"]]) // remove 1
+        verifyCalculateModificationItems(mapping, [1, 3], [1, 2, 3], [[ADD, "2"]]) // add 1
+
+        verifyCalculateModificationItems(mapping, [1, 2, 3], [1], [[REM, ["2", "3"]]]) // remove 2
+        verifyCalculateModificationItems(mapping, [1], [1, 2, 3], [[ADD, ["2", "3"]]]) // add 2
+        
+        verifyCalculateModificationItems(mapping, [], [1], [[ADD, "1"]])
+        
+        verifyCalculateModificationItems(mapping, [1, 3], [1, 2], [[REM, "3"], [ADD, "2"]])
+        
+        verifyCalculateModificationItems(mapping, [1], [], [[REM, null]])        
     }
     
-    void testPseudoTypeSet() 
-    {
-        doMappingTest("pseudoTypeSet", "pseudoTypeSet", "Integer", Set, ["1", "2", "3"], [1, 2, 3] as Set)
+    void verifyCalculateModificationItems(mapping, clean, dirty, mods) {
+        super.verifyCalculateModificationItems(mapping, clean as Set, dirty as Set, mods)
     }
     
-    void testBogusType()
-    {
+    void testBogusType() {
         shouldFail {
             mappingForField("badCollectionType")
         }
     }
 }
 
-class MultiValueAttributeMappingTestSubject
-{
-    List stringList
+class MultiValueAttributeMappingTestSubject {
+    Set stringSet
     
     SortedSet<Integer> sortedIntSet
     

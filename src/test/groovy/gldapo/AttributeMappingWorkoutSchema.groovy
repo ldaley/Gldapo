@@ -1,6 +1,6 @@
 class AttributeMappingWorkoutSchema {
-    String s
-    List<Integer> li
+    Set s
+    Set<Integer> li
     Set<Float> sf
     SortedSet<Long> ssl
 }

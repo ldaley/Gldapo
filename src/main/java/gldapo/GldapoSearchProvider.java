@@ -15,10 +15,11 @@
  */
 package gldapo;
 import java.util.List;
+import org.springframework.ldap.core.DistinguishedName;
 
 public interface GldapoSearchProvider
 {
-    public List search(Object schemaRegistration, String base, String filter, GldapoSearchControlProvider controls);
+    public List search(Object schemaRegistration, DistinguishedName base, String filter, GldapoSearchControlProvider controls);
     public GldapoSearchControlProvider getSearchControls();
-    public String getBase();
+    public DistinguishedName getBase();
 }

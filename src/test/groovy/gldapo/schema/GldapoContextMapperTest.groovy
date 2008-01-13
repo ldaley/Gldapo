@@ -27,15 +27,15 @@ class GldapoContextMapperTest extends GroovyTestCase
     ])
     
     void testMapFromContext() 
-    {
+    {GldapoContextMapperTest
         def o = contextMapper.mapFromContext(fakeContext)
         assertEquals("attr1Value", o.attr1)
-        assertEquals(["attr2Value1", "attr2Value2"], o.attr2)
+        assertEquals(["attr2Value1", "attr2Value2"] as Set, o.attr2)
     }
 }
 
 class GldapoContextMapperTestSubject
 {
     String attr1
-    List<String> attr2
+    Set<String> attr2
 }

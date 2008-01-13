@@ -26,6 +26,8 @@ import org.springframework.ldap.LimitExceededException
 import org.springframework.ldap.core.ContextMapper
 import org.springframework.ldap.NamingException
 import javax.naming.directory.SearchControls
+import javax.naming.directory.ModificationItem
+import org.springframework.ldap.core.DistinguishedName
 
 class GldapoDirectory implements GldapoSearchProvider {
     
@@ -99,8 +101,8 @@ class GldapoDirectory implements GldapoSearchProvider {
     /**
      * Returns the base DN for operations for this directory
      */
-    String getBase() {
-        template?.contextSource?.base as String
+    DistinguishedName getBase() {
+        template?.contextSource?.base
     }
     
     /**
@@ -120,7 +122,7 @@ class GldapoDirectory implements GldapoSearchProvider {
      * @return A list of objects of the class that the schemaRegistration is for
      * @throws NamingException If any LDAP related error occurs
      */
-    List search(Object schemaRegistration, String base, String filter, GldapoSearchControlProvider controls) throws NamingException {
+    List search(Object schemaRegistration, DistinguishedName base, String filter, GldapoSearchControlProvider controls) throws NamingException {
         
         if (schemaRegistration instanceof GldapoSchemaRegistration == false) {
             throw new IllegalArgumentException("schemaRegistration must be an instance of GldapoSchemaRegistration")
@@ -149,7 +151,7 @@ class GldapoDirectory implements GldapoSearchProvider {
      * @return A list of objects of the class that the schemaRegistration is for
      * @throws NamingException If any LDAP related error occurs
      */
-    private List nonPagedSearch(String base, String filter, SearchControls jndiControls, ContextMapperCallbackHandler handler) throws NamingException {
+    private List nonPagedSearch(DistinguishedName base, String filter, SearchControls jndiControls, ContextMapperCallbackHandler handler) throws NamingException {
         try {
             this.template.search(base, filter, jndiControls, handler)
         } catch (LimitExceededException e) {
@@ -171,7 +173,7 @@ class GldapoDirectory implements GldapoSearchProvider {
      * @return A list of objects of the class that the schemaRegistration is for
      * @throws NamingException If any LDAP related error occurs
      */
-    private List pagedSearch(String base, String filter, SearchControls jndiControls, ContextMapperCallbackHandler handler, Integer pageSize) throws NamingException {
+    private List pagedSearch(DistinguishedName base, String filter, SearchControls jndiControls, ContextMapperCallbackHandler handler, Integer pageSize) throws NamingException {
         try {
             PagedResultsRequestControl requestControl = new PagedResultsRequestControl(pageSize)
             this.template.search(base, filter, jndiControls, handler, requestControl)
@@ -189,5 +191,9 @@ class GldapoDirectory implements GldapoSearchProvider {
         }
         
         return handler.list
+    }
+    
+    void save(dn, modificationItems) {
+        this.template.modifyAttributes(dn, modificationItems as ModificationItem[])
     }
 }

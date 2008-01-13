@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 package gldapo.schema.injecto
-import injecto.annotation.InjectoDependencies
+import injecto.annotation.InjectoProperty
+import gldapo.schema.GldapoSchemaRegistration
 
-@InjectoDependencies([
-    GldapoInstanceInjecto, SearchingInjecto, GetInjecto, 
-    DirectoryInjecto, DnInjecto, SchemaRegistrationInjecto,
-    CleanValuesInjecto, SaveInjecto
-])
-class GldapoSchemaMetaInjecto {}
+class SchemaRegistrationInjecto {
+    
+    @InjectoProperty
+    static GldapoSchemaRegistration schemaRegistration = null
+
+}
