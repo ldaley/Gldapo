@@ -41,12 +41,20 @@ class GldapoTest extends GroovyTestCase
                     searchControls: [
                         countLimit: 20
                     ]
+                ],
+                d2: [
+                    url: "ldap://example.com",
+                    base: "dc=example,dc=com",
+                    searchControls: [
+                        countLimit: 50
+                    ]
                 ]
-            ]
+            ],
+            defaultDirectory: "d2"
         )
         
         assertTrue(directories instanceof List)
-        assertEquals(1, directories.size())
+        assertEquals(2, directories.size())
         assertEquals("d1", directories[0].name)
         assertEquals(new DistinguishedName("dc=example, dc=com"), directories[0].base)
         assertEquals(20, directories[0].searchControls.countLimit)
@@ -91,8 +99,17 @@ class GldapoTest extends GroovyTestCase
                     searchControls: [
                         countLimit: 20
                     ]
+                ],
+                d2: [
+                    url: "ldap://example2.com",
+                    base: "dc=example2,dc=com",
+                    ignorePartialResultException: true,
+                    searchControls: [
+                        countLimit: 50
+                    ]
                 ]
             ],
+            defaultDirectory: "d2",
             typemappings: [
                 String
             ],
@@ -101,10 +118,15 @@ class GldapoTest extends GroovyTestCase
             ]
         )
         
-        assertEquals(1, gldapo.directories.size())
+        assertEquals(2, gldapo.directories.size())
         assertNotNull("d1", gldapo.directories.d1)
+        
         assertEquals(new DistinguishedName("dc=example, dc=com"), gldapo.directories.d1.base)
+        
         assertEquals(20, gldapo.directories.d1.searchControls.countLimit)
+        assertEquals(50, gldapo.directories.d2.searchControls.countLimit)
+        
+        assertEquals("d2", gldapo.directories.defaultDirectory.name)
         
         assertTrue(gldapo.typemappings.contains(String))
         assertNotNull(gldapo.schemas.find { it == SimpleSchemaClass })

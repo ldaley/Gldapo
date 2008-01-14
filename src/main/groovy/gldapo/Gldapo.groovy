@@ -80,6 +80,13 @@ class Gldapo {
     GldapoOperationRegistry operations = new GldapoOperationRegistry(this)
 
     /**
+     * 
+     */
+    Gldapo(Map config) {
+        this.consumeConfig(config)
+    }
+    
+    /**
      * Calls {@code clear()} on the directory, schema and type mapping registries before passing the config to
      * {@link #consumeConfig(Map)}
      */
@@ -100,14 +107,12 @@ class Gldapo {
      */
     void consumeConfig(Map config) {
         if (config) {
-            def directories = extractDirectoriesFromConfig(config)
-            if (directories) directories.each { this.directories << it }
+            extractDirectoriesFromConfig(config).each { this.directories << it }
+            if (config.containsKey("defaultDirectory")) 
+                this.directories.defaultDirectoryName = config.defaultDirectory
 
-            def typemappings = extractTypeMappingsFromConfig(config)
-            if (typemappings) typemappings.each { this.typemappings << it }
-
-            def schemas = extractSchemasFromConfig(config)
-            if (schemas) schemas.each { this.schemas << it }
+            extractTypeMappingsFromConfig(config).each { this.typemappings << it }
+            extractSchemasFromConfig(config).each { this.schemas << it }
         }
     }
     

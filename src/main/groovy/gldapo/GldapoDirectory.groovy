@@ -95,6 +95,9 @@ class GldapoDirectory implements GldapoSearchProvider {
         this.template = new LdapTemplate(contextSource: contextSource)
         this.template.afterPropertiesSet()
         
+        if (config.containsKey("ignorePartialResultException")) 
+            this.template.ignorePartialResultException = config.ignorePartialResultException
+            
         this.searchControls = new GldapoSearchControls(config[CONFIG_SEARCH_CONTROLS_KEY])
     }
     
@@ -109,8 +112,8 @@ class GldapoDirectory implements GldapoSearchProvider {
      * Performs a search operation on the directory.
      * <p>
      * If the search control provider contains a {@code pageSize} that is greater than 1
-     * {@link #pagedSearch(String,String,SearchControls,ContextMapperCallbackHandler,Integer) pagedSearch()} is used,
-     * otherwise {@link #nonPagedSearch(String,String,SearchControls,ContextMapperCallbackHandler) nonPagedSearch()} is used.
+     * {@link #pagedSearch(DistinguishedName,String,SearchControls,ContextMapperCallbackHandler,Integer) pagedSearch()} is used,
+     * otherwise {@link #nonPagedSearch(DistinguishedName,String,SearchControls,ContextMapperCallbackHandler) nonPagedSearch()} is used.
      * <p>
      * An instance of {@link SearchControls} is made out of the gldapo search controls ({@code controls}) to be used by
      * the {@link LdapTemplate} instance which does the actual searching.
@@ -193,6 +196,9 @@ class GldapoDirectory implements GldapoSearchProvider {
         return handler.list
     }
     
+    /**
+     * 
+     */
     void save(dn, modificationItems) {
         this.template.modifyAttributes(dn, modificationItems as ModificationItem[])
     }
