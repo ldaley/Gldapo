@@ -109,7 +109,7 @@ class GldapoTest extends GroovyTestCase
                     ]
                 ]
             ],
-            defaultDirectory: "d2",
+            defaultdirectory: "d2",
             typemappings: [
                 String
             ],

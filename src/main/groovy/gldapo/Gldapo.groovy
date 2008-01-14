@@ -108,8 +108,8 @@ class Gldapo {
     void consumeConfig(Map config) {
         if (config) {
             extractDirectoriesFromConfig(config).each { this.directories << it }
-            if (config.containsKey("defaultDirectory")) 
-                this.directories.defaultDirectoryName = config.defaultDirectory
+            if (config.containsKey(CONFIG_KEY_DEFAULT_DIRECTORY)) 
+                this.directories.defaultDirectoryName = config."$CONFIG_KEY_DEFAULT_DIRECTORY"
 
             extractTypeMappingsFromConfig(config).each { this.typemappings << it }
             extractSchemasFromConfig(config).each { this.schemas << it }
