@@ -16,32 +16,30 @@
 package gldapo.schema.injecto
 import injecto.annotation.InjectoProperty
 import gldapo.exception.GldapoException
-import gldapo.schema.attribute.MultiValueAttributeMapping
 
 class CleanValuesInjecto {
 
-    Map _cleanValues = [:]
+    @InjectoProperty(write = false)
+    Map cleanValues = [:]
     
-    def _setCleanValue = { String name, Object value ->
-        delegate._cleanValues[name] = value
+    def setCleanValue = { String name, Object value ->
+        delegate.cleanValues[name] = value
     }
 
-    def _getCleanValue = { String name ->
-        delegate._cleanValues[name]
+    def getCleanValue = { String name ->
+        delegate.cleanValues[name]
     }
-    
-    def _refreshCleanValues = {
+
+    def snapshotStateAsClean = {
         delegate.class.schemaRegistration.attributeMappings.each { attribute, mapping ->
             def value = delegate."$attribute"
-            if (value == null) {
-                delegate._setCleanValue(attribute, null)
-            } else {
-                if (mapping instanceof MultiValueAttributeMapping) {
-                    delegate._setCleanValue(attribute, value.clone())
-                } else {
-                    delegate._setCleanValue(attribute, value)
-                }
-            }            
+            delegate.setCleanValue(attribute, (value instanceof Cloneable) ? value.clone() : value)
+        }
+    }
+    
+    def revert = { ->
+        delegate.cleanValues.each { key, value ->
+            delegate."$key" = (value instanceof Cloneable) ? value.clone() : value
         }
     }
 }

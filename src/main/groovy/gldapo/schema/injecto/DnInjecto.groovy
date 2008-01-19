@@ -15,8 +15,10 @@
  */
 package gldapo.schema.injecto
 import gldapo.GldapoDirectory
+import gldapo.exception.GldapoException
 import org.springframework.ldap.core.DistinguishedName
 import injecto.annotation.InjectoProperty
+import injecto.annotation.InjectAs
 import injecto.annotation.InjectoDependency
 
 @InjectoDependency(DirectoryInjecto)
@@ -26,10 +28,19 @@ class DnInjecto {
     DistinguishedName rdn = null
 
     def setRdn = { DistinguishedName rdn ->
+        if (delegate.rdn != null)
+            throw new GldapoException("Cannot change rdn/dn on object once set")
+            
         delegate.setInjectoProperty('rdn', rdn)
+        delegate.setInjectoProperty('dn', null)
     }
     
-    @InjectoProperty
+    @InjectAs("setRdn")
+    def setRdnAsString = { String rdn ->
+        delegate.setRdn(new DistinguishedName(rdn))
+    }
+    
+    @InjectoProperty(write = false)
     DistinguishedName dn = null
     
     def getDn = { ->

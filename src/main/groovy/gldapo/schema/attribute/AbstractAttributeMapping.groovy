@@ -76,6 +76,11 @@ abstract class AbstractAttributeMapping
      */
     abstract protected calculateModificationItems(clean, dirty)
      
+     /**
+      * 
+      */
+     abstract protected getAttribute(obj)
+     
     /**
      * 
      */

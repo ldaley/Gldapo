@@ -15,9 +15,17 @@
  */
 package gldapo.schema.injecto
 import gldapo.GldapoDirectory
+import gldapo.exception.GldapoException
 import injecto.annotation.InjectoProperty
 
 class DirectoryInjecto {
     @InjectoProperty
     GldapoDirectory directory = null
+    
+    def setDirectory = { directory ->
+        if (delegate.directory != null)
+            throw new GldapoException("Cannot change directory on schema objects after it has been set")
+        
+        delegate.setInjectoProperty("directory", directory)
+    }
 }

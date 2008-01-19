@@ -15,29 +15,94 @@
  */
 package gldapo.schema.injecto
 import injecto.annotation.InjectoDependencies
+import injecto.annotation.InjectoProperty
+import injecto.annotation.InjectAs
 import org.apache.commons.lang.WordUtils
+import gldapo.exception.GldapoException
+import org.springframework.ldap.core.DistinguishedName
+import javax.naming.directory.BasicAttributes
 
 @InjectoDependencies([CleanValuesInjecto, SchemaRegistrationInjecto, DirectoryInjecto, DnInjecto])
 class SaveInjecto {
+
+    @InjectoProperty
+    Boolean existingEntry = false
     
-    def save = { ->
+    /**
+     * 
+     */
+    def getAttributes = { ->
+        def schemaRegistration = delegate.class.schemaRegistration
+        def attributes = new BasicAttributes()
+        schemaRegistration.attributeMappings.each { attributeName, mapping ->
+            attributes.put(mapping.getAttribute(delegate."$attributeName"))
+        }
+        
+        return attributes
+    }
+    
+    /**
+     * Inspects the state of the object and calculates the {@link ModificationItem}'s that describe
+     * the changes to this object since it was loaded.
+     */
+    def getModificationItems = { ->
         def schemaRegistration = delegate.class.schemaRegistration
         def modificationItems = []
         
-        schemaRegistration.attributeMappings.each { attribute, mapping ->
-            def clean = delegate._getCleanValue(attribute)
-            def dirty = delegate."$attribute"
-            def modificationItemsForAttribute = mapping.calculateModificationItems(clean,dirty)
+        schemaRegistration.attributeMappings.each { attributeName, mapping ->
+            def clean = delegate.getCleanValue(attributeName)
+            def dirty = delegate."$attributeName"
+            def modificationItemsForAttribute = mapping.calculateModificationItems(clean, dirty)
             if (modificationItemsForAttribute) {
                 modificationItems.addAll(modificationItemsForAttribute)
             }
         }
         
-        if (modificationItems.empty == false) {
-            println modificationItems.toString()
-            delegate.directory.save(delegate.rdn, modificationItems)
-        }
-        
-        delegate._refreshCleanValues()
+        return modificationItems
     }
+
+    /**
+     * Writes an existing object back to the directory.
+     * <p>
+     * Uses the {@link GldapoDirectory#save(DistinguishedName,List<ModificationItem>)} method of this
+     * object's directory if this object has any modification items.
+     */
+    def save = { ->        
+        if (delegate.directory == null) 
+            throw new GldapoException("save() called on object with no directory")
+            
+        if (delegate.rdn == null) 
+            throw new GldapoException("save() called on object with no dn")
+        
+        if (delegate.existingEntry) {
+            def modificationItems = delegate.modificationItems
+            if (modificationItems.empty == false) delegate.directory.save(delegate.rdn, modificationItems)
+        } else {
+            delegate.directory.save(delegate.rdn, delegate.attributes)
+        } 
+        
+        delegate.snapshotStateAsClean()
+    }
+    
+    /**
+     * Writes a new object to the directory
+     */
+    @InjectAs("save")
+    def saveWithDnAndDirectory = { DistinguishedName rdn, directory ->
+        delegate.rdn = rdn
+        delegate.directory = directory
+        directory.save()
+    }
+    
+    /**
+     * 
+     */
+    @InjectAs("save")
+    def saveNewStringRdn = { String rdn, directory ->
+        delegate.save(new DistinguishedName(rdn), directory) 
+    }
+
+    
+
 }
+

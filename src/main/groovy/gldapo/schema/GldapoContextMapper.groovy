@@ -29,12 +29,13 @@ class GldapoContextMapper implements ContextMapper
         
         entry.directory = directory
         entry.rdn = context.dn
+        entry.existingEntry = true
         
         schemaRegistration.attributeMappings.each { name, mapping ->
             mapping.mapFromContext(context, entry)
         }
         
-        entry._refreshCleanValues()
+        entry.snapshotStateAsClean()
         
         return entry
      }

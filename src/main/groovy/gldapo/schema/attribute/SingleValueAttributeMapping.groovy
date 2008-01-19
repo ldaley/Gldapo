@@ -56,4 +56,8 @@ class SingleValueAttributeMapping extends AbstractAttributeMapping
             return null
         }
     }
+    
+    protected getAttribute(value) {
+        new BasicAttribute(this.attributeName, this.mapToLdapType(value))
+    }
 }

@@ -115,4 +115,13 @@ class MultiValueAttributeMapping extends AbstractAttributeMapping
         
         return modificationItems
     }
+    
+    protected getAttribute(value) {
+        def attribute = new BasicAttribute(this.attributeName)
+        value.each {
+            attribute.add(this.mapToLdapType(it))
+        }
+        return attribute
+    }
+    
 }

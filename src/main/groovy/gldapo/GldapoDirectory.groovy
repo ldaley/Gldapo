@@ -27,6 +27,7 @@ import org.springframework.ldap.core.ContextMapper
 import org.springframework.ldap.NamingException
 import javax.naming.directory.SearchControls
 import javax.naming.directory.ModificationItem
+import javax.naming.directory.Attributes
 import org.springframework.ldap.core.DistinguishedName
 
 class GldapoDirectory implements GldapoSearchProvider {
@@ -199,7 +200,11 @@ class GldapoDirectory implements GldapoSearchProvider {
     /**
      * 
      */
-    void save(dn, modificationItems) {
+    void save(DistinguishedName dn, List<ModificationItem> modificationItems) {
         this.template.modifyAttributes(dn, modificationItems as ModificationItem[])
+    }
+    
+    void save(DistinguishedName dn, Attributes attributes) {
+        this.template.bind(dn, null, attributes)
     }
 }
