@@ -29,7 +29,7 @@ class GldapoContextMapper implements ContextMapper
         
         entry.directory = directory
         entry.rdn = context.dn
-        entry.existingEntry = true
+        entry.exists = true
         
         schemaRegistration.attributeMappings.each { name, mapping ->
             mapping.mapFromContext(context, entry)

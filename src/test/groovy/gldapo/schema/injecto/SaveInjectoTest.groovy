@@ -31,11 +31,11 @@ class SaveInjectoTest extends GroovyTestCase {
      * We don't need to put the calculation of correct modification items here, the *AttributeMappingTest tests
      * do that. We just need to check that we are calling things correctly.
      */
-    void testSaveExisting() {
+    void testUpdate() {
         
         def e = new SaveInjectoTestSchema()
 
-        e.existingEntry = true
+        e.exists = true
         e.a = "clean"
         e.b = ["1", "2"] as Set
         e.snapshotStateAsClean()
@@ -50,25 +50,25 @@ class SaveInjectoTest extends GroovyTestCase {
         assertEquals(mods[0].attribute.get(), "2")
         
         e.rdn = "dc=example,dc=com"
-        e.directory = [save: { DistinguishedName rdn, List modificationItems ->
+        e.directory = [updateEntry: { DistinguishedName rdn, List modificationItems ->
             assertEquals(1, modificationItems.size())
             assertEquals(modificationItems[0].modificationOp, REM)
             assertEquals(modificationItems[0].attribute.iD, "b")
             assertEquals(modificationItems[0].attribute.get(), "2")
         }]
         
-        e.save()
+        e.update()
     }
     
     /**
      * 
      */
-    void testSaveNew() {
+    void testCreate() {
         def e = new SaveInjectoTestSchema()
         e.a = "clean"
         e.b = ["1", "2"] as Set
         e.rdn = "dc=example,dc=com"
-        e.directory = [save: { DistinguishedName rdn, Attributes attributes ->
+        e.directory = [createEntry: { DistinguishedName rdn, Attributes attributes ->
             assertEquals(2, attributes.size())
             assertEquals("clean", attributes.get("a").get())
             
@@ -77,7 +77,7 @@ class SaveInjectoTest extends GroovyTestCase {
             assertTrue(b.contains("2"))
         }]
         
-        e.save()
+        e.create()
         
     }
 }

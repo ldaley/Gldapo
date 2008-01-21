@@ -200,11 +200,28 @@ class GldapoDirectory implements GldapoSearchProvider {
     /**
      * 
      */
-    void save(DistinguishedName dn, List<ModificationItem> modificationItems) {
+    void createEntry(DistinguishedName dn, Attributes attributes) {
+        this.template.bind(dn, null, attributes)
+    }
+    
+    /**
+     * 
+     */
+    void updateEntry(DistinguishedName dn, List<ModificationItem> modificationItems) {
         this.template.modifyAttributes(dn, modificationItems as ModificationItem[])
     }
     
-    void save(DistinguishedName dn, Attributes attributes) {
-        this.template.bind(dn, null, attributes)
+    /**
+     * 
+     */
+    void moveEntry(DistinguishedName olddn, DistinguishedName newdn) {
+        this.template.rename(olddn, newdn)
+    }
+    
+    /**
+     * 
+     */
+    void replaceEntry(DistinguishedName dn, Attributes attributes) {
+        this.template.rebind(dn, null, attributes)
     }
 }

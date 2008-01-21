@@ -26,7 +26,7 @@ import javax.naming.directory.BasicAttributes
 class SaveInjecto {
 
     @InjectoProperty
-    Boolean existingEntry = false
+    Boolean exists = false
     
     /**
      * 
@@ -62,47 +62,84 @@ class SaveInjecto {
     }
 
     /**
-     * Writes an existing object back to the directory.
-     * <p>
-     * Uses the {@link GldapoDirectory#save(DistinguishedName,List<ModificationItem>)} method of this
-     * object's directory if this object has any modification items.
+     * Ensures that the object has an rdn and a directory.
+     * 
+     * @throws GldapoException
      */
-    def save = { ->        
-        if (delegate.directory == null) 
-            throw new GldapoException("save() called on object with no directory")
-            
-        if (delegate.rdn == null) 
-            throw new GldapoException("save() called on object with no dn")
-        
-        if (delegate.existingEntry) {
-            def modificationItems = delegate.modificationItems
-            if (modificationItems.empty == false) delegate.directory.save(delegate.rdn, modificationItems)
-        } else {
-            delegate.directory.save(delegate.rdn, delegate.attributes)
-        } 
-        
-        delegate.snapshotStateAsClean()
-    }
-    
-    /**
-     * Writes a new object to the directory
-     */
-    @InjectAs("save")
-    def saveWithDnAndDirectory = { DistinguishedName rdn, directory ->
-        delegate.rdn = rdn
-        delegate.directory = directory
-        directory.save()
+    def assertHasRdnAndDirectoryForOperation = { operation ->
+        assertHasDirectoryForOperation(operation)
+        assertHasRdnForOperation(operation)
     }
     
     /**
      * 
      */
-    @InjectAs("save")
-    def saveNewStringRdn = { String rdn, directory ->
-        delegate.save(new DistinguishedName(rdn), directory) 
+    def assertHasDirectoryForOperation = { operation ->
+        if (delegate.directory == null) 
+            throw new GldapoException("'$operation' attempted on object with no directory")
+    }
+    
+    /**
+     * 
+     */
+    def assertHasRdnForOperation = { operation ->
+        if (delegate.rdn == null) 
+            throw new GldapoException("'$operation' attempted on object with no rdn")
+    }
+    
+    /**
+     * 
+     */
+    def create = { ->
+        delegate.assertHasRdnAndDirectoryForOperation('create')
+        delegate.directory.createEntry(delegate.rdn, delegate.attributes)
+        delegate.snapshotStateAsClean()
     }
 
+    /**
+     * Writes an existing object back to the directory.
+     * <p>
+     * Uses the {@link GldapoDirectory#updateEntry(DistinguishedName,List<ModificationItem>)} method of this
+     * object's directory if this object has any modification items.
+     */    
+    def update = { ->
+        delegate.assertHasRdnAndDirectoryForOperation('update')
+        def modificationItems = delegate.modificationItems
+        if (!modificationItems.empty) delegate.directory.updateEntry(delegate.rdn, modificationItems)
+        delegate.snapshotStateAsClean()
+    }
     
+    /**
+     * Convenience method to create the entry if it doesn't exist, or update it if it does.
+     * 
+     * @see getCreate()
+     * @see getSave()
+     */
+    def save = { ->                
+        (delegate.exists) ? delegate.update() : delegate.create()
+    }
+
+    /**
+     * 
+     */
+    def move = { DistinguishedName newrdn ->
+        if (delegate.exists) {
+            delegate.update()
+        } else {
+            throw new GldapoException("'move' attempted on an object that does not exist")
+        }
+        delegate.directory.moveEntry(delegate.rdn, newrdn)
+        delegate.rdn = newrdn
+    }
+    
+    /**
+     * 
+     */
+    def replace = { DistinguishedName target ->
+        assertHasDirectoryForOperation('replace')
+        delegate.directory.replaceEntry(target, delegate.attributes)
+        delegate.rdn = target
+        delegate.snapshotStateAsClean()
+    }
 
 }
-
