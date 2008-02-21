@@ -30,7 +30,7 @@ class GldapoSearch extends AbstractGldapoOptionSubjectableOperation
     GldapoSearch() {
         super()
         required = ["schema"]
-        optionals = ["directory", "filter", "base", "absoluteBase", "countLimit", "derefLinkFlag", "searchScope", "timeLimit"]
+        optionals = ["directory", "filter", "base", "absoluteBase", "countLimit", "derefLinkFlag", "searchScope", "timeLimit", "pageSize"]
     }
     
     void inspectOptions() {

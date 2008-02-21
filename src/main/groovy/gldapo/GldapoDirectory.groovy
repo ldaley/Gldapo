@@ -138,7 +138,7 @@ class GldapoDirectory implements GldapoSearchProvider {
         SearchControls jndiControls = controls as SearchControls
         jndiControls.returningAttributes = schemaRegistration.attributeMappings*.attributeName
         
-        if (controls.pageSize == null || pageSize < 1) {
+        if (controls.pageSize == null || controls.pageSize < 1) {
             return nonPagedSearch(base, filter, jndiControls, handler)
         } else { 
             return pagedSearch(base, filter, jndiControls, handler, controls.pageSize)
