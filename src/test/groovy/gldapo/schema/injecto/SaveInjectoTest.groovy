@@ -80,6 +80,69 @@ class SaveInjectoTest extends GroovyTestCase {
         e.create()
         
     }
+    
+    void testSave() {
+        def e = new SaveInjectoTestSchema()
+        
+        e.exists = true
+        
+        def called = false
+        e.metaClass.update << { -> 
+            called = true
+        }
+        e.metaClass.create << { -> 
+            throw new Error()
+        }
+        e.save()
+        assertTrue("update() should have been called", called)
+        
+        e.exists = false
+        called = false
+        e.metaClass.update << { -> 
+            throw new Error()
+        }
+        e.metaClass.create << { -> 
+            called = true
+        }
+        e.save()
+        assertTrue("create() should have been called", called)
+    }
+    
+    void testMove() {
+        def e = new SaveInjectoTestSchema()
+        def moveto = new DistinguishedName("dc=example2,dc=com")
+        e.exists = true
+        e.rdn = "dc=example,dc=com"
+        e.directory = [moveEntry: { from, to -> 
+            assertEquals(from, e.rdn)
+            assertEquals(to, moveto)
+        }]
+        
+        def called = false
+        e.metaClass.update << { ->
+            called = true
+        }
+        e.move(moveto)
+        assertTrue(called)
+        assertEquals(e.rdn, moveto)
+        
+        def e2 = new SaveInjectoTestSchema()
+        e2.exists = false
+        shouldFail(Exception) {
+            e2.move(moveto)
+        }
+    }
+    
+    void testReplace() {
+        def e = new SaveInjectoTestSchema()
+        e.rdn = "dc=example,dc=com"
+        def replaced = new DistinguishedName("dc=example2,dc=com")
+        e.directory = [replaceEntry: { target, attributes ->
+            assertEquals(replaced, target)
+        }]
+        e.replace(replaced)
+        assertEquals(replaced, e.rdn)
+    }
 }
 
 class SaveInjectoTestSchema {

@@ -129,7 +129,13 @@ class SaveInjecto {
             throw new GldapoException("'move' attempted on an object that does not exist")
         }
         delegate.directory.moveEntry(delegate.rdn, newrdn)
-        delegate.rdn = newrdn
+        delegate.setInjectoProperty('rdn', newrdn)
+        delegate.setInjectoProperty('dn', null)
+    }
+
+    @InjectAs("move")
+    def moveString = { String newrdn ->
+        delegate.move(new DistinguishedName(newrdn))
     }
     
     /**
@@ -138,7 +144,8 @@ class SaveInjecto {
     def replace = { DistinguishedName target ->
         assertHasDirectoryForOperation('replace')
         delegate.directory.replaceEntry(target, delegate.attributes)
-        delegate.rdn = target
+        delegate.setInjectoProperty('rdn', target)
+        delegate.setInjectoProperty('dn', null)
         delegate.snapshotStateAsClean()
     }
 

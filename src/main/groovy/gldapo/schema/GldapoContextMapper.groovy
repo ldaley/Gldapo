@@ -27,7 +27,7 @@ class GldapoContextMapper implements ContextMapper
     {
         def entry = schemaRegistration.schema.newInstance()
         
-        entry.directory = directory
+        entry.setDirectory(directory) // TODO Fix for groovy bug (last checked 1.5.4)
         entry.rdn = context.dn
         entry.exists = true
         
