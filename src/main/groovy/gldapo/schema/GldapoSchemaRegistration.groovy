@@ -17,7 +17,6 @@ package gldapo.schema
 import gldapo.Gldapo
 import gldapo.exception.GldapoSchemaInitializationException
 import gldapo.schema.attribute.AttributeMappingInspector
-import gldapo.schema.injecto.GldapoSchemaMetaInjecto
 import injecto.Injecto
 
 class GldapoSchemaRegistration 
@@ -41,7 +40,7 @@ class GldapoSchemaRegistration
     }
         
     static prepareSchemaClass(schema) {
-        Injecto.inject(schema, GldapoSchemaMetaInjecto)
+        Injecto.inject(schema, GldapoSchemaClassInjecto)
     }
     
     boolean equals(Class clazz) {

@@ -13,27 +13,82 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.injecto
-import gldapo.Gldapo
+package gldapo.schema
+
+import gldapo.*
 import javax.naming.directory.DirContext
-import javax.naming.directory.Attributes
 import org.springframework.ldap.core.DistinguishedName
+import gldapo.test.GldapoMockOperationInstaller
+import javax.naming.directory.Attributes
+import javax.naming.directory.BasicAttributes
 
-class SaveInjectoTest extends GroovyTestCase {
+class GldapoSchemaClassInjectoTest extends GroovyTestCase {
 
-    static gldapo = new Gldapo(schemas: [SaveInjectoTestSchema])
+    static gldapo = new Gldapo(schemas: [DummySchema])
     
     static REP = DirContext.REPLACE_ATTRIBUTE
     static REM = DirContext.REMOVE_ATTRIBUTE 
     static ADD = DirContext.ADD_ATTRIBUTE
     
-    /**
-     * We don't need to put the calculation of correct modification items here, the *AttributeMappingTest tests
-     * do that. We just need to check that we are calling things correctly.
-     */
+    void testSnapshotAsClean() {
+        def e = new DummySchema()
+
+        e.snapshotStateAsClean()
+        assertTrue(e.cleanValues.containsKey("a"))
+        assertNull(e.cleanValues.a)
+        assertTrue(e.cleanValues.containsKey("b"))
+        assertNull(e.cleanValues.b)
+
+        e.a = "blah"
+        e.b = ["1", "2"] as Set
+        e.snapshotStateAsClean()
+        assertEquals("blah", e.cleanValues.a)
+        assertEquals(["1", "2"] as Set, e.cleanValues.b)
+    }
+    
+    void testRevert() {
+        def e = new DummySchema()
+        e.a = "blah"
+        e.b = ["a"] as Set
+        e.snapshotStateAsClean()
+        
+        e.a = "notblah"
+        e.b = ["b"] as Set
+        e.revert()
+        
+        assertEquals("blah", e.a)
+        assert ["a"] as Set == e.b
+    }
+    
+    void testDirectory() {
+        def o = new DummySchema()
+        def d = new GldapoDirectory("test", [url: "ldap://example.com"])
+        o.directory = d
+        assertSame(d, o.directory)
+    }
+    
+    void testRdn() {
+        def o = new DummySchema()
+        o.rdn = new DistinguishedName("dc=test")
+        assertEquals(new DistinguishedName("dc=test"), o.rdn)
+    }
+    
+    void testDn() {
+        def o = new DummySchema()
+        o.directory = [base: new DistinguishedName("dc=example, dc=com")]
+        o.rdn = new DistinguishedName("ou=people")
+        assertEquals(new DistinguishedName("ou=people, dc=example, dc=com"), o.dn)
+    }
+    
+    void testGetWithResult() {
+        GldapoMockOperationInstaller.installSearchWithResult([1,2,3], gldapo)
+        assertEquals(1, DummySchema.getByDn("abc"))
+    }
+    
+
     void testUpdate() {
         
-        def e = new SaveInjectoTestSchema()
+        def e = new DummySchema()
 
         e.exists = true
         e.a = "clean"
@@ -59,12 +114,9 @@ class SaveInjectoTest extends GroovyTestCase {
         
         e.update()
     }
-    
-    /**
-     * 
-     */
+
     void testCreate() {
-        def e = new SaveInjectoTestSchema()
+        def e = new DummySchema()
         e.a = "clean"
         e.b = ["1", "2"] as Set
         e.rdn = "dc=example,dc=com"
@@ -82,7 +134,7 @@ class SaveInjectoTest extends GroovyTestCase {
     }
     
     void testSave() {
-        def e = new SaveInjectoTestSchema()
+        def e = new DummySchema()
         
         e.exists = true
         
@@ -109,7 +161,7 @@ class SaveInjectoTest extends GroovyTestCase {
     }
     
     void testMove() {
-        def e = new SaveInjectoTestSchema()
+        def e = new DummySchema()
         def moveto = new DistinguishedName("dc=example2,dc=com")
         e.exists = true
         e.rdn = "dc=example,dc=com"
@@ -126,7 +178,7 @@ class SaveInjectoTest extends GroovyTestCase {
         assertTrue(called)
         assertEquals(e.rdn, moveto)
         
-        def e2 = new SaveInjectoTestSchema()
+        def e2 = new DummySchema()
         e2.exists = false
         shouldFail(Exception) {
             e2.move(moveto)
@@ -134,7 +186,7 @@ class SaveInjectoTest extends GroovyTestCase {
     }
     
     void testReplace() {
-        def e = new SaveInjectoTestSchema()
+        def e = new DummySchema()
         e.rdn = "dc=example,dc=com"
         def replaced = new DistinguishedName("dc=example2,dc=com")
         e.directory = [replaceEntry: { target, attributes ->
@@ -143,9 +195,53 @@ class SaveInjectoTest extends GroovyTestCase {
         e.replace(replaced)
         assertEquals(replaced, e.rdn)
     }
+    
+    void testFindAll() 
+    {
+        GldapoMockOperationInstaller.installSearchWithResult([1,2,3], gldapo)
+        assertEquals([1,2,3], DummySchema.findAll())
+    }
+    
+    void testFind()
+    {
+        GldapoMockOperationInstaller.installSearchWithResult([1,2,3], gldapo)
+        assertEquals(1, DummySchema.find())
+        
+        GldapoMockOperationInstaller.installSearchWithResult([], gldapo)
+        assertEquals(null, DummySchema.find())
+    }
+
+    void testDelete() {
+        def e = new DummySchema()
+        def rdn = new DistinguishedName("dc=example,dc=com")
+        e.rdn = rdn
+        def deleted = false
+        e.directory = [deleteEntry: {
+            assertEquals(rdn, it)
+            deleted = true
+        }]
+        e.delete()
+        assertTrue(deleted)
+        assertFalse(e.exists)
+    }
+    
+    void testDeleteRecursively() {
+        def e = new DummySchema()
+        def rdn = new DistinguishedName("dc=example,dc=com")
+        e.rdn = rdn
+        def deleted = false
+        e.directory = [deleteEntryRecursively: {
+            assertEquals(rdn, it)
+            deleted = true
+        }]
+        e.deleteRecursively()
+        assertTrue(deleted)         
+        assertFalse(e.exists)
+    }
+    
 }
 
-class SaveInjectoTestSchema {
+class DummySchema {
     String a
     Set<String> b
 }

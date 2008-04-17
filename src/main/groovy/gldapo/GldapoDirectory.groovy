@@ -224,4 +224,18 @@ class GldapoDirectory implements GldapoSearchProvider {
     void replaceEntry(DistinguishedName dn, Attributes attributes) {
         this.template.rebind(dn, null, attributes)
     }
+    
+    /**
+     *
+     */
+     void deleteEntry(DistinguishedName dn) {
+         this.template.unbind(dn)
+     }
+     
+     /**
+      * 
+      */
+     void deleteEntryRecursively(DistinguishedName dn) {
+         this.template.unbind(dn, true)
+     }
 }

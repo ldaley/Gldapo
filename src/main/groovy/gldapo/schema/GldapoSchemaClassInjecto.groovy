@@ -13,20 +13,130 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.injecto
-import injecto.annotation.InjectoDependencies
+package gldapo.schema
+
+import gldapo.Gldapo
+import gldapo.GldapoOperationRegistry
+import gldapo.GldapoDirectory
+import gldapo.exception.GldapoException
 import injecto.annotation.InjectoProperty
 import injecto.annotation.InjectAs
-import org.apache.commons.lang.WordUtils
-import gldapo.exception.GldapoException
 import org.springframework.ldap.core.DistinguishedName
+import org.apache.commons.lang.WordUtils
+import javax.naming.directory.DirContext
+import javax.naming.directory.Attributes
 import javax.naming.directory.BasicAttributes
 
-@InjectoDependencies([CleanValuesInjecto, SchemaRegistrationInjecto, DirectoryInjecto, DnInjecto])
-class SaveInjecto {
+class GldapoSchemaClassInjecto {
 
     @InjectoProperty
+    static GldapoSchemaRegistration schemaRegistration = null
+    
+    @InjectoProperty
+    static Gldapo gldapo = null
+
+    @InjectoProperty
+    GldapoDirectory directory = null
+
+    @InjectoProperty
+    DistinguishedName rdn = null
+    
+    @InjectoProperty(write = false)
+    DistinguishedName dn = null
+    
+    @InjectoProperty(write = false)
+    Map cleanValues = [:]
+    
+    @InjectoProperty
     Boolean exists = false
+    
+    def setCleanValue = { String name, Object value ->
+        delegate.cleanValues[name] = value
+    }
+
+    def getCleanValue = { String name ->
+        delegate.cleanValues[name]
+    }
+
+    def snapshotStateAsClean = {
+        delegate.class.schemaRegistration.attributeMappings.each { attribute, mapping ->
+            def value = delegate."$attribute"
+            delegate.setCleanValue(attribute, (value instanceof Cloneable) ? value.clone() : value)
+        }
+    }
+    
+    def revert = { ->
+        delegate.cleanValues.each { key, value ->
+            delegate."$key" = (value instanceof Cloneable) ? value.clone() : value
+        }
+    }
+    
+    
+    def setDirectory = { directory ->
+        if (delegate.directory != null)
+            throw new GldapoException("Cannot change directory on schema objects after it has been set")
+        
+        delegate.setInjectoProperty("directory", directory)
+    }
+    
+
+
+    def setRdn = { DistinguishedName rdn ->
+        if (delegate.rdn != null)
+            throw new GldapoException("Cannot change rdn/dn on object once set")
+            
+        delegate.setInjectoProperty('rdn', rdn)
+        delegate.setInjectoProperty('dn', null)
+    }
+    
+    @InjectAs("setRdn")
+    def setRdnAsString = { String rdn ->
+        delegate.setRdn(new DistinguishedName(rdn))
+    }
+    
+
+    
+    def getDn = { ->
+        def dn = delegate.getInjectoProperty('dn')
+        if (dn == null) {
+            dn = new DistinguishedName()
+            dn.append(delegate.directory.base)
+            dn.append(delegate.rdn)
+            delegate.setInjectoProperty('dn', dn)
+        }
+        return dn
+    }
+    
+    static getByDn = { DistinguishedName dn, GldapoDirectory directory ->
+        delegate.find(absoluteBase: dn, searchScope: "object", directory: directory)
+    }
+
+    @InjectAs("getByDn")
+    static getByStringDn = { String dn, GldapoDirectory directory ->
+        delegate.find(absoluteBase: dn, searchScope: "object", directory: directory)
+    }
+    
+    @InjectAs("getByDn")
+    static getUsingDirectoryName = { DistinguishedName dn, String directoryName ->
+        delegate.find(absoluteBase: dn, searchScope: "object", directory: directoryName)
+    }
+    
+    @InjectAs("getByDn")
+    static getUsingDirectoryNameAndStringDn = { String dn, String directoryName ->
+        delegate.find(absoluteBase: dn, searchScope: "object", directory: directoryName)
+    }
+
+    @InjectAs("getByDn")
+    static getUsingDefaultDirectory = { DistinguishedName dn -> 
+        delegate.getByDn(dn, (String)null)
+    }
+    
+    @InjectAs("getByDn")
+    static getUsingDefaultDirectoryAndStringDn = { String dn -> 
+        delegate.getByDn(dn, (String)null)
+    }
+    
+
     
     /**
      * 
@@ -148,5 +258,40 @@ class SaveInjecto {
         delegate.setInjectoProperty('dn', null)
         delegate.snapshotStateAsClean()
     }
+    
+    def delete = {
+        delegate.assertHasRdnAndDirectoryForOperation('delete')
+        delegate.directory.deleteEntry(delegate.rdn)
+        delegate.exists = false
+    }
 
+    def deleteRecursively = {
+        delegate.assertHasRdnAndDirectoryForOperation('delete')
+        delegate.directory.deleteEntryRecursively(delegate.rdn)
+        delegate.exists = false
+    }
+    
+    
+    static findAll = { Map options ->
+        def searchOptions = options.clone()
+        searchOptions.schema = delegate
+        
+        delegate.gldapo.operations[GldapoOperationRegistry.SEARCH, searchOptions].execute()
+    }
+    
+    @InjectAs("findAll")
+    static findAllNoArgs = { -> 
+        delegate.findAll([:])
+    }
+    
+    static find = { Map options ->
+        options.countLimit = 1
+        def r = delegate.findAll(options)
+        (r.size() > 0) ? r[0] : null
+    }
+    
+    @InjectAs("find")
+    static findNoArgs = { -> 
+        delegate.find([:])
+    }
 }

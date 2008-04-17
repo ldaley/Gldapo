@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package gldapo.schema
-import gldapo.schema.injecto.GldapoSchemaMetaInjecto
 import gldapo.Gldapo
 import injecto.Injecto
 
@@ -23,7 +22,7 @@ class GldapoSchemaRegistrationTest extends GroovyTestCase
     static r = new GldapoSchemaRegistration(GldapoSchemaRegistrationTestSubject, new Gldapo())
         
     void testItGotInjected() {
-        assertTrue(Injecto.isInjected(GldapoSchemaRegistrationTestSubject, GldapoSchemaMetaInjecto))
+        assertTrue(Injecto.isInjected(GldapoSchemaRegistrationTestSubject, GldapoSchemaClassInjecto))
     }
     
     void testReturnsRightClass() {
