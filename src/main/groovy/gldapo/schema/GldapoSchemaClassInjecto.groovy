@@ -71,7 +71,6 @@ class GldapoSchemaClassInjecto {
         }
     }
     
-    
     def setDirectory = { directory ->
         if (delegate.directory != null)
             throw new GldapoException("Cannot change directory on schema objects after it has been set")
@@ -79,8 +78,6 @@ class GldapoSchemaClassInjecto {
         delegate.setInjectoProperty("directory", directory)
     }
     
-
-
     def setRdn = { DistinguishedName rdn ->
         if (delegate.rdn != null)
             throw new GldapoException("Cannot change rdn/dn on object once set")
@@ -93,8 +90,6 @@ class GldapoSchemaClassInjecto {
     def setRdnAsString = { String rdn ->
         delegate.setRdn(new DistinguishedName(rdn))
     }
-    
-
     
     def getDn = { ->
         def dn = delegate.getInjectoProperty('dn')
