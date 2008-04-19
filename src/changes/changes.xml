@@ -29,10 +29,22 @@
             <action dev="Luke Daley" type="update">Significant work on the build system</action>
             <action dev="Luke Daley" type="update">Made the site documentation somewhere approaching passable</action>
             <action dev="Luke Daley" type="update">Lots of fixes and improvements that I forgot to record at the time :)</action>
-            <release version="0.4b3" date="2008-01-02">
-                <action dev="Luke Daley" type="fix">Paging is now optional, if the page size is less than 1, paging will not be used</action>
-                <action dev="Luke Daley" type="update">Improved API of gldapo.Gldapo class to be more modular</action>
-            </release>
+        </release>
+        <release version="0.4b3" date="2008-01-02">
+            <action dev="Luke Daley" type="fix">Paging is now optional, if the page size is less than 1, paging will not be used</action>
+            <action dev="Luke Daley" type="update">Improved API of gldapo.Gldapo class to be more modular</action>
+        </release>
+        <release version="0.5" date="2008-04-19">
+            <action dev="Luke Daley" type="add">create() - writes new entries to the directory</action>
+            <action dev="Luke Daley" type="add">update() - writes changed attribute values back to the directory</action>
+            <action dev="Luke Daley" type="add">save() - calls create() or update() depending on the exists of the entry</action>
+            <action dev="Luke Daley" type="add">move() - moves the entry in the directory</action>
+            <action dev="Luke Daley" type="add">replace() - replaces an entry in the directory with the state of a schema object</action>
+            <action dev="Luke Daley" type="add">delete() and deleteRecursively() - removes the object from the directory</action>
+            <action dev="Luke Daley" type="update">Use DistinguishedName objects (from Spring LDAP) to represent DN's instead of strings.</action>
+            <action dev="Luke Daley" type="add">Default type mapping for DistinguishedName type</action>
+            <action dev="Luke Daley" type="fix">pageSize on searches is now respected</action>
+            <action dev="Luke Daley" type="update">Moved to Groovy 1.5.4</action>
         </release>
     </body>
 </document>
