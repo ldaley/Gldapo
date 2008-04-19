@@ -30,6 +30,7 @@
             <item name="Attributes" href="/schemaclasses/attributes.html"/>
             <item name="Filters" href="/schemaclasses/filters.html"/>
             <item name="Searching" href="schemaclasses/searching.html"/>
+            <item name="Working with Entries" href="schemaclasses/entries.html"/>
             <item name="Method Reference" href="schemaclasses/methodreference.html"/>
         </menu>
         <menu name="Type Mapping">

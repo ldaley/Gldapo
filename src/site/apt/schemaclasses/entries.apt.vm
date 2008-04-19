@@ -1,0 +1,104 @@
+    -------------------------------------
+    Schema Classes - Working with Entries
+    -------------------------------------
+
+Working with Entries
+
+    Entries in the LDAP store are objects of schema classes. Gldapo provides instance methods to perform entry operations.
+
+    For the following examples, let's use the Gldapo config of...
+
++-------------------------------+
+class MySchemaClass
+{
+    String cn
+    String sn
+}
+
+Gldapo.initialize(
+    directories: [
+        example: [
+            url: "ldap://example.com"
+            base: "dc=example,dc=com"
+        ]
+    ],
+    schemas: [MySchemaClass]
+)
++-------------------------------+
+         
+* Creating
+
+    Creating new entries involves creating a new object of a schema class and calling the <<<create()>>> or <<<save()>>> methods. You <<must>> associate the object to a directory and give it a dn first though...
+
++-------------------------------+
+def newUser = new MySchemaClass()
+
+// Assign the object a directory and a place in it.
+newUser.directory = "example"
+newUser.rdn = "uid=newuser,ou=people"
+
+// Set the attribute values
+newUser.cn = "New"
+newUser.sn = "User"
+
+// Write to the directory
+newUser.create()
++-------------------------------+
+
+* Updating
+
+    Updating an object involves fetching it from the store, changing some attributes and writing it back...
+    
++-------------------------------+
+def newUser = MySchemaClass.find(directory: "example", filter: "(&(cn=New)(sn=User))")
+newUser.cn = "NotSoNew"
+newUser.update()
++-------------------------------+
+
+* Saving
+
+    Gldapo provides a <<<save()>>> convenience instance method that will <<<create()>>> the object if it doesn't exist, or <<<update()>>> it if it does.
+
+* Moving
+
+    Moving an object involves fetching an existing object, optionally modifying it, then specifying a new rdn for it...
+
++-------------------------------+
+def newUser = MySchemaClass.find(directory: "example", filter: "(&(cn=NotSoNew)(sn=User))")
+newUser.cn = "NotSoNew"
+newUser.move("uid=notsonew,ou=people")
++-------------------------------+
+
+    This will <<<update()>>> the object at it's <original> location, and then perform the move.
+
+* Replacing
+
+    Replacing an object can be done by either fetching an existing object or creating a new one, and then specify the location of the object to replace...
+
++-------------------------------+
+def newUserReplacement = new MySchemaClass()
+newUserReplacement.directory = "example"
+newUserReplacement.cn = "NotSoNew"
+newUserReplacement.sn = "Replacement"
+newUserReplacement.replace("uid=notsonew,ou=people")
++-------------------------------+
+
+* Deleting
+
+    Deleting an entry involves either fetching an entry, or creating a skeleton object and calling <<<delete()>>>...
+
++-------------------------------+
+def newUser = MySchemaClass.find(directory: "example", filter: "(&(cn=NotSoNew)(sn=Replacement))")
+newUser.delete()
++-------------------------------+
+
+    Or...
+
++-------------------------------+
+def newUserReplacement = new MySchemaClass()
+newUserReplacement.directory = "example"
+newUserReplacement.rdn = "uid=notsonew,ou=people"
+newUserReplacement.delete()
++-------------------------------+
+
+    <<Note:>> there is also the method <<<deleteRecursively()>>> which will delete the object and all children. The <<<delete()>>> method will <<fail>> if the object has children.
