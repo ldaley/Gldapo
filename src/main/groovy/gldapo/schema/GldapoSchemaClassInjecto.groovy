@@ -26,6 +26,7 @@ import org.apache.commons.lang.WordUtils
 import javax.naming.directory.DirContext
 import javax.naming.directory.Attributes
 import javax.naming.directory.BasicAttributes
+import org.springframework.ldap.AuthenticationException
 
 class GldapoSchemaClassInjecto {
 
@@ -288,5 +289,31 @@ class GldapoSchemaClassInjecto {
     @InjectAs("find")
     static findNoArgs = { -> 
         delegate.find([:])
+    }
+    
+    def authenticate = { password ->
+        delegate.assertHasRdnAndDirectoryForOperation('authenticate')
+        def contextSource = delegate.directory.getSubContextSource(delegate.rdn)
+        contextSource.password = password
+        
+        def success = false
+        def context
+        
+        try {
+            contextSource.afterPropertiesSet()
+            context = contextSource.getReadOnlyContext()
+            success = true
+        }
+        catch(Exception e) {
+            if (e instanceof AuthenticationException) {
+                success = false
+            } else {
+                throw e
+            }
+        } finally {
+            if (context != null) context.close()
+        }
+
+        return success
     }
 }
