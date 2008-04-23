@@ -238,4 +238,15 @@ class GldapoDirectory implements GldapoSearchProvider {
      void deleteEntryRecursively(DistinguishedName dn) {
          this.template.unbind(dn, true)
      }
+     
+     def getSubContextSource(DistinguishedName rdn) {
+        def context = template.contextSource
+        def contextDnCopy = new DistinguishedName(context.baseLdapPath)
+        def subContextDn = contextDnCopy.append(rdn)
+        return context.class.newInstance(
+            urls: context.urls,
+            userDn: subContextDn as String,
+            pooled: context.pooled
+        )
+     }
 }

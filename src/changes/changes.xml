@@ -46,5 +46,9 @@
             <action dev="Luke Daley" type="fix">pageSize on searches is now respected</action>
             <action dev="Luke Daley" type="update">Moved to Groovy 1.5.4</action>
         </release>
+        <release version="0.5.1" date="2008-04-23">
+            <action dev="Luke Daley" type="add">GldapoDirectory#createSubContextSource(DistinguishedName) - useful for creating other context sources from a directory</action>
+            <action dev="Luke Daley" type="add">authenticate(String) - allows schema objects to be used for authentication checks</action>
+        </release>
     </body>
 </document>
