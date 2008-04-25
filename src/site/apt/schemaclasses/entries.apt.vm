@@ -102,3 +102,18 @@ newUserReplacement.delete()
 +-------------------------------+
 
     <<Note:>> there is also the method <<<deleteRecursively()>>> which will delete the object and all children. The <<<delete()>>> method will <<fail>> if the object has children.
+
+* Authenticating
+
+    All entity objects have an <<<authenticate(String)>>> method which accepts a password and attempts to authenticate the object with that password, returning <<<true>>> or <<<false>>>.
+    
++-------------------------------+
+if (MySchemaClass.find(directory: "example", filter: "(&(cn=NotSoNew)(sn=User))")?.authenticate("passw0rd"))
+{
+    // Do authenticated stuff
+}
+else
+{
+    // Do non authenticated stuff
+}
++-------------------------------+
