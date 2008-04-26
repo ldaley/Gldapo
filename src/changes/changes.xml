@@ -50,7 +50,7 @@
             <action dev="Luke Daley" type="add">GldapoDirectory#createSubContextSource(DistinguishedName) - useful for creating other context sources from a directory</action>
             <action dev="Luke Daley" type="add">authenticate(String) - allows schema objects to be used for authentication checks (Thanks to Marco Mornati)</action>
         </release>
-        <release version="0.5.2" date="">
+        <release version="0.5.2" date="2008-04-26">
             <action dev="Luke Daley" type="add">When an operation is attempted on an entry with no directory set, the default directory is used if set/available</action>
             <action dev="Luke Daley" type="fix">Added extra documentation about the default directory</action>
             <action dev="Luke Daley" type="fix">The getAttributes() method on entries now only returns attributes for where the entry has a value for that attribute (this was preventing new entries being created if values weren't set for all attributes)</action>
