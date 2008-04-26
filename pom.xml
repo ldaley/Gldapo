@@ -92,7 +92,7 @@
         </dependency>
     </dependencies>
     <properties>
-        <stableVersion>0.5</stableVersion>
+        <stableVersion>0.5.2</stableVersion>
         <releaseBase>http://mvn.ldaley.com/release/com/ldaley/gldapo</releaseBase>
         <releaseAssembly>dist</releaseAssembly>
         <springLdapApi>http://static.springframework.org/spring-ldap/docs/1.2.1/api/spring-ldap</springLdapApi>
