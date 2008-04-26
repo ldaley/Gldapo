@@ -37,6 +37,7 @@ class GldapoDirectoryRegistry extends LinkedHashMap<String, GldapoDirectory> {
         * a name matching {@link #defaultDirectoryName}.
      * 
      * @return The default directory
+     * @todo Rename this to getDefault
      * @throws GldapoNoDefaultDirectoryException If there is more then one registered directory, and {@link #defaultDirectoryName} is null.
      * @throws GldapoDirectoryNotFoundException If there is no directory registered that has a name of {@link #defaultDirectoryName}
      */
@@ -47,6 +48,10 @@ class GldapoDirectoryRegistry extends LinkedHashMap<String, GldapoDirectory> {
         def defaultDirectory = this[defaultDirectoryName]
         if (defaultDirectory == null) throw new GldapoDirectoryNotFoundException(defaultDirectoryName)
         return defaultDirectory
+    }
+    
+    boolean isHasDefault() {
+        (this.size() == 1 || this.defaultDirectoryName != null)
     }
     
     /**

@@ -110,7 +110,7 @@ DistinguishedName getDn()
 
 * {getRdn()}
 
-    Returns the {{{${springLdapApi}/org/springframework/ldap/core/DistinguishedName.html}distinguished name}} <relative> to the base of the directory of this entry.
+    Returns the {{{${springLdapApi}/org/springframework/ldap/core/Distingui{{{../schemaclasses/searching.html}searching}}shedName.html}distinguished name}} <relative> to the base of the directory of this entry.
 
 +-------------------------------+
 DistinguishedName getRdn()
@@ -154,7 +154,7 @@ static Object find() throws NamingException, GldapoNoDefaultDirectoryException, 
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoNoDefaultDirectoryException>>> if no default directory has been specified.
+    * <<<GldapoNoDefaultDirectoryException>>> if no {{{../directories/registry.html#The_default_directory}default directory}} has been specified.
 
     * <<<GldapoOperationException>>> if a configuration error occurs.
 
@@ -172,7 +172,7 @@ static Object find(Map options) throws NamingException, GldapoNoDefaultDirectory
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoNoDefaultDirectoryException>>> if the <<<directory>>> option is not specified and no default directory has been specified.
+    * <<<GldapoNoDefaultDirectoryException>>> if the <<<directory>>> option is not specified and no {{{../directories/registry.html#The_default_directory}default directory}} has been specified.
 
     * <<<GldapoDirectoryNotFoundException>>> if the <<<directory>>> option is specified as a string name (instead of <<<GldapoDirectory>>> instance) and no directory can be found of that name.
 
@@ -190,7 +190,7 @@ static List findAll() throws NamingException, GldapoNoDefaultDirectoryException,
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoNoDefaultDirectoryException>>> if no default directory has been specified.
+    * <<<GldapoNoDefaultDirectoryException>>> if no {{{../directories/registry.html#The_default_directory}default directory}} has been specified.
 
     * <<<GldapoOperationException>>> if a configuration error occurs.
     
@@ -206,7 +206,7 @@ static List findAll(Map options) NamingException, GldapoNoDefaultDirectoryExcept
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoNoDefaultDirectoryException>>> if the <<<directory>>> item is not specified and no default directory has been specified.
+    * <<<GldapoNoDefaultDirectoryException>>> if the <<<directory>>> item is not specified and no {{{../directories/registry.html#The_default_directory}default directory}} has been specified.
         
     * <<<GldapoDirectoryNotFoundException>>> if the <<<directory>>> option is specified as a string name (instead of <<<GldapoDirectory>>> instance) and no directory can be found of that name.
 
@@ -219,7 +219,7 @@ static List findAll(Map options) NamingException, GldapoNoDefaultDirectoryExcept
 *--*--+
 || Attribute || Description |
 *--*--+
-| <<directory>> | Either the name of a registered directory, or an instance of <<<GldapoDirectory>>>. If <<<null>>>, the default directory will be used. |
+| <<directory>> | Either the name of a registered directory, or an instance of <<<GldapoDirectory>>>. If <<<null>>>, the {{{../directories/registry.html#The_default_directory}default directory}} will be used. |
 *--*--+
 | <<filter>> | An LDAP filter string to use to restrict the search. If the schema class has a {{{filters.html}filter}} it will be anded to the search filter. If no filter is specified <<<"(objectclass=*)">>> |
 *--*--+
@@ -240,7 +240,7 @@ static List findAll(Map options) NamingException, GldapoNoDefaultDirectoryExcept
 
 * {getByDn(String)}
 
-    Returns a single entry by it's distinguished name using the <<default directory>>.
+    Returns a single entry by it's distinguished name using the <<{{{../directories/registry.html#The_default_directory}default directory}}>>.
 
 +-------------------------------+
 static Object getByDn(String dn) NamingException, GldapoNoDefaultDirectoryException
@@ -250,7 +250,7 @@ static Object getByDn(String dn) NamingException, GldapoNoDefaultDirectoryExcept
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoNoDefaultDirectoryException>>> if no default directory has been specified.
+    * <<<GldapoNoDefaultDirectoryException>>> if no {{{../directories/registry.html#The_default_directory}default directory}} has been specified.
 
 * {getByDn(String,String)}
 
@@ -290,7 +290,7 @@ void create() throws NamingException, GldapoException
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoException>>> if the object does not have a directory or rdn set.
+    * <<<GldapoException>>> if the object does not have a directory (and no <{{{../directories/registry.html#The_default_directory}default directory}}> has been specified) or rdn set.
 
 * {update()}
 
@@ -304,7 +304,7 @@ void update() throws NamingException, GldapoException
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoException>>> if the object does not have a directory or rdn set.
+    * <<<GldapoException>>> if the object does not have a directory (and no <{{{../directories/registry.html#The_default_directory}default directory}}> has been specified) or rdn set.
 
 * {save()}
 
@@ -318,7 +318,7 @@ void save() throws NamingException, GldapoException
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoException>>> if the object does not have a directory or rdn set.
+    * <<<GldapoException>>> if the object does not have a directory (and no <{{{../directories/registry.html#The_default_directory}default directory}}> has been specified) or rdn set.
 
 * {move(String)}
 
@@ -332,7 +332,7 @@ void move(String newRdn) throws NamingException, GldapoException
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoException>>> if the object does not have a directory or rdn set.
+    * <<<GldapoException>>> if the object does not have a directory (and no <{{{../directories/registry.html#The_default_directory}default directory}}> has been specified) or rdn set.
 
 * {move(DistinguishedName)}
 
@@ -346,7 +346,7 @@ void move(DistinguishedName newRdn) throws NamingException, GldapoException
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoException>>> if the object does not have a directory or rdn set.
+    * <<<GldapoException>>> if the object does not have a directory (and no <{{{../directories/registry.html#The_default_directory}default directory}}> has been specified) or rdn set.
 
 * {replace(DistinguishedName)}
 
@@ -360,7 +360,7 @@ void replace(DistinguishedName newRdn) throws NamingException, GldapoException
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoException>>> if the object does not have a directory or rdn set.
+    * <<<GldapoException>>> if the object does not have a directory (and no <{{{../directories/registry.html#The_default_directory}default directory}}> has been specified) or rdn set.
 
 * {delete()}
 
@@ -374,7 +374,7 @@ void delete() throws NamingException, GldapoException
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoException>>> if the object does not have a directory or rdn set.
+    * <<<GldapoException>>> if the object does not have a directory (and no <{{{../directories/registry.html#The_default_directory}default directory}}> has been specified) or rdn set.
 
 * {deleteRecursively()}
 
@@ -388,7 +388,7 @@ void deleteRecursively() throws NamingException, GldapoException
 
     * <<<{{{${springLdapApi}/org/springframework/ldap/NamingException.html}NamingException}}>>> if an LDAP error occurs.
 
-    * <<<GldapoException>>> if the object does not have a directory or rdn set.
+    * <<<GldapoException>>> if the object does not have a directory (and no <{{{../directories/registry.html#The_default_directory}default directory}}> has been specified) or rdn set.
 
 * {authenticate(String)}
 
@@ -400,6 +400,6 @@ boolean authenticate(String password) throws GldapoException, Exception
 
     <<Throws:>>
 
-    * <<<GldapoException>>> if the object does not have a directory or rdn set.
+    * <<<GldapoException>>> if the object does not have a directory (and no <{{{../directories/registry.html#The_default_directory}default directory}}> has been specified) or rdn set.
     
     * <<<Exception>>> if any LDAP related error occurs.

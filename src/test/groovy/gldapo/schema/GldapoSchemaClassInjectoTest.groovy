@@ -239,6 +239,16 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         assertFalse(e.exists)
     }
     
+    void testAssumeDefaultDirectoryIfNoneSet() {
+        def directoryRegistryMock = new GldapoDirectoryRegistry()
+        def directory = new GldapoDirectory("d", [url: "ldap://example.com"])
+        directoryRegistryMock << directory
+        DummySchema.gldapo.directories = directoryRegistryMock
+        def e = new DummySchema()
+        assertNull(e.directory)
+        e.assumeDefaultDirectoryIfNoneSet()
+        assertEquals(directory, e.directory)
+    }
 }
 
 class DummySchema {

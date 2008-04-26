@@ -43,3 +43,40 @@ Gldapo.instance.directories << d
 +-------------------------------+
 assert(Gldapo.instance.directories["myDirectory"] is d)
 +-------------------------------+
+
+* {The default directory}
+    
+    Gldapo has the concept of a <default> directory. This directory is used when no directory has been specified for an operation.
+
+    If only one directory has been defined, it is automatically the default. If there are multiple directories, you must specify which one is to be the default.
+
+    The default directory can be specified at initialization time...
+
++-------------------------------+
+directories {
+    directory1 { 
+        defaultDirectory = true // <-- This line
+        url = "ldap://example.com"
+        base = "ou=example,dc=com"
+        userDn = "uid=someuser,ou=example,dc=com"
+        password = "password" 
+    }
+    directory2 {
+        urls = [ 
+            "ldap://s1.example2.com",
+            "ldap://s2.example2.com",
+        ]
+        base = "ou=example2,dc=com"
+    }
+}
++-------------------------------+
+
+    Or at runtime...
+
++-------------------------------+
+Gldapo.instance.directories.defaultDirectoryName = "directory2"
++-------------------------------+
+
+** Why have a default directory?
+
+    The primary reason for supporting the notion of a default directory is to alleviate users of Gldapo from having to repeatedly specify the directory needlessly. The majority of LDAP applications tend to only deal with one directory.

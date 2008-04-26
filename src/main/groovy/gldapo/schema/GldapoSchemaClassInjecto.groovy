@@ -168,6 +168,17 @@ class GldapoSchemaClassInjecto {
     }
 
     /**
+     * If the object doesn't have a directory set, it will have the default directory
+     * set from it's class's gldapo instance after this. If a directory is set, this does nothing.
+     */
+    def assumeDefaultDirectoryIfNoneSet = { ->
+        if (delegate.directory == null) {
+            def directoryRegistry = delegate.class.gldapo.directories
+            if (directoryRegistry.isHasDefault()) 
+                delegate.directory = directoryRegistry.defaultDirectory
+        }
+    }
+    /**
      * Ensures that the object has an rdn and a directory.
      * 
      * @throws GldapoException
@@ -197,6 +208,7 @@ class GldapoSchemaClassInjecto {
      * 
      */
     def create = { ->
+        assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasRdnAndDirectoryForOperation('create')
         delegate.directory.createEntry(delegate.rdn, delegate.attributes)
         delegate.snapshotStateAsClean()
@@ -209,6 +221,7 @@ class GldapoSchemaClassInjecto {
      * object's directory if this object has any modification items.
      */    
     def update = { ->
+        assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasRdnAndDirectoryForOperation('update')
         def modificationItems = delegate.modificationItems
         if (!modificationItems.empty) delegate.directory.updateEntry(delegate.rdn, modificationItems)
@@ -229,6 +242,7 @@ class GldapoSchemaClassInjecto {
      * 
      */
     def move = { DistinguishedName newrdn ->
+        assumeDefaultDirectoryIfNoneSet()
         if (delegate.exists) {
             delegate.update()
         } else {
@@ -248,6 +262,7 @@ class GldapoSchemaClassInjecto {
      * 
      */
     def replace = { DistinguishedName target ->
+        assumeDefaultDirectoryIfNoneSet()
         assertHasDirectoryForOperation('replace')
         delegate.directory.replaceEntry(target, delegate.attributes)
         delegate.setInjectoProperty('rdn', target)
@@ -256,12 +271,14 @@ class GldapoSchemaClassInjecto {
     }
     
     def delete = {
+        assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasRdnAndDirectoryForOperation('delete')
         delegate.directory.deleteEntry(delegate.rdn)
         delegate.exists = false
     }
 
     def deleteRecursively = {
+        assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasRdnAndDirectoryForOperation('delete')
         delegate.directory.deleteEntryRecursively(delegate.rdn)
         delegate.exists = false
