@@ -19,7 +19,7 @@
     <groupId>com.ldaley</groupId>
     <artifactId>gldapo</artifactId>
     <packaging>jar</packaging>
-    <version>0.5.2-SNAPSHOT</version>
+    <version>0.5.2</version>
     <name>Gldapo</name>
     <description>An Object Oriented LDAP interface for the Groovy programming language</description>
     <url>http://ldaley.com/gldapo</url>
@@ -28,8 +28,8 @@
         <url>http://ldaley.com</url>
     </organization>
     <scm>
-        <connection>scm:svn:http://svn.ldaley.com/gldapo/trunk</connection>
-        <url>http://websvn.ldaley.com/wsvn/gldapo/trunk</url>
+        <connection>scm:svn:http://svn.ldaley.com/gldapo/tags/gldapo-0.5.2</connection>
+        <url>http://websvn.ldaley.com/wsvn/gldapo/tags/gldapo-0.5.2</url>
     </scm>
     <licenses>
         <license>
@@ -92,7 +92,7 @@
         </dependency>
     </dependencies>
     <properties>
-        <stableVersion>0.5</stableVersion>
+        <stableVersion>0.5.2</stableVersion>
         <releaseBase>http://mvn.ldaley.com/release/com/ldaley/gldapo</releaseBase>
         <releaseAssembly>dist</releaseAssembly>
         <springLdapApi>http://static.springframework.org/spring-ldap/docs/1.2.1/api/spring-ldap</springLdapApi>
