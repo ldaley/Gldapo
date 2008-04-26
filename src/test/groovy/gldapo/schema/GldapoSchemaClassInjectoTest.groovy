@@ -249,6 +249,21 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         e.assumeDefaultDirectoryIfNoneSet()
         assertEquals(directory, e.directory)
     }
+    
+    void testGetAttributesOnlyReturnsAttributesWhereAValueIsSet() {
+        def e = new DummySchema()
+        e.a = "test"
+        assertEquals(1, e.attributes.size())
+        
+        e.b = ["test"]
+        assertEquals(2, e.attributes.size())
+        
+        e.b = []
+        assertEquals(1, e.attributes.size())
+        
+        e.a = null
+        assertEquals(0, e.attributes.size())
+    }
 }
 
 class DummySchema {

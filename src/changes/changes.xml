@@ -53,6 +53,7 @@
         <release version="0.5.2" date="2008-04-23">
             <action dev="Luke Daley" type="add">When an operation is attempted on an entry with no directory set, the default directory is used if set/available</action>
             <action dev="Luke Daley" type="fix">Added extra documentation about the default directory</action>
+            <action dev="Luke Daley" type="fix">The getAttributes() method on entries now only returns attributes for where the entry has a value for that attribute (this was preventing new entries being created if values weren't set for all attributes)</action>
         </release>
     </body>
 </document>

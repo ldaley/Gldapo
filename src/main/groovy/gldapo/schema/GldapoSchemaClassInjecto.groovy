@@ -141,7 +141,9 @@ class GldapoSchemaClassInjecto {
         def schemaRegistration = delegate.class.schemaRegistration
         def attributes = new BasicAttributes()
         schemaRegistration.attributeMappings.each { attributeName, mapping ->
-            attributes.put(mapping.getAttribute(delegate."$attributeName"))
+            def value = delegate."$attributeName"
+            if (!(value == null || (value instanceof Collection && value.size() == 0)))
+                attributes.put(mapping.getAttribute(delegate."$attributeName"))
         }
         
         return attributes
