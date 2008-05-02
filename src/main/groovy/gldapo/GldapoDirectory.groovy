@@ -136,7 +136,7 @@ class GldapoDirectory implements GldapoSearchProvider {
         ContextMapperCallbackHandler handler = new ContextMapperCallbackHandler(mapper)
 
         SearchControls jndiControls = controls as SearchControls
-        jndiControls.returningAttributes = schemaRegistration.attributeMappings*.attributeName
+        jndiControls.returningAttributes = schemaRegistration.attributeMappings*.value.attributeName
         
         if (controls.pageSize == null || controls.pageSize < 1) {
             return nonPagedSearch(base, filter, jndiControls, handler)
