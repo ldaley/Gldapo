@@ -70,6 +70,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.novell.ldap</groupId>
+            <artifactId>jldap</artifactId>
+            <version>4.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>1.5.4</version>
