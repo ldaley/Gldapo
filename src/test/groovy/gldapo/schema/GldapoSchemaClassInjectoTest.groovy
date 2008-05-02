@@ -143,7 +143,7 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
             called = true
         }
         e.metaClass.create << { -> 
-            throw new Error()
+            called = false
         }
         e.save()
         assertTrue("update() should have been called", called)
@@ -151,7 +151,7 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         e.exists = false
         called = false
         e.metaClass.update << { -> 
-            throw new Error()
+            called = false
         }
         e.metaClass.create << { -> 
             called = true
