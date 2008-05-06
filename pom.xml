@@ -16,21 +16,53 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.ldaley</groupId>
+    <groupId>org.codehaus</groupId>
     <artifactId>gldapo</artifactId>
     <packaging>jar</packaging>
     <version>0.5.3-SNAPSHOT</version>
     <name>Gldapo</name>
     <description>An Object Oriented LDAP interface for the Groovy programming language</description>
-    <url>http://ldaley.com/gldapo</url>
+    <url>http://gldapo.codehaus.org</url>
+    <inceptionYear>2007</inceptionYear>
     <organization>
-        <name>ldaley.com</name>
-        <url>http://ldaley.com</url>
+        <name>Codehaus</name>
+        <url>http://codehaus.org</url>
     </organization>
     <scm>
-        <connection>scm:svn:http://svn.ldaley.com/gldapo/trunk</connection>
-        <url>http://websvn.ldaley.com/wsvn/gldapo/trunk</url>
+        <connection>scm:svn:http://svn.codehaus.org/gldapo/trunk</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/gldapo/trunk</developerConnection>
+        <url>http://svn.gldapo.codehaus.org/browse/gldapo/trunk</url>
     </scm>
+    <issueManagement>
+        <system>jira</system>
+        <url>http://jira.codehaus.org/secure/BrowseProject.jspa?id=11760</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Bamboo</system>
+        <url>http://bamboo.ci.codehaus.org/browse/GLDP</url>
+    </ciManagement>
+    <mailingLists>
+        <mailingList>
+            <name>Development List</name>
+            <subscribe>dev-subscribe@gldapo.codehaus.org</subscribe>
+            <unsubscribe>dev-unsubscribe@gldapo.codehaus.org</unsubscribe>
+            <post>dev@gldapo.codehaus.org</post>
+            <archive>http://archive.gldapo.codehaus.org/dev/</archive>
+        </mailingList>
+        <mailingList>
+            <name>User List</name>
+            <subscribe>user-subscribe@gldapo.codehaus.org</subscribe>
+            <unsubscribe>user-unsubscribe@gldapo.codehaus.org</unsubscribe>
+            <post>user@gldapo.codehaus.org</post>
+            <archive>http://archive.gldapo.codehaus.org/user/</archive>
+        </mailingList>
+        <mailingList>
+            <name>Commits List</name>
+            <subscribe>scm-subscribe@gldapo.codehaus.org</subscribe>
+            <unsubscribe>scm-unsubscribe@gldapo.codehaus.org</unsubscribe>
+            <archive>http://archive.gldapo.codehaus.org/scm/</archive>
+        </mailingList>
+    </mailingLists>
     <licenses>
         <license>
             <name>Apache 2</name>
@@ -47,7 +79,8 @@
             <roles>
                 <role>Lead</role>
             </roles>
-            <organization>ldaley.com</organization>
+            <url>http://ldaley.com</url>
+            <timezone>10</timezone>
         </developer>
     </developers>
     <dependencies>
@@ -111,8 +144,8 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>ldaley.com</id>
-            <name>ldaley.com</name>
+            <id>codehaus.org</id>
+            <name>codehaus.org</name>
             <url>http://mvn.ldaley.com/release</url>
         </repository>
         <repository>
@@ -172,7 +205,7 @@
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>attached</goal>
+                            <goal>assembly</goal>
                         </goals>
                         <configuration>
                             <descriptors>
@@ -183,12 +216,24 @@
                 </executions>
             </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav</artifactId>
+                <version>1.0-beta-2</version>
+            </extension>
+        </extensions>
     </build>
     <reporting>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>changes-maven-plugin</artifactId>
+                <configuration>
+                    <resolutionIds>Resolved, Closed</resolutionIds>
+                    <statusIds>Resolved, Closed</statusIds>
+                    <sortColumnNames>FixVersions DESC</sortColumnNames>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -197,7 +242,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo.groovy</groupId>
                 <artifactId>groovy-maven-plugin</artifactId>
-                <version>1.0-beta-1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -214,32 +258,19 @@
     </reporting>
     <distributionManagement>
         <repository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>ldaley.com</id>
-            <name>ldaley.com Maven Repository</name>
-            <url>scp://ldaley.com/home/ldaley/mvn.ldaley.com/release</url>
-            <layout>default</layout>
+            <id>codehaus.org</id>
+            <name>Gldapo Central Repository</name>
+            <url>dav:https://dav.codehaus.org/repository/gldapo/</url>
         </repository>
         <snapshotRepository>
-            <uniqueVersion>true</uniqueVersion>
-            <id>ldaley.com</id>
-            <name>ldaley.com Maven Repository (Snapshot)</name>
-            <url>scp://ldaley.com/home/ldaley/mvn.ldaley.com/snapshot</url>
-            <layout>default</layout>
+            <id>codehaus.org</id>
+            <name>Gldapo Central Development Repository</name>
+            <url>dav:https://dav.codehaus.org/snapshots.repository/gldapo/</url>
         </snapshotRepository>
         <site>
-            <id>ldaley.com</id>
-            <name>ldaley.com</name>
-            <url>scp://ldaley.com/home/ldaley/ldaley.com/gldapo/</url>
+            <id>codehaus.org</id>
+            <name>Gldapo Website</name>
+            <url>dav:https://dav.codehaus.org/gldapo/</url>
         </site>
     </distributionManagement>
-    <mailingLists>
-        <mailingList>
-            <name>User List</name>
-            <subscribe>http://lists.ldaley.com/listinfo.cgi/gldapo-user-ldaley.com</subscribe>
-            <unsubscribe>http://lists.ldaley.com/listinfo.cgi/gldapo-user-ldaley.com</unsubscribe>
-            <post>gldapo-user@lists.cqu.edu.au</post>
-            <archive>http://lists.ldaley.com/private.cgi/gldapo-user-ldaley.com/</archive>
-        </mailingList>
-    </mailingLists>
 </project>
