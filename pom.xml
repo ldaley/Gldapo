@@ -132,8 +132,8 @@
     </dependencies>
     <properties>
         <stableVersion>0.5.2</stableVersion>
-        <releaseBase>http://mvn.ldaley.com/release/com/ldaley/gldapo</releaseBase>
-        <releaseAssembly>dist</releaseAssembly>
+        <downloadUrlBase>http://dist.codehaus.org/gldapo</downloadUrlBase>
+        <distAssembly>dist</distAssembly>
         <springLdapApi>http://static.springframework.org/spring-ldap/docs/1.2.1/api/spring-ldap</springLdapApi>
     </properties>
     <repositories>
@@ -162,8 +162,54 @@
             <url>http://mvn.ldaley.com/snapshot</url>
         </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>codehaus.org</id>
+            <name>codehaus.org</name>
+            <url>http://mvn.ldaley.com/release</url>
+        </pluginRepository>
+        <pluginRepository>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>daily</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <id>ldaley.com Snapshots</id>
+            <name>ldaley.com Snapshots</name>
+            <url>http://mvn.ldaley.com/snapshot</url>
+        </pluginRepository>
+    </pluginRepositories>
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.ldaley.maven.plugins</groupId>
+                <artifactId>maven-wagon-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>upload-dist</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>upload</goal>
+                        </goals>
+                        <configuration>
+                            <serverId>codehaus.org</serverId>
+                            <url>https://dav.codehaus.org/dist</url>
+                            <snapshotUrl>https://dav.codehaus.org/snapshots.dist</snapshotUrl>
+                            <resourceSrc>${project.build.directory}/${project.artifactId}-${project.version}-${distAssembly}.*</resourceSrc>
+                            <resourceDest>/gldapo</resourceDest>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
