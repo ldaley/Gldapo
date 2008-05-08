@@ -176,7 +176,7 @@ class Gldapo {
      * Calls {@link #resetWithConfig(Map)} on the gldapo {@link #instance}
      */
     static initialize(Map config) throws GldapoInitializationException {
-        this.instance.resetWithConfig(config)
+        instance.resetWithConfig(config)
     }
 
     /**

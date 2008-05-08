@@ -173,9 +173,8 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo.groovy</groupId>
-                <artifactId>groovy-maven-plugin</artifactId>
-                <version>1.0-beta-3</version>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
                 <extensions>true</extensions>
                 <executions>
                     <execution>
@@ -240,8 +239,8 @@
                 <artifactId>taglist-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo.groovy</groupId>
-                <artifactId>groovy-maven-plugin</artifactId>
+                <groupId>org.codehaus.groovy.maven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
