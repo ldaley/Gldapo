@@ -13,6 +13,7 @@ import javax.naming.directory.DirContext
 
 import com.novell.ldap.LDAPConnection
 import com.novell.ldap.util.LDIFWriter
+import com.novell.ldap.LDAPException
 
 import org.apache.directory.server.core.configuration.MutablePartitionConfiguration
 import org.apache.directory.server.unit.AbstractServerTest
@@ -86,9 +87,15 @@ abstract public class AbstractGldapoIntegrationTest extends AbstractServerTest
         jldapConnection.bind(3, "uid=admin,ou=system", "secret" as byte[])
     }
     
-    
     def getEntry(dn) {
-        jldapConnection.read("$dn,$partitionSuffix")
+        try {
+            return jldapConnection.read("$dn,$partitionSuffix")
+        } catch (LDAPException e) {
+            if (e.resultCode == LDAPException.NO_SUCH_OBJECT) 
+                return null
+            else
+                throw e
+        }
     }
     
     void assertEqualsLdif(dn, expectedLdif) {
