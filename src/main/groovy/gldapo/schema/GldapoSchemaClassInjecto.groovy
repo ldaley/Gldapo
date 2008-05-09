@@ -213,6 +213,7 @@ class GldapoSchemaClassInjecto {
         assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasRdnAndDirectoryForOperation('create')
         delegate.directory.createEntry(delegate.rdn, delegate.attributes)
+        delegate.exists = true
         delegate.snapshotStateAsClean()
     }
 
