@@ -77,8 +77,27 @@ abstract public class AbstractGldapoIntegrationTest extends AbstractServerTest
         []
     }
     
-    void importLdif(ldif) {
-        importLdif(this.class.getResourceAsStream(ldif));
+    void importEntry(name, ldif) {
+        importEntry(name, null, ldif)
+    }
+    
+    void importEntry(name, parent, ldif) {
+        assertEquals("Argument 1 to importEntry() must be a one element Map", 1, name.size())
+        def entry = name.find { true }
+        def namingAttr = entry.key
+        def namingValue = entry.value
+        
+        def cleanedLdif = new StringBuffer()
+        cleanedLdif << ((parent) ? "dn: $namingAttr=$namingValue,$parent,$partitionSuffix\n" : "dn: $namingAttr=$namingValue,$partitionSuffix\n")
+        cleanedLdif << "$namingAttr: $namingValue\n"
+
+        ldif.eachLine { line ->
+            line = line.trim()
+            cleanedLdif << line + "\n"
+        }
+        
+        def ldifStream = new ByteArrayInputStream(cleanedLdif.toString().bytes)
+        importLdif(ldifStream)
     }
     
     void initJldapConnection() {
