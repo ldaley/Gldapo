@@ -273,6 +273,11 @@ class GldapoSchemaClassInjecto {
         delegate.snapshotStateAsClean()
     }
     
+    @InjectAs("replace")
+    def replaceString = { String target ->
+        delegate.replace(new DistinguishedName(target))
+    }
+
     def delete = {
         assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasRdnAndDirectoryForOperation('delete')
