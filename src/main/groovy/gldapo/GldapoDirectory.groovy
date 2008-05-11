@@ -161,7 +161,7 @@ class GldapoDirectory implements SearchProvider {
         try {
             this.template.search(base, filter, jndiControls, handler)
         } catch (LimitExceededException e) {
-            // If the number have entries has hit the specified count limit OR
+            // If the number of entries has hit the specified count limit OR
             // The server is unwilling to send more entries we will get here.
             // It's not really an error condition hence we just return what we found.
         }
@@ -190,10 +190,9 @@ class GldapoDirectory implements SearchProvider {
                 this.template.search(base, filter, jndiControls, handler, requestControl)
             } 
         } catch (LimitExceededException e) {
-            // If the number have entries has hit the specified count limit OR
+            // If the number of entries has hit the specified count limit OR
             // The server is unwilling to send more entries we will get here.
             // It's not really an error condition hence we just return what we found.
-
         }
         
         return handler.list
