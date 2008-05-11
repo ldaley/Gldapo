@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2007 Luke Daley
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,27 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo
-import javax.naming.directory.SearchControls
+package gldapo.search
 
-class GldapoSearchControlsTest extends GroovyTestCase 
+class SearchControlsTest extends GroovyTestCase
 {
-    void testSetSearchScopeAndAsInteger() 
+    void testSetSearchScopeAndAsInteger()
     {
-        def sc = new GldapoSearchControls()
-        
+        def sc = new SearchControls()
+
         sc.searchScope = "subtree"
-        assertEquals(SearchControls.SUBTREE_SCOPE,sc.searchScopeAsInteger)
+        assertEquals(javax.naming.directory.SearchControls.SUBTREE_SCOPE,sc.searchScopeAsInteger)
         sc.searchScope = "object"
-        assertEquals(SearchControls.OBJECT_SCOPE, sc.searchScopeAsInteger)
+        assertEquals(javax.naming.directory.SearchControls.OBJECT_SCOPE, sc.searchScopeAsInteger)
         sc.searchScope = "onelevel"
-        assertEquals(SearchControls.ONELEVEL_SCOPE, sc.searchScopeAsInteger)
-        
+        assertEquals(javax.naming.directory.SearchControls.ONELEVEL_SCOPE, sc.searchScopeAsInteger)
+
         shouldFail() {
             sc.searchScope = "xxxxxxxxxx"
         }
     }
-    
+
     void testFromConfig()
     {
         def c = new ConfigObject()
@@ -41,49 +40,47 @@ class GldapoSearchControlsTest extends GroovyTestCase
         c.derefLinkFlag = false
         c.searchScope = "object"
         c.timeLimit = 200
-        def sc = GldapoSearchControls.newInstance(c)
-        
+        def sc = SearchControls.newInstance(c)
+
         assertEquals(100, sc.countLimit)
         assertFalse(sc.derefLinkFlag)
         assertEquals("object", sc.searchScope)
         assertEquals(200, sc.timeLimit)
     }
-    
+
     void testAsJavaxSearchControls()
     {
-        def sc = new GldapoSearchControls()
+        def sc = new SearchControls()
         sc.countLimit = 100
         sc.derefLinkFlag = false
         sc.searchScope = "object"
         sc.timeLimit = 200
-        
-        def jsc = sc as SearchControls
-        assertTrue(jsc instanceof SearchControls)
-        
+
+        def jsc = sc as javax.naming.directory.SearchControls
+        assertTrue(jsc instanceof javax.naming.directory.SearchControls)
+
         assertEquals(100, jsc.countLimit)
         assertFalse(jsc.derefLinkFlag)
-        assertEquals(SearchControls.OBJECT_SCOPE, jsc.searchScope)
+        assertEquals(javax.naming.directory.SearchControls.OBJECT_SCOPE, jsc.searchScope)
         assertEquals(200, jsc.timeLimit)
     }
-    
+
     void testMerging()
     {
-        def sc = new GldapoSearchControls()
+        def sc = new SearchControls()
         sc.countLimit = 100
         sc.derefLinkFlag = false
         sc.searchScope = "object"
         sc.timeLimit = 200
-        
-        def sc2 = new GldapoSearchControls()
+
+        def sc2 = new SearchControls()
         sc2.searchScope = "onelevel"
         sc2.timeLimit = 300
-        
+
         def s = sc.mergeWith(sc2)
         assertEquals(100, s.countLimit)
         assertFalse(s.derefLinkFlag)
         assertEquals("onelevel", s.searchScope)
         assertEquals(300, s.timeLimit)
-        
-        
     }
 }

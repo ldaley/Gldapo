@@ -75,11 +75,6 @@ class Gldapo {
     GldapoTypeMappingRegistry typemappings = new GldapoTypeMappingRegistry()
 
     /**
-     * Holds the operation abstractions
-     */
-    GldapoOperationRegistry operations = new GldapoOperationRegistry(this)
-
-    /**
      * 
      */
     Gldapo(Map config) {

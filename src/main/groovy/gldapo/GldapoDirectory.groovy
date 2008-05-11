@@ -18,6 +18,9 @@ import gldapo.schema.GldapoContextMapper
 import gldapo.schema.GldapoSchemaRegistration
 import gldapo.exception.GldapoException
 import gldapo.exception.GldapoInvalidConfigException
+import gldapo.search.SearchControlProvider
+import gldapo.search.SearchControls
+import gldapo.search.SearchProvider
 import org.springframework.ldap.core.LdapTemplate
 import org.springframework.ldap.core.support.LdapContextSource
 import org.springframework.ldap.core.ContextMapperCallbackHandler
@@ -25,12 +28,11 @@ import org.springframework.ldap.control.PagedResultsRequestControl
 import org.springframework.ldap.LimitExceededException
 import org.springframework.ldap.core.ContextMapper
 import org.springframework.ldap.NamingException
-import javax.naming.directory.SearchControls
 import javax.naming.directory.ModificationItem
 import javax.naming.directory.Attributes
 import org.springframework.ldap.core.DistinguishedName
 
-class GldapoDirectory implements GldapoSearchProvider {
+class GldapoDirectory implements SearchProvider {
     
     /**
      * The key that the config for the directories search controls should be under ({@value})
@@ -56,7 +58,7 @@ class GldapoDirectory implements GldapoSearchProvider {
     /**
      * 
      */
-    GldapoSearchControlProvider searchControls
+    SearchControlProvider searchControls
     
     /**
      * 
@@ -76,8 +78,8 @@ class GldapoDirectory implements GldapoSearchProvider {
      * (or {@code urls}). The rest are optional.
      * <p>
      * It can also contain a map under the key denoted by {@link #CONFIG_SEARCH_CONTROLS_KEY} 
-     * that is used to construct an instance of {@link GldapoSearchControls} using the 
-     * {@link GldapoSearchControls#constructor(Map)} constructor. If it is omitted, a search controls
+     * that is used to construct an instance of {@link SearchControls} using the 
+     * {@link SearchControls#constructor(Map)} constructor. If it is omitted, a search controls
      * object with default values is used.
      * <p>
      * 
@@ -99,7 +101,7 @@ class GldapoDirectory implements GldapoSearchProvider {
         if (config.containsKey("ignorePartialResultException")) 
             this.template.ignorePartialResultException = config.ignorePartialResultException
             
-        this.searchControls = new GldapoSearchControls(config[CONFIG_SEARCH_CONTROLS_KEY])
+        this.searchControls = new SearchControls(config[CONFIG_SEARCH_CONTROLS_KEY])
     }
     
     /**
@@ -126,7 +128,7 @@ class GldapoDirectory implements GldapoSearchProvider {
      * @return A list of objects of the class that the schemaRegistration is for
      * @throws NamingException If any LDAP related error occurs
      */
-    List search(Object schemaRegistration, DistinguishedName base, String filter, GldapoSearchControlProvider controls) throws NamingException {
+    List search(Object schemaRegistration, DistinguishedName base, String filter, SearchControlProvider controls) throws NamingException {
         
         if (schemaRegistration instanceof GldapoSchemaRegistration == false) {
             throw new IllegalArgumentException("schemaRegistration must be an instance of GldapoSchemaRegistration")
@@ -135,7 +137,7 @@ class GldapoDirectory implements GldapoSearchProvider {
         ContextMapper mapper = new GldapoContextMapper(schemaRegistration: schemaRegistration, directory: this)
         ContextMapperCallbackHandler handler = new ContextMapperCallbackHandler(mapper)
 
-        SearchControls jndiControls = controls as SearchControls
+        javax.naming.directory.SearchControls jndiControls = controls as javax.naming.directory.SearchControls
         jndiControls.returningAttributes = schemaRegistration.attributeMappings*.value.attributeName
         
         if (controls.pageSize == null || controls.pageSize < 1) {
@@ -155,7 +157,7 @@ class GldapoDirectory implements GldapoSearchProvider {
      * @return A list of objects of the class that the schemaRegistration is for
      * @throws NamingException If any LDAP related error occurs
      */
-    private List nonPagedSearch(DistinguishedName base, String filter, SearchControls jndiControls, ContextMapperCallbackHandler handler) throws NamingException {
+    private List nonPagedSearch(DistinguishedName base, String filter, javax.naming.directory.SearchControls jndiControls, ContextMapperCallbackHandler handler) throws NamingException {
         try {
             this.template.search(base, filter, jndiControls, handler)
         } catch (LimitExceededException e) {
@@ -177,7 +179,7 @@ class GldapoDirectory implements GldapoSearchProvider {
      * @return A list of objects of the class that the schemaRegistration is for
      * @throws NamingException If any LDAP related error occurs
      */
-    private List pagedSearch(DistinguishedName base, String filter, SearchControls jndiControls, ContextMapperCallbackHandler handler, Integer pageSize) throws NamingException {
+    private List pagedSearch(DistinguishedName base, String filter, javax.naming.directory.SearchControls jndiControls, ContextMapperCallbackHandler handler, Integer pageSize) throws NamingException {
         try {
             PagedResultsRequestControl requestControl = new PagedResultsRequestControl(pageSize)
             this.template.search(base, filter, jndiControls, handler, requestControl)

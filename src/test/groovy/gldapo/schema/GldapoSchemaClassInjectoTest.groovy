@@ -18,9 +18,10 @@ package gldapo.schema
 import gldapo.*
 import javax.naming.directory.DirContext
 import org.springframework.ldap.core.DistinguishedName
-import gldapo.test.GldapoMockOperationInstaller
 import javax.naming.directory.Attributes
 import javax.naming.directory.BasicAttributes
+import gldapo.search.SearchProvider
+import gldapo.search.SearchControlProvider
 
 class GldapoSchemaClassInjectoTest extends GroovyTestCase {
 
@@ -29,7 +30,13 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
     static REP = DirContext.REPLACE_ATTRIBUTE
     static REM = DirContext.REMOVE_ATTRIBUTE 
     static ADD = DirContext.ADD_ATTRIBUTE
+
+    def directory = new DummyDirectory("dummy", [url: "ldap://example.com", base: "dc=example,dc=com"])
     
+    void setUp() {
+        gldapo.directories << directory
+    }
+
     void testSnapshotAsClean() {
         def e = new DummySchema()
 
@@ -81,8 +88,9 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
     }
     
     void testGetWithResult() {
-        GldapoMockOperationInstaller.installSearchWithResult([1,2,3], gldapo)
-        assertEquals(1, DummySchema.getByDn("abc"))
+        def result = [1,2,3]
+        directory.result = result
+        assertEquals(result.first(), DummySchema.getByDn("cn=entry,dn=example,dc=com"))
     }
     
 
@@ -196,18 +204,30 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         assertEquals(replaced, e.rdn)
     }
     
+    void installSearchResult(result)
+    {
+        Map
+        gldapo.directories.values().each { gldapo.directories.remove(it) }
+        gldapo.directories << [
+            search: { Object registration, DistinguishedName base, String filter, SearchControlProvider controls -> result }
+        ] as SearchProvider
+    }
+    
     void testFindAll() 
     {
-        GldapoMockOperationInstaller.installSearchWithResult([1,2,3], gldapo)
-        assertEquals([1,2,3], DummySchema.findAll())
+        def result = [1,2,3]
+        directory.result = result
+        assertEquals(result, DummySchema.findAll())
     }
     
     void testFind()
     {
-        GldapoMockOperationInstaller.installSearchWithResult([1,2,3], gldapo)
-        assertEquals(1, DummySchema.find())
+        def result = [1,2,3]
+        directory.result = result
+        assertEquals(result.first(), DummySchema.find())
         
-        GldapoMockOperationInstaller.installSearchWithResult([], gldapo)
+        result = []
+        directory.result = result
         assertEquals(null, DummySchema.find())
     }
 
@@ -263,6 +283,21 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         
         e.a = null
         assertEquals(0, e.attributes.size())
+    }
+}
+
+class DummyDirectory extends GldapoDirectory {
+    
+    def validator 
+    def result
+    
+    DummyDirectory(String name, Map options) {
+        super(name, options)
+    }
+    
+    List search(Object registration, DistinguishedName base, String filter, SearchControlProvider controls) {
+        if (validator) validator()
+        result
     }
 }
 

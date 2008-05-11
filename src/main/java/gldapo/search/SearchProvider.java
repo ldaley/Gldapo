@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.exception
+package gldapo.search;
+import java.util.List;
+import org.springframework.ldap.core.DistinguishedName;
 
-class GldapoOperationException extends GldapoException
+public interface SearchProvider
 {
-    GldapoOperationException(String msg)
-    {
-        super(msg)
-    }
+    public List search(Object registration, DistinguishedName base, String filter, SearchControlProvider controls);
+    public SearchControlProvider getSearchControls();
+    public DistinguishedName getBase();
 }

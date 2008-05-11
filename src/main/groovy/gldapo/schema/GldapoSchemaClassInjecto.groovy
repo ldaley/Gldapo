@@ -16,7 +16,7 @@
 package gldapo.schema
 
 import gldapo.Gldapo
-import gldapo.GldapoOperationRegistry
+import gldapo.search.SearchOptionParser
 import gldapo.GldapoDirectory
 import gldapo.exception.GldapoException
 import injecto.annotation.InjectoProperty
@@ -289,10 +289,8 @@ class GldapoSchemaClassInjecto {
     
     
     static findAll = { Map options ->
-        def searchOptions = options.clone()
-        searchOptions.schema = delegate
-        
-        delegate.gldapo.operations[GldapoOperationRegistry.SEARCH, searchOptions].execute()
+        def parser = new SearchOptionParser(delegate, options)
+        parser.directory.search(delegate.schemaRegistration, parser.base, parser.filter, parser.controls)
     }
     
     @InjectAs("findAll")

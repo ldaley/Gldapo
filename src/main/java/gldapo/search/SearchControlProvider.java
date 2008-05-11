@@ -13,22 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.test
-import gldapo.GldapoOperationRegistry
-import gldapo.operation.GldapoOperation
-import gldapo.Gldapo
-/**
- * Used to install fake operations in tests
- */
-class GldapoMockOperationInstaller
+package gldapo.search;
+
+public interface SearchControlProvider
 {
-    static install(opName, opInstance, gldapo)
-    {
-        gldapo.operations[opName] = new Expando(newInstance: { -> opInstance })
-    }
-    
-    static installSearchWithResult(result, gldapo)
-    {
-        install(GldapoOperationRegistry.SEARCH, [execute: { -> result }, setGldapo: {}] as GldapoOperation, gldapo)
-    }
+    public Integer getCountLimit();
+    public Boolean getDerefLinkFlag();
+    public String getSearchScope();
+    public Integer getTimeLimit();
+    public Integer getPageSize();
 }

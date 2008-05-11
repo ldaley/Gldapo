@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo
+package gldapo.search
 import gldapo.exception.GldapoException
-import javax.naming.directory.SearchControls
  
-class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable {
+class SearchControls implements SearchControlProvider, Cloneable {
 
     public static final OBJECT_SEARCHSCOPE = "object"
     public static final ONELEVEL_SEARCHSCOPE = "onelevel"
     public static final SUBTREE_SEARCHSCOPE = "subtree"
     
     static Map SEARCHSCOPE_MAPPING = [
-        (OBJECT_SEARCHSCOPE): SearchControls.OBJECT_SCOPE,
-        (ONELEVEL_SEARCHSCOPE): SearchControls.ONELEVEL_SCOPE,
-        (SUBTREE_SEARCHSCOPE): SearchControls.SUBTREE_SCOPE
+        (OBJECT_SEARCHSCOPE): javax.naming.directory.SearchControls.OBJECT_SCOPE,
+        (ONELEVEL_SEARCHSCOPE): javax.naming.directory.SearchControls.ONELEVEL_SCOPE,
+        (SUBTREE_SEARCHSCOPE): javax.naming.directory.SearchControls.SUBTREE_SCOPE
     ]
     
     Integer countLimit
@@ -35,7 +34,7 @@ class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable {
     Integer timeLimit
     Integer pageSize
         
-    GldapoSearchControls(Map config) {
+    SearchControls(Map config) {
         if (config) {
             if (config.containsKey("countLimit")) this.countLimit = config.countLimit
             if (config.containsKey("derefLinkFlag")) this.derefLinkFlag = config.derefLinkFlag
@@ -46,7 +45,7 @@ class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable {
     }
 
     def clone() {
-        def n = new GldapoSearchControls()
+        def n = new SearchControls()
         if (this.countLimit != null) n.countLimit = this.countLimit
         if (this.derefLinkFlag != null) n.derefLinkFlag = this.derefLinkFlag
         if (this.searchScope != null) n.searchScope = this.searchScope
@@ -58,7 +57,7 @@ class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable {
     /**
      * @todo Use an inspector or something to do this dynamically
      */
-    GldapoSearchControls mergeWith(controls) {
+    SearchControls mergeWith(controls) {
         def m = this.clone()
         
         if (controls.countLimit != null) m.countLimit = controls.countLimit
@@ -81,8 +80,8 @@ class GldapoSearchControls implements GldapoSearchControlProvider, Cloneable {
     
     def asType(Class c)
     {
-        if (c.equals(SearchControls)) {
-            def controls = new SearchControls()
+        if (c.equals(javax.naming.directory.SearchControls)) {
+            def controls = new javax.naming.directory.SearchControls()
             if (this.countLimit != null) controls.countLimit = this.countLimit
             if (this.derefLinkFlag != null) controls.derefLinkFlag = this.derefLinkFlag
             if (this.searchScope != null) controls.searchScope = this.searchScopeAsInteger
