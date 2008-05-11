@@ -30,8 +30,8 @@ directories {
 }
 
 schemas = [
-    SimpleSchemaClass,
-    AttributeMappingWorkoutSchema
+    gldapo.GldapoTestSchema1,
+    gldapo.GldapoTestSchema2
 ]
 
 environments {

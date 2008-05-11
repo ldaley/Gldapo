@@ -65,12 +65,12 @@ class GldapoTest extends GroovyTestCase
     void testExtractTypeMappingsFromConfig() {
         def typemappings = Gldapo.extractTypeMappingsFromConfig(
             typemappings: [
-                SimpleSchemaClass, WashingtonEduPerson
+                GldapoTestSchema1, GldapoTestSchema2
             ]
         )
         assertEquals(2, typemappings.size())
-        assertTrue(typemappings.contains(SimpleSchemaClass))
-        assertTrue(typemappings.contains(WashingtonEduPerson))
+        assertTrue(typemappings.contains(GldapoTestSchema1))
+        assertTrue(typemappings.contains(GldapoTestSchema2))
         
         shouldFail(GldapoInvalidConfigException) { Gldapo.extractTypeMappingsFromConfig(typemappings: "blah") }
     }
@@ -78,12 +78,12 @@ class GldapoTest extends GroovyTestCase
     void testExtractSchemasFromConfig() {
         def schemas = Gldapo.extractSchemasFromConfig(
             schemas: [
-                SimpleSchemaClass, WashingtonEduPerson
+                GldapoTestSchema1, GldapoTestSchema2
             ]
         )
         assertEquals(2, schemas.size())
-        assertTrue(schemas.contains(SimpleSchemaClass))
-        assertTrue(schemas.contains(WashingtonEduPerson))
+        assertTrue(schemas.contains(GldapoTestSchema1))
+        assertTrue(schemas.contains(GldapoTestSchema2))
 
         shouldFail(GldapoInvalidConfigException) { Gldapo.extractSchemasFromConfig(schemas: "blah") }
     }
@@ -114,7 +114,7 @@ class GldapoTest extends GroovyTestCase
                 String
             ],
             schemas: [
-                SimpleSchemaClass, WashingtonEduPerson
+                GldapoTestSchema1, GldapoTestSchema2
             ]
         )
         
@@ -129,6 +129,14 @@ class GldapoTest extends GroovyTestCase
         assertEquals("d2", gldapo.directories.defaultDirectory.name)
         
         assertTrue(gldapo.typemappings.contains(String))
-        assertNotNull(gldapo.schemas.find { it == SimpleSchemaClass })
+        assertNotNull(gldapo.schemas.find { it == GldapoTestSchema1 })
     }
+}
+
+class GldapoTestSchema1 {
+    String sn
+}
+
+class GldapoTestSchema2 {
+    String sn
 }
