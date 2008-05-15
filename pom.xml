@@ -146,22 +146,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>codehaus.org</id>
-            <name>codehaus.org</name>
+            <id>ldaley.com</id>
+            <name>ldaley.com Releases</name>
             <url>http://mvn.ldaley.com/release</url>
-        </repository>
-        <repository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-            <id>ldaley.com Snapshots</id>
-            <name>ldaley.com Snapshots</name>
-            <url>http://mvn.ldaley.com/snapshot</url>
         </repository>
     </repositories>
     <pluginRepositories>
@@ -172,22 +159,9 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <id>codehaus.org</id>
-            <name>codehaus.org</name>
+            <id>ldaley.com</id>
+            <name>ldaley.com Releases</name>
             <url>http://mvn.ldaley.com/release</url>
-        </pluginRepository>
-        <pluginRepository>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-                <checksumPolicy>fail</checksumPolicy>
-            </snapshots>
-            <id>ldaley.com Snapshots</id>
-            <name>ldaley.com Snapshots</name>
-            <url>http://mvn.ldaley.com/snapshot</url>
         </pluginRepository>
     </pluginRepositories>
     <build>
