@@ -13,7 +13,7 @@ Download Gldapo
 *------+----------+--------------+
 | JDK | 1.5 + | |
 *------+----------+--------------+
-| {{{http://groovy.codehaus.org/}Groovy}} | 1.5.0 + | |
+| {{{http://groovy.codehaus.org/}Groovy}} | 1.5.5 + | |
 *------+----------+--------------+
 | {{{http://www.springframework.org/ldap}Spring-LDAP}} | 1.2.1 | Provides the underlying LDAP connectivity |
 *------+----------+--------------+
