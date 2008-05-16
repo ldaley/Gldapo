@@ -19,7 +19,7 @@ import gldapo.exception.GldapoException
 
 class SearchOptionException extends GldapoException {
 
-    SearchOptionException(message) {
+    SearchOptionException(String message) {
         super(message)
     }
 
