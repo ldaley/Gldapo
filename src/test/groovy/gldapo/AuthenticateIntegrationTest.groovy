@@ -1,5 +1,4 @@
 package gldapo
-import gldapo.schema.annotation.GldapoSchemaFilter
 
 public class AuthenticateIntegrationTest extends AbstractGldapoIntegrationTest
 {
@@ -21,8 +20,5 @@ public class AuthenticateIntegrationTest extends AbstractGldapoIntegrationTest
     }
 }
 
-@GldapoSchemaFilter("(objectclass=person)")
 class AuthenticateIntegrationTestPerson {
-    String sn
-    String cn
 }
