@@ -221,7 +221,7 @@ static List findAll(Map options) NamingException, GldapoNoDefaultDirectoryExcept
 *--*--+
 | <<directory>> | Either the name of a registered directory, or an instance of <<<GldapoDirectory>>>. If <<<null>>>, the {{{../directories/registry.html#The_default_directory}default directory}} will be used. |
 *--*--+
-| <<filter>> | An LDAP filter string to use to restrict the search. If the schema class has a {{{filters.html}filter}} it will be anded to the search filter. If no filter is specified <<<"(objectclass=*)">>> |
+| <<filter>> | An LDAP filter string to use to restrict the search (will be converted to a string with <<<toString()>>>). If the schema class has a {{{filters.html}filter}} it will be anded to the search filter. If no filter is specified <<<"(objectclass=*)">>> |
 *--*--+
 | <<base>> | The LDAP path string (relative to the base of the directory) to start the search at. If ommitted, the directory base will be used |
 *--*--+
