@@ -18,6 +18,7 @@ import gldapo.Gldapo
 import gldapo.GldapoDirectory
 import gldapo.schema.annotation.GldapoSchemaFilter
 import org.springframework.ldap.core.DistinguishedName
+import org.springframework.ldap.filter.*
 
 class SearchOptionParserTest extends GroovyTestCase {
 
@@ -88,6 +89,15 @@ class SearchOptionParserTest extends GroovyTestCase {
 
         def noFilterAndSchemaFilter = getParser([:], SearchOptionParserTestSchemaWithFilter)
         assertEquals("(objectclass=person)", noFilterAndSchemaFilter.filter)
+    }
+    
+    void testFilterWithFilterObject() {
+        
+        def withFilter = getParser(filter: new EqualsFilter("a", "b"))
+        assertEquals("(a=b)", withFilter.filter)
+
+        def withFilterAndSchemaFilter = getParser(filter: new EqualsFilter("a", "b"), SearchOptionParserTestSchemaWithFilter)
+        assertEquals("(&(objectclass=person)(a=b))", withFilterAndSchemaFilter.filter)
     }
 }
 

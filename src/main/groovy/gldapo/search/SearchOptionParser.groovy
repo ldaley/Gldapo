@@ -84,10 +84,11 @@ class SearchOptionParser
     def calculateFilter()
     {
         def schemaFilter = this.schema.getAnnotation(GldapoSchemaFilter)?.value()
+        def optionFilter = this.options.filter as String
         
-        if (this.options.filter) 
+        if (optionFilter) 
         {
-            return (schemaFilter) ? "(&${schemaFilter}${this.options.filter})" : this.options.filter
+            return (schemaFilter) ? "(&${schemaFilter}${optionFilter})" : optionFilter
         } 
         else 
         {
