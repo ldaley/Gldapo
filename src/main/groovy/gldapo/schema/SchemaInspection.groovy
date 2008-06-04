@@ -16,7 +16,7 @@
 package gldapo.schema
 import gldapo.schema.attribute.*
 import java.lang.reflect.Field
-import gldapo.GldapoTypeMappingRegistry
+import gldapo.Gldap
 import org.apache.commons.lang.StringUtils
 
 class SchemaInspection 
@@ -24,11 +24,11 @@ class SchemaInspection
     static excludedFields = ["metaClass"]
     
     def schema
-    def typemappings
+    def gldapo
     
-    SchemaInspection(Class schema, GldapoTypeMappingRegistry typemappings) {
+    SchemaInspection(Class schema, Gldapo gldapo) {
         this.schema = schema
-        this.typemappings = typemappings
+        this.gldapo = gldapo
     }
 
     Map getAttributeMappings()
@@ -47,11 +47,11 @@ class SchemaInspection
         
         if (Collection.isAssignableFrom(field.type))
         {
-            return new MultiValueAttributeMapping(schema, field, typemappings)
+            return new MultiValueAttributeMapping(schema, field, gldapo.typemappings)
         }
         else
         {
-            return new SingleValueAttributeMapping(schema, field, typemappings)
+            return new SingleValueAttributeMapping(schema, field, gldapo.typemappings)
         }
     }
     

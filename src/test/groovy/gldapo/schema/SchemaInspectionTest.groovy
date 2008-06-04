@@ -15,11 +15,11 @@
  */
 package gldapo.schema
 import gldapo.schema.attribute.*
-import gldapo.GldapoTypeMappingRegistry
+import gldapo.Gldapo
 
 class SchemaInspectionTest extends GroovyTestCase
 {    
-    def inspection = new SchemaInspection(SchemaInspectionTestSubject, new GldapoTypeMappingRegistry())
+    def inspection = new SchemaInspection(SchemaInspectionTestSubject, new Gldapo())
     def mappings = inspection.attributeMappings
 
     void testCorrectNumberOfMappings()

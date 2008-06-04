@@ -35,7 +35,7 @@ class GldapoSchemaRegistration
         
         this.schema = schema
         
-        def inspection = new SchemaInspection(schema, gldapo.typemappings)
+        def inspection = new SchemaInspection(schema, gldapo)
         this.attributeMappings = inspection.attributeMappings
     }
         
