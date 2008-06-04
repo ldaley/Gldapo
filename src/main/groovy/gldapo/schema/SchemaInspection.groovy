@@ -44,15 +44,8 @@ class SchemaInspection
     AbstractAttributeMapping getMappingForField(Field field)
     {
         if (excludedFields.contains(field.name) || !fieldIsReadableAndWritable(field)) return null
-        
-        if (Collection.isAssignableFrom(field.type))
-        {
-            return new MultiValueAttributeMapping(schema, field, gldapo.typemappings)
-        }
-        else
-        {
-            return new SingleValueAttributeMapping(schema, field, gldapo.typemappings)
-        }
+        def mappingClass = (Collection.isAssignableFrom(field.type)) ? MultiValueAttributeMapping : SingleValueAttributeMapping
+        mappingClass.newInstance(schema, field, gldapo.typemappings)
     }
     
     def fieldIsReadableAndWritable(Field field)
