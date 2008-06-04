@@ -16,7 +16,7 @@
 package gldapo.schema
 import gldapo.schema.attribute.*
 import java.lang.reflect.Field
-import gldapo.Gldap
+import gldapo.Gldapo
 import org.apache.commons.lang.StringUtils
 
 class SchemaInspection 
