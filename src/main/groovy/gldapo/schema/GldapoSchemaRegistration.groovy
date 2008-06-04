@@ -16,7 +16,6 @@
 package gldapo.schema
 import gldapo.Gldapo
 import gldapo.exception.GldapoSchemaInitializationException
-import gldapo.schema.attribute.AttributeMappingInspector
 import injecto.Injecto
 
 class GldapoSchemaRegistration 
@@ -36,7 +35,8 @@ class GldapoSchemaRegistration
         
         this.schema = schema
         
-        this.attributeMappings = AttributeMappingInspector.getAttributeMappings(schema, gldapo.typemappings)
+        def inspection = new SchemaInspection(schema, gldapo.typemappings)
+        this.attributeMappings = inspection.attributeMappings
     }
         
     static prepareSchemaClass(schema) {

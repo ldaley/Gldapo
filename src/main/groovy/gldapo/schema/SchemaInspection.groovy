@@ -13,28 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.attribute
+package gldapo.schema
+import gldapo.schema.attribute.*
 import java.lang.reflect.Field
 import gldapo.GldapoTypeMappingRegistry
 import org.apache.commons.lang.StringUtils
 
-class AttributeMappingInspector 
+class SchemaInspection 
 {
     static excludedFields = ["metaClass"]
     
-    static Map getAttributeMappings(Class schema, GldapoTypeMappingRegistry typemappings)
+    def schema
+    def typemappings
+    
+    SchemaInspection(Class schema, GldapoTypeMappingRegistry typemappings) {
+        this.schema = schema
+        this.typemappings = typemappings
+    }
+
+    Map getAttributeMappings()
     {
         def mappings = [:]
-        schema.declaredFields.each {
-            def mapping = getMappingForField(schema, it, typemappings)
+        this.schema.declaredFields.each {
+            def mapping = getMappingForField(it)
             if (mapping) mappings[it.name] = mapping
         }
         return mappings
     }
     
-    static getMappingForField(Class schema, Field field, GldapoTypeMappingRegistry typemappings)
+    AbstractAttributeMapping getMappingForField(Field field)
     {
-        if (excludedFields.contains(field.name) || !fieldIsReadableAndWritable(schema, field)) return null
+        if (excludedFields.contains(field.name) || !fieldIsReadableAndWritable(field)) return null
         
         if (Collection.isAssignableFrom(field.type))
         {
@@ -46,9 +55,10 @@ class AttributeMappingInspector
         }
     }
     
-    static fieldIsReadableAndWritable(Class schema, Field field)
+    def fieldIsReadableAndWritable(Field field)
     {
         def capitalisedFieldName = StringUtils.capitalize(field.name)
-        return (schema.metaClass.hasMetaMethod("get${capitalisedFieldName}") && schema.metaClass.hasMetaMethod("set${capitalisedFieldName}", field.type))
+        def mc = this.schema.metaClass
+        mc.hasMetaMethod("get${capitalisedFieldName}") && mc.hasMetaMethod("set${capitalisedFieldName}", field.type)
     }
 }

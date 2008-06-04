@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.attribute
+package gldapo.schema
+import gldapo.schema.attribute.*
+import gldapo.GldapoTypeMappingRegistry
 
-class AttributeMappingInspectorTest extends GroovyTestCase
+class SchemaInspectionTest extends GroovyTestCase
 {    
-    def mappings
-    
-    AttributeMappingInspectorTest()
-    {
-        mappings = AttributeMappingInspector.getAttributeMappings(AttributeMappingInspectorTestSubject, gldapo.Gldapo.instance.typemappings)
-    }
-    
+    def inspection = new SchemaInspection(SchemaInspectionTestSubject, new GldapoTypeMappingRegistry())
+    def mappings = inspection.attributeMappings
+
     void testCorrectNumberOfMappings()
     {
         assertEquals(3, mappings.size())
@@ -64,7 +62,7 @@ class AttributeMappingInspectorTest extends GroovyTestCase
     }
 }
 
-class AttributeMappingInspectorTestSubject
+class SchemaInspectionTestSubject
 {
     String simpleSingleValue
     
