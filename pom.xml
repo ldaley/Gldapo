@@ -19,7 +19,7 @@
     <groupId>org.codehaus</groupId>
     <artifactId>gldapo</artifactId>
     <packaging>jar</packaging>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.6</version>
     <name>Gldapo</name>
     <description>An Object Oriented LDAP interface for the Groovy programming language</description>
     <url>http://gldapo.codehaus.org</url>
@@ -29,9 +29,9 @@
         <url>http://codehaus.org</url>
     </organization>
     <scm>
-        <connection>scm:svn:http://svn.codehaus.org/gldapo/trunk</connection>
-        <developerConnection>scm:svn:https://svn.codehaus.org/gldapo/trunk</developerConnection>
-        <url>http://svn.gldapo.codehaus.org/browse/gldapo/trunk</url>
+        <connection>scm:svn:http://svn.codehaus.org/gldapo/tags/gldapo-0.6</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/gldapo/tags/gldapo-0.6</developerConnection>
+        <url>http://svn.gldapo.codehaus.org/browse/gldapo/tags/gldapo-0.6</url>
     </scm>
     <issueManagement>
         <system>jira</system>
@@ -227,16 +227,16 @@
                             <tasks>
                                 <checksum algorithm="SHA1" fileext=".sha1">
                                     <fileset dir="${project.build.directory}">
-                                        <include name="${distAssemblyName}.zip"/>
-                                        <include name="${distAssemblyName}.tar.bz2"/>
-                                        <include name="${distAssemblyName}.tar.gz"/>
+                                        <include name="${distAssemblyName}.zip" />
+                                        <include name="${distAssemblyName}.tar.bz2" />
+                                        <include name="${distAssemblyName}.tar.gz" />
                                     </fileset>
                                 </checksum>
                                 <checksum algorithm="MD5" fileext=".md5">
                                     <fileset dir="${project.build.directory}">
-                                        <include name="${distAssemblyName}.zip"/>
-                                        <include name="${distAssemblyName}.tar.bz2"/>
-                                        <include name="${distAssemblyName}.tar.gz"/>
+                                        <include name="${distAssemblyName}.zip" />
+                                        <include name="${distAssemblyName}.tar.bz2" />
+                                        <include name="${distAssemblyName}.tar.gz" />
                                     </fileset>
                                 </checksum>
                             </tasks>
