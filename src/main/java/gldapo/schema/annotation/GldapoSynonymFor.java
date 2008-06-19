@@ -15,7 +15,7 @@
 */
 package gldapo.schema.annotation;
 import java.lang.annotation.*;
-
+ 
 /**
  * 
  */
