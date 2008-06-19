@@ -131,7 +131,7 @@
         </dependency>
     </dependencies>
     <properties>
-        <stableVersion>0.5.2</stableVersion>
+        <stableVersion>0.6</stableVersion>
         <downloadUrlBase>http://dist.codehaus.org/gldapo</downloadUrlBase>
         <distAssembly>dist</distAssembly>
         <distAssemblyName>${project.artifactId}-${project.version}-${distAssembly}</distAssemblyName>
