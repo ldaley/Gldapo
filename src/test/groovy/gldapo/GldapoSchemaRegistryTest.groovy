@@ -15,6 +15,7 @@
  */
 package gldapo
 import gldapo.schema.GldapoSchemaRegistration
+import gldapo.schema.annotation.GldapoNamingAttribute
 
 class GldapoSchemaRegistryTest extends GroovyTestCase {
 
@@ -69,7 +70,13 @@ class GldapoSchemaRegistryTest extends GroovyTestCase {
     }
 }
 
-class RegistryTestSchema1 {}
-class RegistryTestSchema2 {}
+class RegistryTestSchema1 {
+    @GldapoNamingAttribute
+    String name
+}
+class RegistryTestSchema2 {
+    @GldapoNamingAttribute
+    String name
+}
 
 

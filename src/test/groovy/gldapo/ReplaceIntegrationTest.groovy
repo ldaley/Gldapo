@@ -1,5 +1,6 @@
 package gldapo
 import gldapo.schema.annotation.GldapoSchemaFilter
+import gldapo.schema.annotation.GldapoNamingAttribute
 
 public class ReplaceIntegrationTest extends AbstractGldapoIntegrationTest
 {
@@ -32,6 +33,7 @@ public class ReplaceIntegrationTest extends AbstractGldapoIntegrationTest
 @GldapoSchemaFilter("(objectclass=person)")
 class ReplaceIntegrationTestPerson {
     Set<String> objectclass
+    @GldapoNamingAttribute
     String sn
     String cn
 }

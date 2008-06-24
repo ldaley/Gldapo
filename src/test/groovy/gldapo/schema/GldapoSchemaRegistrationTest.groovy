@@ -15,6 +15,7 @@
  */
 package gldapo.schema
 import gldapo.Gldapo
+import gldapo.schema.annotation.GldapoNamingAttribute
 import injecto.Injecto
 
 class GldapoSchemaRegistrationTest extends GroovyTestCase 
@@ -35,4 +36,7 @@ class GldapoSchemaRegistrationTest extends GroovyTestCase
     }
 }
 
-class GldapoSchemaRegistrationTestSubject {}
+class GldapoSchemaRegistrationTestSubject {
+    @GldapoNamingAttribute
+    String name
+}

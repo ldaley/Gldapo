@@ -16,6 +16,7 @@
 package gldapo.schema
 import gldapo.schema.attribute.*
 import gldapo.schema.annotation.GldapoNamingAttribute
+import gldapo.exception.GldapoNoNamingAttributeException
 import java.lang.reflect.Field
 import gldapo.Gldapo
 import org.apache.commons.lang.StringUtils
@@ -41,6 +42,9 @@ class SchemaInspection
             if (it.getAnnotation(GldapoNamingAttribute))
                 this.namingAttributeFieldName = it.name
         }
+        
+        if (namingAttributeFieldName == null)
+            throw new GldapoNoNamingAttributeException(this.schema)
     }
     
     private getMappingForField(Field field)

@@ -1,5 +1,6 @@
 package gldapo
 import gldapo.schema.annotation.GldapoSynonymFor
+import gldapo.schema.annotation.GldapoNamingAttribute
 
 public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
 {
@@ -85,6 +86,7 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
 
 class MoveIntegrationTestPerson {
     Set<String> objectClass
+    @GldapoNamingAttribute
     String sn
     String cn
 }

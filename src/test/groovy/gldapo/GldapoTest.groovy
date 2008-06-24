@@ -17,6 +17,7 @@ package gldapo
 import gldapo.exception.GldapoInitializationException
 import gldapo.exception.GldapoInvalidConfigException
 import org.springframework.ldap.core.DistinguishedName
+import gldapo.schema.annotation.GldapoNamingAttribute
 
 class GldapoTest extends GroovyTestCase 
 {
@@ -134,9 +135,11 @@ class GldapoTest extends GroovyTestCase
 }
 
 class GldapoTestSchema1 {
+    @GldapoNamingAttribute
     String sn
 }
 
 class GldapoTestSchema2 {
+    @GldapoNamingAttribute
     String sn
 }

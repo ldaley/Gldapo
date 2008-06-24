@@ -1,4 +1,5 @@
 package gldapo
+import gldapo.schema.annotation.GldapoNamingAttribute
 
 public class AuthenticateIntegrationTest extends AbstractGldapoIntegrationTest
 {
@@ -21,4 +22,6 @@ public class AuthenticateIntegrationTest extends AbstractGldapoIntegrationTest
 }
 
 class AuthenticateIntegrationTestPerson {
+    @GldapoNamingAttribute
+    String name
 }

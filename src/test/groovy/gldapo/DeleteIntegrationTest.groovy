@@ -1,5 +1,6 @@
 package gldapo
 import gldapo.exception.GldapoException
+import gldapo.schema.annotation.GldapoNamingAttribute
 
 public class DeleteIntegrationTest extends AbstractGldapoIntegrationTest
 {
@@ -61,10 +62,12 @@ public class DeleteIntegrationTest extends AbstractGldapoIntegrationTest
 }
 
 class DeleteIntegrationTestOrgUnit {
+    @GldapoNamingAttribute
     String ou
 }
 
 class DeleteIntegrationTestPerson {
     String sn
+    @GldapoNamingAttribute
     String cn
 }

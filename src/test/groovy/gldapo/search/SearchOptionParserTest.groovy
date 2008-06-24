@@ -17,6 +17,7 @@ package gldapo.search
 import gldapo.Gldapo
 import gldapo.GldapoDirectory
 import gldapo.schema.annotation.GldapoSchemaFilter
+import gldapo.schema.annotation.GldapoNamingAttribute
 import org.springframework.ldap.core.DistinguishedName
 import org.springframework.ldap.filter.*
 
@@ -101,7 +102,13 @@ class SearchOptionParserTest extends GroovyTestCase {
     }
 }
 
-class SearchOptionParserTestSchema{}
+class SearchOptionParserTestSchema{
+    @GldapoNamingAttribute
+    String name
+}
 
 @GldapoSchemaFilter("(objectclass=person)")
-class SearchOptionParserTestSchemaWithFilter{}
+class SearchOptionParserTestSchemaWithFilter{
+    @GldapoNamingAttribute
+    String name
+}

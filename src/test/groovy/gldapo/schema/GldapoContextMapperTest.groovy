@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 package gldapo.schema
+import gldapo.schema.annotation.GldapoNamingAttribute
 
 class GldapoContextMapperTest extends GroovyTestCase 
 {
@@ -36,6 +37,7 @@ class GldapoContextMapperTest extends GroovyTestCase
 
 class GldapoContextMapperTestSubject
 {
+    @GldapoNamingAttribute
     String attr1
     Set<String> attr2
 }

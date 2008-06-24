@@ -1,5 +1,6 @@
 package gldapo
 import gldapo.schema.annotation.GldapoSynonymFor
+import gldapo.schema.annotation.GldapoNamingAttribute
 
 public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
 {
@@ -128,6 +129,7 @@ public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
 class SaveIntegrationTestPerson {
     Set<String> objectClass
     String sn
+    @GldapoNamingAttribute
     String cn
     String title
     Set<String> telephoneNumber

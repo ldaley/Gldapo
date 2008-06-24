@@ -22,6 +22,7 @@ import javax.naming.directory.Attributes
 import javax.naming.directory.BasicAttributes
 import gldapo.search.SearchProvider
 import gldapo.search.SearchControlProvider
+import gldapo.schema.annotation.GldapoNamingAttribute
 
 class GldapoSchemaClassInjectoTest extends GroovyTestCase {
 
@@ -302,6 +303,8 @@ class DummyDirectory extends GldapoDirectory {
 }
 
 class DummySchema {
+    @GldapoNamingAttribute
+    String name
     String a
     Set<String> b
 }
