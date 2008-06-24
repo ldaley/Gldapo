@@ -15,6 +15,7 @@
  */
 package gldapo.schema
 import gldapo.schema.attribute.*
+import gldapo.schema.annotation.GldapoNamingAttribute
 import gldapo.Gldapo
 
 class SchemaInspectionTest extends GroovyTestCase
@@ -60,10 +61,16 @@ class SchemaInspectionTest extends GroovyTestCase
     {
         assertNotNull(mappings.privateReadWrite)
     }
+    
+    void testNamingAttribute() {
+        assertEquals("simpleSingleValue", inspection.namingAttributeFieldName)
+    }
 }
 
 class SchemaInspectionTestSubject
 {
+    
+    @GldapoNamingAttribute
     String simpleSingleValue
     
     Set<String> simpleMultiValue

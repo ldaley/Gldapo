@@ -15,6 +15,7 @@
  */
 package gldapo.schema
 import gldapo.schema.attribute.*
+import gldapo.schema.annotation.GldapoNamingAttribute
 import java.lang.reflect.Field
 import gldapo.Gldapo
 import org.apache.commons.lang.StringUtils
@@ -26,6 +27,7 @@ class SchemaInspection
     def schema
     def gldapo
     def attributeMappings = [:]
+    def namingAttributeFieldName
     
     SchemaInspection(Class schema, Gldapo gldapo) {
         this.schema = schema
@@ -35,6 +37,9 @@ class SchemaInspection
             def mapping = getMappingForField(it)
             if (mapping) 
                 attributeMappings[it.name] = mapping
+            
+            if (it.getAnnotation(GldapoNamingAttribute))
+                this.namingAttributeFieldName = it.name
         }
     }
     
