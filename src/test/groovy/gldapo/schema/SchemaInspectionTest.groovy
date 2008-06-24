@@ -16,6 +16,7 @@
 package gldapo.schema
 import gldapo.schema.attribute.*
 import gldapo.schema.annotation.GldapoNamingAttribute
+import gldapo.exception.GldapoNoNamingAttributeException
 import gldapo.Gldapo
 
 class SchemaInspectionTest extends GroovyTestCase
@@ -65,7 +66,15 @@ class SchemaInspectionTest extends GroovyTestCase
     void testNamingAttribute() {
         assertEquals("simpleSingleValue", inspection.namingAttributeFieldName)
     }
+    
+    void testNoNamingAttributeThrowsException() {
+        shouldFail(GldapoNoNamingAttributeException) {
+            new SchemaInspection(SchemaInspectionTestNoNamingAttributeSubject, new Gldapo())
+        }
+    }
 }
+
+class SchemaInspectionTestNoNamingAttributeSubject{}
 
 class SchemaInspectionTestSubject
 {
