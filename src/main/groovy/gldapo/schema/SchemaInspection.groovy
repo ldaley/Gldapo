@@ -25,33 +25,30 @@ class SchemaInspection
     
     def schema
     def gldapo
+    def attributeMappings = [:]
     
     SchemaInspection(Class schema, Gldapo gldapo) {
         this.schema = schema
         this.gldapo = gldapo
-    }
-
-    Map getAttributeMappings()
-    {
-        def mappings = [:]
+        
         this.schema.declaredFields.each {
             def mapping = getMappingForField(it)
-            if (mapping) mappings[it.name] = mapping
+            if (mapping) 
+                attributeMappings[it.name] = mapping
         }
-        return mappings
     }
     
-    AbstractAttributeMapping getMappingForField(Field field)
+    private getMappingForField(Field field)
     {
         if (excludedFields.contains(field.name) || !fieldIsReadableAndWritable(field)) return null
         getAttributeMappingClassForField(field).newInstance(schema, field, gldapo.typemappings)
     }
     
-    def getAttributeMappingClassForField(field) {
+    private getAttributeMappingClassForField(field) {
         (Collection.isAssignableFrom(field.type)) ? MultiValueAttributeMapping : SingleValueAttributeMapping
     }
 
-    def fieldIsReadableAndWritable(Field field)
+    private fieldIsReadableAndWritable(Field field)
     {
         def capitalisedFieldName = StringUtils.capitalize(field.name)
         def mc = this.schema.metaClass
