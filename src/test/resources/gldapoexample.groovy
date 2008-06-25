@@ -7,6 +7,7 @@ import gldapo.schema.annotation.*
 @GldapoSchemaFilter("(objectclass=person)")
 class ExamplePerson 
 {    
+    @GldapoNamingAttribute
     String cn
     String givenName
     String mail
