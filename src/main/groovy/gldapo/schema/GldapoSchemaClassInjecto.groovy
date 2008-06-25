@@ -79,19 +79,17 @@ class GldapoSchemaClassInjecto {
         delegate.setInjectoProperty("directory", directory)
     }
     
-    def setRdn = { DistinguishedName rdn ->
+    def setRdn = { rdn ->
         if (delegate.rdn != null)
             throw new GldapoException("Cannot change rdn/dn on object once set")
-            
+        
+        if ((rdn instanceof DistinguishedName) == false)
+            rdn = new DistinguishedName(rdn as String)
+        
         delegate.setInjectoProperty('rdn', rdn)
         delegate.setInjectoProperty('dn', null)
     }
-    
-    @InjectAs("setRdn")
-    def setRdnAsString = { String rdn ->
-        delegate.setRdn(new DistinguishedName(rdn))
-    }
-    
+
     def getDn = { ->
         def dn = delegate.getInjectoProperty('dn')
         if (dn == null) {
