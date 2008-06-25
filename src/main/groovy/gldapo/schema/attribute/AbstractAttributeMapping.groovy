@@ -116,11 +116,11 @@ abstract class AbstractAttributeMapping
         
         def byFieldMapperName = toGroovyByFieldMapperName(this.field.name)
         def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
-        if (classByFieldMapper) return { classByFieldMapper.invoke(schema, it) }
+        if (classByFieldMapper) return { classByFieldMapper.invoke(schema, (it.class.array) ? [it] : it) }
         
         def byTypeMapperName = toGroovyByTypeMapperName(this.typeMapping)
         def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
-        if (classByTypeMapper) return { classByTypeMapper.invoke(schema, it) }
+        if (classByTypeMapper) return { classByTypeMapper.invoke(schema, (it.class.array) ? [it] : it) }
         
         def defaultByTypeMapper = typemappings.getToGroovyMapperForType(this.typeMapping)
         if (defaultByTypeMapper) return defaultByTypeMapper
@@ -136,11 +136,11 @@ abstract class AbstractAttributeMapping
         
         def byFieldMapperName = toLdapByTypeMapperName(this.field.name)
         def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
-        if (classByFieldMapper) return { classByFieldMapper.invoke(schema, it) }
+        if (classByFieldMapper) return { classByFieldMapper.invoke(schema, (it.class.array) ? [it] : it) }
         
         def byTypeMapperName = toGroovyByTypeMapperName(this.typeMapping)
         def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
-        if (classByTypeMapper) return { classByTypeMapper.invoke(schema, it) }
+        if (classByTypeMapper) return { classByTypeMapper.invoke(schema, (it.class.array) ? [it] : it) }
         
         def defaultByTypeMapper = typemappings.getToLdapMapperForType(this.typeMapping)
         if (defaultByTypeMapper) return defaultByTypeMapper
