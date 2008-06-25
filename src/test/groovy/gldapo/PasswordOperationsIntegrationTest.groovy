@@ -1,4 +1,5 @@
 package gldapo
+import gldapo.schema.annotation.GldapoSynonymFor
 import gldapo.schema.annotation.GldapoNamingAttribute
 
 public class PasswordOperationsIntegrationTest extends AbstractGldapoIntegrationTest
@@ -9,7 +10,7 @@ public class PasswordOperationsIntegrationTest extends AbstractGldapoIntegration
         new PasswordOperationsIntegrationTestPerson(
             cn: name,
             rdn: "cn=${name}",
-            userPassword: password
+            password: password
         )
     }
 
@@ -30,12 +31,13 @@ public class PasswordOperationsIntegrationTest extends AbstractGldapoIntegration
         importEntry(cn: "updatepassword", """
             objectclass: top
             objectclass: iNetOrgPerson
-            sn: password1
+            sn: updatepassword
+            userPassword: password1
         """)
 
         def p = PasswordOperationsIntegrationTestPerson.find(filter: "cn=updatepassword")
-
-        p.userPassword = "password2"
+        println p.password
+        p.password = "password2"
         p.save()
 
         assertTrue(p.authenticate("password2"))
@@ -46,5 +48,6 @@ class PasswordOperationsIntegrationTestPerson {
     Set<String> objectclass = ["top", "iNetOrgPerson"]
     String sn = "person"
     @GldapoNamingAttribute String cn
-    String userPassword
+    @GldapoSynonymFor("userPassword")
+    String password
 }
