@@ -92,6 +92,12 @@ class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
         verifyMapFromContext(mapping, ["1", "2", "3"], [3, 4, 5] as Set)
     }
 
+    void testCustomToTypeTypeMapper() {
+        def mapping = mappingForField("lc")
+        verifyProperties(mapping, "lc", "LowerCaseString", Set)
+        verifyMapFromContext(mapping, ["A", "B", "C"], ["a", "b", "c"] as Set)
+    }
+
     void verifyCalculateModificationItems(mapping, clean, dirty, mods) {
         super.verifyCalculateModificationItems(mapping, clean as Set, dirty as Set, mods)
     }
@@ -118,4 +124,12 @@ class MultiValueAttributeMappingTestSubject {
     static mapToPlusTwoField(value) {
         new Integer(value) + 2
     }
+    
+    @GldapoPseudoType("LowerCaseString")
+    Set<String> lc
+    
+    static mapToLowerCaseStringType(value) {
+        value.toString().toLowerCase()
+    }
+    
 }

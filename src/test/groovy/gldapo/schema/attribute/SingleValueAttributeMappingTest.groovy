@@ -59,6 +59,12 @@ class SingleValueAttributeMappingTest extends AbstractAttributeMappingTest
         verifyMapFromContext(mapping, "1", 3)
     }
     
+    void testCustomToTypeTypeMapper() {
+        def mapping = mappingForField("lc")
+        verifyProperties(mapping, "lc", "LowerCaseString")
+        verifyMapFromContext(mapping, "A", "a")
+    }
+    
     void testBogusType() {
         shouldFail() {
             mappingForField("bogusType")
@@ -83,5 +89,12 @@ class SingleValueAttributeMappingTestSubject
     
     static mapToPlusTwoField(value) {
         new Integer(value) + 2
+    }
+    
+    @GldapoPseudoType("LowerCaseString")
+    String lc
+    
+    static mapToLowerCaseStringType(value) {
+        value.toString().toLowerCase()
     }
 }
