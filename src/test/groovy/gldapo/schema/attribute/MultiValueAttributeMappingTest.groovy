@@ -86,6 +86,12 @@ class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
         verifyCalculateModificationItems(mapping, [1], [], [[REM, null]])        
     }
     
+    void testCustomToFieldTypeMapper() {
+        def mapping = mappingForField("plusTwo")
+        verifyProperties(mapping, "plusTwo", "Integer", Set)
+        verifyMapFromContext(mapping, ["1", "2", "3"], [3, 4, 5] as Set)
+    }
+
     void verifyCalculateModificationItems(mapping, clean, dirty, mods) {
         super.verifyCalculateModificationItems(mapping, clean as Set, dirty as Set, mods)
     }
@@ -106,4 +112,10 @@ class MultiValueAttributeMappingTestSubject {
     Set pseudoTypeSet
     
     LinkedList badCollectionType
+    
+    Set<Integer> plusTwo
+    
+    static mapToPlusTwoField(value) {
+        new Integer(value) + 2
+    }
 }

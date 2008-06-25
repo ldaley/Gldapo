@@ -53,6 +53,12 @@ class SingleValueAttributeMappingTest extends AbstractAttributeMappingTest
         verifyProperties(mapping, "other", "String")
     }
     
+    void testCustomToFieldTypeMapper() {
+        def mapping = mappingForField("plusTwo")
+        verifyProperties(mapping, "plusTwo", "Integer")
+        verifyMapFromContext(mapping, "1", 3)
+    }
+    
     void testBogusType() {
         shouldFail() {
             mappingForField("bogusType")
@@ -72,4 +78,10 @@ class SingleValueAttributeMappingTestSubject
     
     @GldapoPseudoType("BogusType")
     String bogusType
+    
+    Integer plusTwo
+    
+    static mapToPlusTwoField(value) {
+        new Integer(value) + 2
+    }
 }
