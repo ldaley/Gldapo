@@ -18,6 +18,8 @@ import java.lang.reflect.Field
 import gldapo.schema.annotation.GldapoPseudoType
 import gldapo.schema.annotation.GldapoSynonymFor
 import javax.naming.directory.DirContext
+import javax.naming.directory.BasicAttributes
+import javax.naming.directory.BasicAttribute
 
 class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
     
@@ -28,8 +30,16 @@ class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
     static REM = DirContext.REMOVE_ATTRIBUTE 
     static ADD = DirContext.ADD_ATTRIBUTE
     
-    def getFakeContext(val) {
-        new Expando(getStringAttributes: { return val as String[] })
+    def getFakeContext(values) {
+        new Expando(getAttributes: { name, String[] attribNames ->
+            def attribs = new BasicAttributes()
+            def attrib = new BasicAttribute(attribNames[0])
+            attribs.put(attrib)
+            values.each {
+                attrib.add(it)
+            }
+            attribs
+        })
     }
     
     void verifyProperties(mapping, attributeName, typeMapping, collectionType) {

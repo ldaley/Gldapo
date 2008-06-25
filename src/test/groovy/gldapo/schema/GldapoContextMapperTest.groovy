@@ -15,6 +15,8 @@
  */
 package gldapo.schema
 import gldapo.schema.annotation.GldapoNamingAttribute
+import javax.naming.directory.BasicAttributes
+import javax.naming.directory.BasicAttribute
 
 class GldapoContextMapperTest extends GroovyTestCase 
 {
@@ -23,8 +25,17 @@ class GldapoContextMapperTest extends GroovyTestCase
     def contextMapper = new GldapoContextMapper(schemaRegistration: registration)
         
     def fakeContext = new Expando([
-        getStringAttribute: { assertEquals("attr1", it); return "attr1Value" },
-        getStringAttributes: { assertEquals("attr2", it); return ["attr2Value1", "attr2Value2"] as String[] }
+        getObjectAttribute: { assertEquals("attr1", it); return "attr1Value" },
+        getAttributes: { name, String[] attribNames ->
+            assertEquals("attr2", attribNames[0])
+            def attribs = new BasicAttributes()
+            def attrib = new BasicAttribute(attribNames[0])
+            attribs.put(attrib)
+            ["attr2Value1", "attr2Value2"].each {
+                attrib.add(it)
+            }
+            attribs
+        }
     ])
     
     void testMapFromContext() 

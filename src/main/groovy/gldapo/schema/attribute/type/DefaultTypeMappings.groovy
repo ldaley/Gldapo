@@ -28,14 +28,14 @@ class DefaultTypeMappings
      * @return The exact same value that was passed in
      */
     static mapToStringType(value) {
-        return value
+        value as String
     }
 
     /**
      * 
      */
     static mapFromStringType(value) {
-        return value
+        value as String
     }
 
     /**

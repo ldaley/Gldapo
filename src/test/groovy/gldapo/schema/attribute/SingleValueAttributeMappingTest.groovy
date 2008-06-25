@@ -28,7 +28,7 @@ class SingleValueAttributeMappingTest extends AbstractAttributeMappingTest
     static ADD = DirContext.ADD_ATTRIBUTE
     
     def getFakeContext(val) {
-        new Expando(getStringAttribute: { return val })
+        new Expando(getObjectAttribute: { return val })
     }
     
     void testSimpleString() {

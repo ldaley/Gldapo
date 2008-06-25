@@ -33,7 +33,7 @@ class SingleValueAttributeMapping extends AbstractAttributeMapping
     }
     
     protected getGroovyValueFromContext(context) {
-        def rawValue = context.getStringAttribute(this.attributeName)
+        def rawValue = context.getObjectAttribute(this.attributeName)
         if (rawValue == null) {
             return null
         } else {

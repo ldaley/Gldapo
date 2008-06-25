@@ -71,15 +71,15 @@ class MultiValueAttributeMapping extends AbstractAttributeMapping
     
     def getGroovyValueFromContext(Object context)
     {        
-        def rawValues = context.getStringAttributes(this.attributeName)
+        def rawValues = context.getAttributes("", [this.attributeName] as String[]).get(this.attributeName)
         def mappedValue = this.collectionType.newInstance()
         
         if (rawValues == null || rawValues.size() < 1) {
-            return mappedValue
+            return []
         } else {
-            rawValues.each {
-                mappedValue << this.toGroovyTypeMapper.call(it)
-            }
+            def rawValuesEnum = rawValues.getAll()
+            while (rawValuesEnum.hasMore())
+                mappedValue << this.toGroovyTypeMapper.call(rawValuesEnum.next())
             return mappedValue
         }
     }
