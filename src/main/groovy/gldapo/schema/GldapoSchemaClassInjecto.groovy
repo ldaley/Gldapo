@@ -41,10 +41,7 @@ class GldapoSchemaClassInjecto {
 
     @InjectoProperty
     DistinguishedName rdn = null
-    
-    @InjectoProperty(write = false)
-    DistinguishedName dn = null
-    
+
     @InjectoProperty(write = false)
     Map cleanValues = [:]
     
@@ -87,18 +84,13 @@ class GldapoSchemaClassInjecto {
             rdn = new DistinguishedName(rdn as String)
         
         delegate.setInjectoProperty('rdn', rdn)
-        delegate.setInjectoProperty('dn', null)
     }
 
     def getDn = { ->
-        def dn = delegate.getInjectoProperty('dn')
-        if (dn == null) {
-            dn = new DistinguishedName()
-            dn.append(delegate.directory.base)
-            dn.append(delegate.rdn)
-            delegate.setInjectoProperty('dn', dn)
-        }
-        return dn
+        def dn = new DistinguishedName()
+        dn.append(delegate.directory.base)
+        dn.append(delegate.rdn)
+        dn
     }
     
     static getByDn = { DistinguishedName dn, GldapoDirectory directory ->
