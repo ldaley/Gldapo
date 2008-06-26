@@ -292,6 +292,11 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         assertEquals("test", e.name)
         assertEquals("test", e.namingValue)
     }
+    
+    void testNamingFieldName() {
+        def e = new DummySchema()
+        assertEquals("name", e.namingAttribute)
+    }
 }
 
 class DummyDirectory extends GldapoDirectory {
