@@ -23,6 +23,7 @@ class GldapoSchemaRegistration
     Class schema
     Map attributeMappings
     Gldapo gldapo
+    String namingAttributeFieldName
     
     GldapoSchemaRegistration(Class schema, Gldapo gldapo)
     {
@@ -37,6 +38,7 @@ class GldapoSchemaRegistration
         
         def inspection = new SchemaInspection(schema, gldapo)
         this.attributeMappings = inspection.attributeMappings
+        this.namingAttributeFieldName = namingAttributeFieldName
     }
         
     static prepareSchemaClass(schema) {

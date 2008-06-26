@@ -86,6 +86,14 @@ class GldapoSchemaClassInjecto {
         delegate.setInjectoProperty('rdn', rdn)
     }
 
+    def setNamingValue = { value ->
+        delegate."${delegate.schemaRegistration.namingAttributeFieldName}" = value
+    }
+    
+    def getNamingValue = { ->
+        delegate."${delegate.schemaRegistration.namingAttributeFieldName}"
+    }
+
     def getDn = { ->
         def dn = new DistinguishedName()
         dn.append(delegate.directory.base)
