@@ -203,9 +203,9 @@ class GldapoSchemaClassInjecto {
      * 
      * @throws GldapoException
      */
-    def assertHasRdnAndDirectoryForOperation = { operation ->
+    def assertHasNamingValueAndDirectoryForOperation = { operation ->
         assertHasDirectoryForOperation(operation)
-        assertHasRdnForOperation(operation)
+        assertHasNamingValueForOperation(operation)
     }
     
     /**
@@ -219,9 +219,9 @@ class GldapoSchemaClassInjecto {
     /**
      * 
      */
-    def assertHasRdnForOperation = { operation ->
-        if (delegate.rdn == null) 
-            throw new GldapoException("'$operation' attempted on object with no rdn")
+    def assertHasNamingValueForOperation = { operation ->
+        if (delegate.namingValue == null) 
+            throw new GldapoException("'$operation' attempted on object with no naming value (${delegate.namingAttribute}) set")
     }
     
     /**
@@ -229,7 +229,7 @@ class GldapoSchemaClassInjecto {
      */
     def create = { ->
         assumeDefaultDirectoryIfNoneSet()
-        delegate.assertHasRdnAndDirectoryForOperation('create')
+        delegate.assertHasNamingValueAndDirectoryForOperation('create')
         delegate.directory.createEntry(delegate.rdn, delegate.attributes)
         delegate.exists = true
         delegate.snapshotStateAsClean()
@@ -243,7 +243,7 @@ class GldapoSchemaClassInjecto {
      */    
     def update = { ->
         assumeDefaultDirectoryIfNoneSet()
-        delegate.assertHasRdnAndDirectoryForOperation('update')
+        delegate.assertHasNamingValueAndDirectoryForOperation('update')
         def modificationItems = delegate.modificationItems
         if (!modificationItems.empty) delegate.directory.updateEntry(delegate.rdn, modificationItems)
         delegate.snapshotStateAsClean()
@@ -298,14 +298,14 @@ class GldapoSchemaClassInjecto {
 
     def delete = {
         assumeDefaultDirectoryIfNoneSet()
-        delegate.assertHasRdnAndDirectoryForOperation('delete')
+        delegate.assertHasNamingValueAndDirectoryForOperation('delete')
         delegate.directory.deleteEntry(delegate.rdn)
         delegate.exists = false
     }
 
     def deleteRecursively = {
         assumeDefaultDirectoryIfNoneSet()
-        delegate.assertHasRdnAndDirectoryForOperation('delete')
+        delegate.assertHasNamingValueAndDirectoryForOperation('delete')
         delegate.directory.deleteEntryRecursively(delegate.rdn)
         delegate.exists = false
     }
@@ -333,7 +333,7 @@ class GldapoSchemaClassInjecto {
     }
     
     def authenticate = { password ->
-        delegate.assertHasRdnAndDirectoryForOperation('authenticate')
+        delegate.assertHasNamingValueAndDirectoryForOperation('authenticate')
         def contextSource = delegate.directory.getSubContextSource(delegate.rdn)
         contextSource.password = password
         
