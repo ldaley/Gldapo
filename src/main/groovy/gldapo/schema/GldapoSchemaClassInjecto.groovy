@@ -39,7 +39,7 @@ class GldapoSchemaClassInjecto {
     @InjectoProperty
     GldapoDirectory directory = null
 
-    @InjectoProperty
+    @InjectoProperty(write = false) // TODO Why is Injecto installing a setter unless write = false here?
     DistinguishedName parent = null
 
     @InjectoProperty(write = false)
@@ -85,6 +85,13 @@ class GldapoSchemaClassInjecto {
         def namingRdn = rdn.removeLast()
         delegate.namingValue = namingRdn.value
         delegate.setInjectoProperty('parent', rdn)
+    }
+
+    def setParent = { parent ->
+        if (parent != null) 
+            parent = (parent instanceof DistinguishedName) ? parent.clone() : new DistinguishedName(parent as String)
+            
+        delegate.setInjectoProperty('parent', parent)
     }
 
     def getRdn = { -> 

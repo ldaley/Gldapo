@@ -298,6 +298,20 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         def e = new DummySchema()
         assertEquals("name", e.namingAttribute)
     }
+    
+    void testSetParent() {
+        def parentString = "ou=people"
+        def parentDn = new DistinguishedName(parentString)
+
+        def e = new DummySchema()
+        e.parent = parentString
+        assertTrue(e.parent instanceof DistinguishedName)
+        assertEquals(parentDn, e.parent)
+        
+        e = new DummySchema()
+        e.parent = parentDn
+        assertEquals(parentDn, e.parent)
+    }
 }
 
 class DummyDirectory extends GldapoDirectory {
