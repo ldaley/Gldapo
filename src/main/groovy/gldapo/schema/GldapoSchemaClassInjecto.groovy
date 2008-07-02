@@ -40,7 +40,7 @@ class GldapoSchemaClassInjecto {
     GldapoDirectory directory = null
 
     @InjectoProperty
-    DistinguishedName rdn = null
+    DistinguishedName parent = null
 
     @InjectoProperty(write = false)
     Map cleanValues = [:]
@@ -77,15 +77,23 @@ class GldapoSchemaClassInjecto {
     }
     
     def setRdn = { rdn ->
-        if (delegate.rdn != null)
+        if (delegate.parent != null)
             throw new GldapoException("Cannot change rdn/dn on object once set")
         
-        if ((rdn instanceof DistinguishedName) == false)
-            rdn = new DistinguishedName(rdn as String)
+        rdn = (rdn instanceof DistinguishedName) ? rdn.clone() : new DistinguishedName(rdn as String)
         
-        delegate.setInjectoProperty('rdn', rdn)
+        def namingRdn = rdn.removeLast()
+        delegate.namingValue = namingRdn.value
+        delegate.setInjectoProperty('parent', rdn)
     }
 
+    def getRdn = { -> 
+        def rdn = new DistinguishedName()
+        rdn.append(delegate.parent)
+        rdn.append(delegate.namingAttribute, delegate.namingValue)
+        rdn
+    }
+    
     def getNamingAttribute = { ->
         delegate.class.schemaRegistration.namingAttributeFieldName
     }
@@ -101,7 +109,8 @@ class GldapoSchemaClassInjecto {
     def getDn = { ->
         def dn = new DistinguishedName()
         dn.append(delegate.directory.base)
-        dn.append(delegate.rdn)
+        dn.append(delegate.parent)
+        dn.append(delegate.namingAttribute, delegate.namingValue)
         dn
     }
     
@@ -254,8 +263,8 @@ class GldapoSchemaClassInjecto {
             throw new GldapoException("'move' attempted on an object that does not exist")
         }
         delegate.directory.moveEntry(delegate.rdn, newrdn)
-        delegate.setInjectoProperty('rdn', newrdn)
-        delegate.setInjectoProperty('dn', null)
+        delegate.parent = null
+        delegate.rdn = newrdn
     }
 
     @InjectAs("move")
@@ -270,8 +279,8 @@ class GldapoSchemaClassInjecto {
         assumeDefaultDirectoryIfNoneSet()
         assertHasDirectoryForOperation('replace')
         delegate.directory.replaceEntry(target, delegate.attributes)
-        delegate.setInjectoProperty('rdn', target)
-        delegate.setInjectoProperty('dn', null)
+        delegate.parent = null
+        delegate.rdn = target
         delegate.snapshotStateAsClean()
     }
     

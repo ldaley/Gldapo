@@ -86,7 +86,6 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
 
 class MoveIntegrationTestPerson {
     Set<String> objectClass
-    @GldapoNamingAttribute
     String sn
-    String cn
+    @GldapoNamingAttribute String cn
 }

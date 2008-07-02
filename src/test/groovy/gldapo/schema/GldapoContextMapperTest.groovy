@@ -35,7 +35,8 @@ class GldapoContextMapperTest extends GroovyTestCase
                 attrib.add(it)
             }
             attribs
-        }
+        },
+        dn: "attr1=attr1Value"
     ])
     
     void testMapFromContext() 

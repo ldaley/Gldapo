@@ -23,5 +23,5 @@ public class AuthenticateIntegrationTest extends AbstractGldapoIntegrationTest
 
 class AuthenticateIntegrationTestPerson {
     @GldapoNamingAttribute
-    String name
+    String cn
 }

@@ -11,7 +11,7 @@ public class CreateIntegrationTest extends AbstractGldapoIntegrationTest
         def p = new CreateIntegrationTestPerson(
             rdn: rdn,
             objectClass: ["top", "person", "organizationalPerson"],
-            cn: "Luke",
+            cn: "allattributes",
             lastName: "surname",
             telephoneNumber: ["123455", "1245"]
         )
