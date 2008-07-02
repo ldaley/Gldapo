@@ -33,7 +33,7 @@ public class ReplaceIntegrationTest extends AbstractGldapoIntegrationTest
 @GldapoSchemaFilter("(objectclass=person)")
 class ReplaceIntegrationTestPerson {
     Set<String> objectclass
-    @GldapoNamingAttribute
     String sn
+    @GldapoNamingAttribute
     String cn
 }

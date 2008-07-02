@@ -80,11 +80,14 @@ class GldapoSchemaClassInjecto {
         if (delegate.parent != null)
             throw new GldapoException("Cannot change rdn/dn on object once set")
         
-        rdn = (rdn instanceof DistinguishedName) ? rdn.clone() : new DistinguishedName(rdn as String)
+        def rdnCopy = (rdn instanceof DistinguishedName) ? rdn.clone() : new DistinguishedName(rdn as String)
         
-        def namingRdn = rdn.removeLast()
+        def namingRdn = rdnCopy.removeLast()
+        if (namingRdn.key != delegate.namingAttribute)
+            throw new GldapoException("Attempt to set rdn of object with a naming attribute of '${delegate.namingAttribute}' to '${rdn}'")
+
         delegate.namingValue = namingRdn.value
-        delegate.setInjectoProperty('parent', rdn)
+        delegate.setInjectoProperty('parent', rdnCopy)
     }
 
     def setParent = { parent ->

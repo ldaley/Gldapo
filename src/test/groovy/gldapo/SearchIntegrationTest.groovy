@@ -73,7 +73,7 @@ public class SearchIntegrationTest extends AbstractGldapoIntegrationTest
 
 @GldapoSchemaFilter("(objectclass=person)")
 class SearchIntegrationTestPerson {
-    @GldapoNamingAttribute
     String sn
+    @GldapoNamingAttribute
     String cn
 }
