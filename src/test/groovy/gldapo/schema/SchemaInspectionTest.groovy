@@ -64,7 +64,7 @@ class SchemaInspectionTest extends GroovyTestCase
     }
     
     void testNamingAttribute() {
-        assertEquals("simpleSingleValue", inspection.namingAttributeFieldName)
+        assertEquals("name", inspection.namingAttributeFieldName)
     }
     
     void testNoNamingAttributeThrowsException() {
@@ -78,8 +78,9 @@ class SchemaInspectionTestNoNamingAttributeSubject{}
 
 class SchemaInspectionTestSubject
 {
-    
     @GldapoNamingAttribute
+    String name
+
     String simpleSingleValue
     
     Set<String> simpleMultiValue

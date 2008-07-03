@@ -52,6 +52,7 @@ class SchemaInspection
     {
         if (Modifier.isStatic(field.modifiers) || 
             excludedFields.contains(field.name) || 
+            field.getAnnotation(GldapoNamingAttribute) != null ||
             !fieldIsReadableAndWritable(field)
         ) { 
             return null

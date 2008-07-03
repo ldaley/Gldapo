@@ -151,7 +151,7 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         e.name = "example"
         e.parent = "dc=com"
         e.directory = [createEntry: { DistinguishedName rdn, Attributes attributes ->
-            assertEquals(3, attributes.size())
+            assertEquals(2, attributes.size())
             assertEquals("clean", attributes.get("a").get())
             
             def b = attributes.get("b")
