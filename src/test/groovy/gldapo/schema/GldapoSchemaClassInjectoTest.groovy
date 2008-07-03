@@ -334,6 +334,13 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         e.parent = parentDn
         assertEquals(parentDn, e.parent)
     }
+    
+    void testChangingSetNamingValue() {
+        def o = new DummySchema(name: "name")
+        shouldFail(gldapo.exception.GldapoException) {
+            o.name = "othername"
+        }
+    }
 }
 
 class DummyDirectory extends GldapoDirectory {

@@ -117,7 +117,12 @@ class GldapoSchemaClassInjecto {
     }
     
     def setNamingValue = { value ->
-        delegate."${delegate.namingAttribute}" = value
+        
+        if (value != null && delegate.namingValue != null && delegate.namingValue != value)
+            throw new GldapoException("Cannot set value for naming attribute ('${delegate.namingAttribute}') once set, see move() or replace()")
+
+        def property = delegate.class.metaClass.getMetaProperty(delegate.namingAttribute)
+        property.setProperty(delegate, value)
     }
     
     def getNamingValue = { ->
@@ -282,6 +287,7 @@ class GldapoSchemaClassInjecto {
         }
         delegate.directory.moveEntry(delegate.rdn, newrdn)
         delegate.parent = null
+        delegate.namingValue = null
         delegate.rdn = newrdn
     }
 
@@ -298,6 +304,7 @@ class GldapoSchemaClassInjecto {
         assertHasDirectoryForOperation('replace')
         delegate.directory.replaceEntry(target, delegate.attributes)
         delegate.parent = null
+        delegate.namingValue = null
         delegate.rdn = target
         delegate.snapshotStateAsClean()
     }
@@ -367,5 +374,17 @@ class GldapoSchemaClassInjecto {
         }
 
         return success
+    }
+    
+    def setProperty = { String name, value ->
+        if (name == delegate.namingAttribute) {
+            delegate.setNamingValue(value)
+        } else {
+            def metaProperty = delegate.class.metaClass.getMetaProperty(name)
+            if (metaProperty) {
+                metaProperty.setProperty(delegate, value)
+            } else
+                throw new MissingPropertyException(name, delegate.class)
+        }
     }
 }
