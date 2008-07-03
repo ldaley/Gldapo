@@ -95,4 +95,6 @@ class SchemaInspectionTestSubject
     String privateReadWrite
     def getPrivateReadWrite() { null }
     void setPrivateReadWrite(String it) { }
+    
+    static staticAttribute
 }

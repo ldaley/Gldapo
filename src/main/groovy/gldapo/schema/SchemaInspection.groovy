@@ -18,6 +18,7 @@ import gldapo.schema.attribute.*
 import gldapo.schema.annotation.GldapoNamingAttribute
 import gldapo.exception.GldapoNoNamingAttributeException
 import java.lang.reflect.Field
+import java.lang.reflect.Modifier
 import gldapo.Gldapo
 import org.apache.commons.lang.StringUtils
 
@@ -49,7 +50,13 @@ class SchemaInspection
     
     private getMappingForField(Field field)
     {
-        if (excludedFields.contains(field.name) || !fieldIsReadableAndWritable(field)) return null
+        if (Modifier.isStatic(field.modifiers) || 
+            excludedFields.contains(field.name) || 
+            !fieldIsReadableAndWritable(field)
+        ) { 
+            return null
+        }
+        
         getAttributeMappingClassForField(field).newInstance(schema, field, gldapo.typemappings)
     }
     
