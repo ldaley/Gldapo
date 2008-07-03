@@ -46,7 +46,7 @@ public class SearchIntegrationTest extends AbstractGldapoIntegrationTest
         // That we got objects for each, not just X copies of the same
         entryRange.each {
             def targetCn = "search$it"
-            assertNotNull("Should contain match for cn = $targetCn", all.find { it.cn = targetCn } )
+            assertNotNull("Should contain match for cn = $targetCn", all.find { it.cn == targetCn } )
         }
     }
 
@@ -56,12 +56,12 @@ public class SearchIntegrationTest extends AbstractGldapoIntegrationTest
 
         entryRange.each {
             def targetCn = "search$it"
-            assertNotNull("Should contain match for cn = $targetCn", all.find { it.cn = targetCn } )
+            assertNotNull("Should contain match for cn = $targetCn", all.find { it.cn == targetCn } )
         }
 
         entryRange.each {
             def targetCn = "searchSub$it"
-            assertNotNull("Should contain match for cn = $targetCn", all.find { it.cn = targetCn } )
+            assertNotNull("Should contain match for cn = $targetCn", all.find { it.cn == targetCn } )
         }
     }
 
