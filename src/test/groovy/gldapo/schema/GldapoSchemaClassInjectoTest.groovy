@@ -88,6 +88,15 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
             o = new DummySchema()
             o.rdn = "notname=blah,dc=com"
         }
+        
+        o = new DummySchema()
+        o.name = "name"
+        assertEquals(new DistinguishedName("name=name"), o.rdn)
+        
+        o = new DummySchema()
+        shouldFail(gldapo.exception.GldapoException) {
+            o.rdn
+        }
     }
     
     void testDn() {

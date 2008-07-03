@@ -99,8 +99,16 @@ class GldapoSchemaClassInjecto {
 
     def getRdn = { -> 
         def rdn = new DistinguishedName()
-        rdn.append(delegate.parent)
+
+        def namingValue = delegate.namingValue
+        if (namingValue == null)
+            throw new GldapoException("getRdn() called on entry object with no naming value (naming attribute is '${delegate.namingAttribute}')")
+        
+        def parent = delegate.parent
+        if (parent != null) rdn.append(delegate.parent)
+        
         rdn.append(delegate.namingAttribute, delegate.namingValue)
+        
         rdn
     }
     
