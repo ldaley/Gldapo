@@ -72,9 +72,21 @@ class SchemaInspectionTest extends GroovyTestCase
             new SchemaInspection(SchemaInspectionTestNoNamingAttributeSubject, new Gldapo())
         }
     }
+    
+    void testNoNamingAttributeTypeThrowsException() {
+        shouldFail(gldapo.exception.GldapoException) {
+            new SchemaInspection(SchemaInspectionTestBadNamingAttributeTypeSubject, new Gldapo())
+        }
+    }
 }
 
 class SchemaInspectionTestNoNamingAttributeSubject{}
+
+class SchemaInspectionTestBadNamingAttributeTypeSubject
+{
+    @GldapoNamingAttribute
+    Integer name
+}
 
 class SchemaInspectionTestSubject
 {

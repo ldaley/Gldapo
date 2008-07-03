@@ -40,8 +40,13 @@ class SchemaInspection
             if (mapping) 
                 attributeMappings[it.name] = mapping
             
-            if (it.getAnnotation(GldapoNamingAttribute))
-                this.namingAttributeFieldName = it.name
+            if (it.getAnnotation(GldapoNamingAttribute)) {
+                if (String.isAssignableFrom(it.type))
+                    this.namingAttributeFieldName = it.name
+                else
+                    throw new gldapo.exception.GldapoException("${schema} has a naming attribute of ${it.type}, must be of ${String}")
+            }
+                
         }
         
         if (namingAttributeFieldName == null)
