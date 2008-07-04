@@ -145,4 +145,65 @@ abstract public class AbstractGldapoIntegrationTest extends AbstractServerTest
     public void tearDown() {
         super.tearDown()
     }
+    
+    protected String shouldFail(Closure code) {
+        boolean failed = false;
+        String result = null;
+        try {
+            code.call();
+        }
+        catch (GroovyRuntimeException gre) {
+            failed = true;
+            result = ScriptBytecodeAdapter.unwrap(gre).getMessage();
+        }
+        catch (Throwable e) {
+                failed = true;
+                result = e.getMessage();
+        }
+        assertTrue("Closure " + code + " should have failed", failed);
+        return result;
+    }
+
+    protected String shouldFail(Class clazz, Closure code) {
+        Throwable th = null;
+        try {
+            code.call();
+        } catch (GroovyRuntimeException gre) {
+            th = ScriptBytecodeAdapter.unwrap(gre);
+        } catch (Throwable e) {
+            th = e;
+        }
+
+        if (th==null) {
+            fail("Closure " + code + " should have failed with an exception of type " + clazz.getName());
+        } else if (! clazz.isInstance(th)) {
+            fail("Closure " + code + " should have failed with an exception of type " + clazz.getName() + ", instead got Exception " + th);
+        }
+        return th.getMessage();
+    }
+
+    protected String shouldFailWithCause(Class clazz, Closure code) {
+        Throwable th = null;
+        try {
+            code.call();
+        } catch (GroovyRuntimeException gre) {
+            th = gre;
+            while (th.getCause()!=null && th.getCause()!=gre){ // if wrapped, find the root cause
+                th=th.getCause();
+                if (th!=gre && (th instanceof GroovyRuntimeException)) {
+                    gre = (GroovyRuntimeException) th;
+                }
+            }
+        } catch (Throwable e) {
+            th = e;
+        }
+
+        if (th==null) {
+            fail("Closure " + code + " should have failed with an exception of type " + clazz.getName());
+        } else if (! clazz.isInstance(th)) {
+            fail("Closure " + code + " should have failed with an exception of type " + clazz.getName() + ", instead got Exception " + th);
+        }
+        return th.getMessage();
+    }
+    
 }
