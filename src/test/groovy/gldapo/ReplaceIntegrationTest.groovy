@@ -28,6 +28,52 @@ public class ReplaceIntegrationTest extends AbstractGldapoIntegrationTest
         assertNotNull(e2)
         assertEquals("replaced", e2.sn)
     }
+    
+    void testReplaceUsingNamingAttributeAndParent() {
+        
+        importEntry(cn: "replaceusingnaming", """
+            objectclass: top
+            objectclass: person
+            sn: replaceme
+        """)
+    
+        def p = new ReplaceIntegrationTestPerson(
+            sn: "replaced",
+            objectclass: ["top", "person"]
+        )
+
+        p.replace("replaceusingnaming", null)
+
+        assertEqualsLdif("cn=replaceusingnaming", """
+            objectClass: top
+            objectClass: person
+            cn: replaceusingnaming
+            sn: replaced
+        """)
+
+        importEntry(ou: "replaceSub", """
+            objectclass: top
+            objectclass: organizationalUnit
+        """)
+        
+        p.replace("replaceusingnaming", "ou=replaceSub")
+        
+        p = new ReplaceIntegrationTestPerson(
+            sn: "replacedBelow",
+            objectclass: ["top", "person"]
+        )
+
+        p.replace("replaceusingnaming", "ou=replaceSub")
+        
+        assertEqualsLdif("cn=replaceusingnaming,ou=replaceSub", """
+            objectClass: top
+            objectClass: person
+            cn: replaceusingnaming
+            sn: replacedBelow
+        """)
+        
+        assertEquals("cn=replaceusingnaming, ou=replaceSub", p.rdn as String)
+    }
 }
 
 @GldapoSchemaFilter("(objectclass=person)")

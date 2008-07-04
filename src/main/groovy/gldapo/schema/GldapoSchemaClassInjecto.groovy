@@ -329,6 +329,21 @@ class GldapoSchemaClassInjecto {
         delegate.replace(new DistinguishedName(target))
     }
 
+    @InjectAs("replace")
+    def replaceByNamingAndParent = { String namingValue, parent ->
+        def rdn = new DistinguishedName()
+        
+        if (parent != null) {
+            if (!(parent instanceof DistinguishedName)) 
+                parent = new DistinguishedName(parent as String)
+            rdn.append(parent)
+        }
+        
+        rdn.append(delegate.namingAttribute, namingValue)
+
+        delegate.replace(rdn)
+    }
+
     def delete = {
         assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasNamingValueAndDirectoryForOperation('delete')
