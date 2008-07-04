@@ -339,6 +339,11 @@ class GldapoSchemaClassInjecto {
             rdn.append(parent)
         }
         
+        if (namingValue == null) {
+            if (delegate.namingValue == null)
+                throw new GldapoException("First argument to replace(String,Object) cannot be null if object has no naming value")
+            namingValue = delegate.namingValue
+        }
         rdn.append(delegate.namingAttribute, namingValue)
 
         delegate.replace(rdn)
