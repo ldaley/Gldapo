@@ -159,6 +159,47 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
         """)
         
     }
+    
+    void testMoveUsingParent() {
+        def cn = "moveByParent"
+        def sn = "sn"
+        def rdn = "cn=$cn"
+        def objectClass = ["top", "person"]
+        def constantLdif = """
+            objectClass: person
+            objectClass: top
+        """
+
+        def p = new MoveIntegrationTestPerson(
+            cn: cn,
+            sn: sn,
+            objectClass: objectClass
+        )
+        
+        p.create()
+
+        importEntry(ou: "moveByParentSub", """
+            objectclass: top
+            objectclass: organizationalUnit
+        """)
+        
+        sn = "changed"
+        p.sn = "changed"
+        
+        p.move(null, "ou=moveByParentSub")
+        
+        assertEqualsLdif("cn=$cn,ou=moveByParentSub", """
+            $constantLdif
+            cn: $cn
+            sn: $sn
+        """)
+        
+        p = new MoveIntegrationTestPerson()
+        shouldFail(gldapo.exception.GldapoException) {
+            p.move(null, "ou=moveByParentSub")
+        }
+        
+    }
 }
 
 class MoveIntegrationTestPerson {
