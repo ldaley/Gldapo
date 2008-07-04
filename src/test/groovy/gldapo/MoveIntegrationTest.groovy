@@ -83,7 +83,7 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
         """)
     }
 
-    void testMoveUsingNamingAttributeAndParent() {
+    void testMoveUsingNamingAttribute() {
         def cn = "moveByNaming"
         def sn = "sn"
         def rdn = "cn=$cn"
@@ -93,6 +93,7 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
             objectClass: person
             objectClass: top
         """
+        
         def p = new MoveIntegrationTestPerson(
             cn: cn,
             sn: sn,
@@ -120,15 +121,38 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
             cn: $cn
             sn: $sn
         """)
+    }
+    
+    void testMoveUsingNamingAttributeAndParent() {
+        def cn = "moveByNamingAndParent"
+        def sn = "sn"
+        def rdn = "cn=$cn"
+        def objectClass = ["top", "person"]
+        def constantLdif = """
+            objectClass: person
+            objectClass: top
+        """
+
+        def p = new MoveIntegrationTestPerson(
+            cn: cn,
+            sn: sn,
+            objectClass: objectClass
+        )
         
-        importEntry(ou: "moveSub", """
+        p.create()
+
+        importEntry(ou: "moveByNamingAndParentSub", """
             objectclass: top
             objectclass: organizationalUnit
         """)
         
-        p.move(cn, "ou=moveSub")
+        cn = "movedByNamingAndParent"
+        sn = "changed"
+        p.sn = "changed"
         
-        assertEqualsLdif("$rdn,ou=moveSub", """
+        p.move(cn, "ou=moveByNamingAndParentSub")
+        
+        assertEqualsLdif("cn=$cn,ou=moveByNamingAndParentSub", """
             $constantLdif
             cn: $cn
             sn: $sn
