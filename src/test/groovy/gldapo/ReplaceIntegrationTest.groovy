@@ -29,8 +29,7 @@ public class ReplaceIntegrationTest extends AbstractGldapoIntegrationTest
         assertEquals("replaced", e2.sn)
     }
     
-    void testReplaceUsingNamingAttributeAndParent() {
-        
+    void testReplaceUsingNamingAttribute() {
         importEntry(cn: "replaceusingnaming", """
             objectclass: top
             objectclass: person
@@ -50,15 +49,22 @@ public class ReplaceIntegrationTest extends AbstractGldapoIntegrationTest
             cn: replaceusingnaming
             sn: replaced
         """)
+    }
+
+    void testReplaceUsingNamingAttributeAndParent() {
 
         importEntry(ou: "replaceSub", """
             objectclass: top
             objectclass: organizationalUnit
         """)
+
+        importEntry(cn: "replaceusingnaming,ou=replaceSub", """
+            objectclass: top
+            objectclass: person
+            sn: replaceme
+        """)
         
-        p.replace("replaceusingnaming", "ou=replaceSub")
-        
-        p = new ReplaceIntegrationTestPerson(
+        def p = new ReplaceIntegrationTestPerson(
             sn: "replacedBelow",
             objectclass: ["top", "person"]
         )
