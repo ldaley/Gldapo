@@ -60,7 +60,6 @@ class GldapoTypeMappingRegistry extends LinkedList<Class> {
         def mapping
         def provider = this.reverse().find {
             mapping = it.metaClass.getMetaMethod(mapperName, argTypes)
-            MetaMethod
             return mapping?.isStatic()
         }
         
