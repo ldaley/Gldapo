@@ -6,15 +6,15 @@ public class ReplaceIntegrationTest extends AbstractGldapoIntegrationTest
 {
     def schemaClasses = [ReplaceIntegrationTestPerson]
 
-    void testReplace() {
+    void testReplaceUsingRdn() {
         
-        importEntry(cn: "replaceme", """
+        importEntry(cn: "replaceusingrdn", """
             objectclass: top
             objectclass: person
             sn: replaceme
         """)
         
-        def e = ReplaceIntegrationTestPerson.find(filter: "(cn=replaceme)")
+        def e = ReplaceIntegrationTestPerson.find(filter: "(cn=replaceusingrdn)")
         assertNotNull(e)
         assertEquals("replaceme", e.sn)
         
@@ -22,9 +22,32 @@ public class ReplaceIntegrationTest extends AbstractGldapoIntegrationTest
         p.objectclass = ["top", "person"]
         p.cn = "replaceme"
         p.sn = "replaced"
-        p.replace("cn=replaceme")
+        p.replace("cn=replaceusingrdn")
         
-        def e2 = ReplaceIntegrationTestPerson.find(filter: "(cn=replaceme)")
+        def e2 = ReplaceIntegrationTestPerson.find(filter: "(cn=replaceusingrdn)")
+        assertNotNull(e2)
+        assertEquals("replaced", e2.sn)
+    }
+    
+    void testReplace() {
+        
+        importEntry(cn: "replace", """
+            objectclass: top
+            objectclass: person
+            sn: replaceme
+        """)
+        
+        def e = ReplaceIntegrationTestPerson.find(filter: "(cn=replace)")
+        assertNotNull(e)
+        assertEquals("replaceme", e.sn)
+        
+        def p = new ReplaceIntegrationTestPerson()
+        p.objectclass = ["top", "person"]
+        p.cn = "replace"
+        p.sn = "replaced"
+        p.replace()
+        
+        def e2 = ReplaceIntegrationTestPerson.find(filter: "(cn=replace)")
         assertNotNull(e2)
         assertEquals("replaced", e2.sn)
     }
