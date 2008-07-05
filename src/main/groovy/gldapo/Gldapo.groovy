@@ -153,7 +153,7 @@ class Gldapo {
     }
     
     /**
-     * Initializes using the config script @ {@code configUrl} and parses it for @{@code environment}
+     * Initializes using the config script {@code configUrl} and parses it for {@code environment}
      * <p>
      * Creates a {@link groovy.util.ConfigSlurper} with the context of {@code environment}
      * and uses it to parse {@code configUrl} into a {@link groovy.util.ConfigObject}.
