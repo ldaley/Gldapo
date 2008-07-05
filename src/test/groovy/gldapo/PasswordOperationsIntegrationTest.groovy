@@ -36,7 +36,6 @@ public class PasswordOperationsIntegrationTest extends AbstractGldapoIntegration
         """)
 
         def p = PasswordOperationsIntegrationTestPerson.find(filter: "cn=updatepassword")
-        println p.password
         p.password = "password2"
         p.save()
 
