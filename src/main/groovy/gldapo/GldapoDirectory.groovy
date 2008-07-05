@@ -37,7 +37,7 @@ class GldapoDirectory implements SearchProvider {
     /**
      * The key that the config for the directories search controls should be under ({@value})
      * 
-     * @see #constructor(String,Map)
+     * @see #GldapoDirectory(String,Map)
      */
     static final CONFIG_SEARCH_CONTROLS_KEY = 'searchControls'
     
@@ -79,7 +79,7 @@ class GldapoDirectory implements SearchProvider {
      * <p>
      * It can also contain a map under the key denoted by {@link #CONFIG_SEARCH_CONTROLS_KEY} 
      * that is used to construct an instance of {@link SearchControls} using the 
-     * {@link SearchControls#constructor(Map)} constructor. If it is omitted, a search controls
+     * {@link SearchControls#SearchControls(Map)} constructor. If it is omitted, a search controls
      * object with default values is used.
      * <p>
      * 

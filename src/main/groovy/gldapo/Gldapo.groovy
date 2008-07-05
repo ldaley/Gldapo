@@ -129,11 +129,11 @@ class Gldapo {
     }
     
     /**
-     * Tries to find the {@link DEFAULT_CONFIG_FILENAME default config} file and passes it's URL along with {@code environment}
+     * Tries to find the {@link #DEFAULT_CONFIG_FILENAME default config} file and passes it's URL along with {@code environment}
      * to {@link #initialize(URL,String)}
      * 
      * @param environment the environment to parse the default config file with
-     * @throws GldapoInitializationException If no {@link DEFAULT_CONFIG_FILENAME default config} file can be found
+     * @throws GldapoInitializationException If no {@link #DEFAULT_CONFIG_FILENAME default config} file can be found
      */
     static initialize(String environment) throws GldapoInitializationException {
         
@@ -157,7 +157,7 @@ class Gldapo {
      * <p>
      * Creates a {@link groovy.util.ConfigSlurper} with the context of {@code environment}
      * and uses it to parse {@code configUrl} into a {@link groovy.util.ConfigObject}.
-     * The config object is then passed to {@link initialize(Map)}.
+     * The config object is then passed to {@link #initialize(Map)}.
      * 
      * @param configUrl The location of the config script (must not be null)
      * @param environment The environment context to parse configUrl with (can be null)

@@ -39,7 +39,7 @@ class GldapoTypeMappingRegistry extends LinkedList<Class> {
     /**
      * Returns a closure that can be used to convert a LDAP value to a particular type.
      * <p>
-     * Uses {@link AbstractAttributeMapping#toGroovyByTypeMapperName(Object)} to calculate the name of the
+     * Uses {@link AbstractAttributeMapping#toGroovyByTypeMapperName(String)} to calculate the name of the
      * suitable mapping method
      */
     def getToGroovyMapperForType(String type) {
@@ -49,7 +49,7 @@ class GldapoTypeMappingRegistry extends LinkedList<Class> {
     /**
      * Returns a closure that can be used to convert a groovy value to an LDAP value (string)
      * <p>
-     * Uses {@link AbstractAttributeMapping#toLdapByTypeMapperName(Object)} to calculate the name of the
+     * Uses {@link AbstractAttributeMapping#toLdapByTypeMapperName(String)} to calculate the name of the
      * suitable mapping method
      */
     def getToLdapMapperForType(String type) {
