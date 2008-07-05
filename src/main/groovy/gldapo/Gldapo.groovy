@@ -155,8 +155,8 @@ class Gldapo {
     /**
      * Initializes using the config script @ {@code configUrl} and parses it for @{@code environment}
      * <p>
-     * Creates a {@link http://http://groovy.codehaus.org/ConfigSlurper ConfigSlurper} with the context of {@code environment}
-     * and uses it to parse {@code configUrl} into a {@link http://fisheye.codehaus.org/browse/groovy/trunk/groovy/groovy-core/src/main/groovy/util/ConfigObject.groovy?r=trunk groovy.util.ConfigObject}.
+     * Creates a {@link groovy.util.ConfigSlurper} with the context of {@code environment}
+     * and uses it to parse {@code configUrl} into a {@link groovy.util.ConfigObject}.
      * The config object is then passed to {@link initialize(Map)}.
      * 
      * @param configUrl The location of the config script (must not be null)
