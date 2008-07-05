@@ -75,6 +75,13 @@ class Gldapo {
     GldapoTypeMappingRegistry typemappings = new GldapoTypeMappingRegistry()
 
     /**
+     * Create a Gldapo instance with only defaults.
+     */
+    public Gldapo() {
+        this([:])
+    }
+    
+    /**
      * 
      */
     Gldapo(Map config) {
