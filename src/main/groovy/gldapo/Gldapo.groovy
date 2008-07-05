@@ -82,9 +82,11 @@ class Gldapo {
     }
     
     /**
+     * Create a Gldapo instance with a config
      * 
+     * @see #resetWithConfig(Map)
      */
-    Gldapo(Map config) {
+    public Gldapo(Map config) {
         this.consumeConfig(config)
     }
     
