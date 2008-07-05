@@ -177,11 +177,14 @@
             <plugin>
                 <groupId>org.codehaus.groovy.maven</groupId>
                 <artifactId>gmaven-plugin</artifactId>
+                <version>1.0-rc-3-SNAPSHOT</version>
                 <extensions>true</extensions>
                 <executions>
                     <execution>
                         <goals>
+                            <goal>generateStubs</goal>
                             <goal>compile</goal>
+                            <goal>generateTestStubs</goal>
                             <goal>testCompile</goal>
                         </goals>
                     </execution>
@@ -227,16 +230,16 @@
                             <tasks>
                                 <checksum algorithm="SHA1" fileext=".sha1">
                                     <fileset dir="${project.build.directory}">
-                                        <include name="${distAssemblyName}.zip" />
-                                        <include name="${distAssemblyName}.tar.bz2" />
-                                        <include name="${distAssemblyName}.tar.gz" />
+                                        <include name="${distAssemblyName}.zip"/>
+                                        <include name="${distAssemblyName}.tar.bz2"/>
+                                        <include name="${distAssemblyName}.tar.gz"/>
                                     </fileset>
                                 </checksum>
                                 <checksum algorithm="MD5" fileext=".md5">
                                     <fileset dir="${project.build.directory}">
-                                        <include name="${distAssemblyName}.zip" />
-                                        <include name="${distAssemblyName}.tar.bz2" />
-                                        <include name="${distAssemblyName}.tar.gz" />
+                                        <include name="${distAssemblyName}.zip"/>
+                                        <include name="${distAssemblyName}.tar.bz2"/>
+                                        <include name="${distAssemblyName}.tar.gz"/>
                                     </fileset>
                                 </checksum>
                             </tasks>
@@ -301,10 +304,38 @@
                 <configuration>
                     <links>
                         <link>http://static.springframework.org/spring-ldap/docs/1.2.1/api/spring-ldap</link>
+                        <link>http://groovy.codehaus.org/api</link>
                         <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+                        <link>http://jsourcery.com/api/apache/directory/apacheds/1.0.1</link>
                     </links>
-                    <sourcepath>src/main/java</sourcepath>
+                    <tags>
+                      <tag>
+                        <name>todo</name>
+                        <placement>X</placement>
+                        <head>To do something:</head>
+                      </tag>
+                    </tags>
                 </configuration>
+                <reportSets>
+                    <reportSet>
+                        <id>html</id>
+                        <configuration>
+                            <sourcepath>src/main/java;target/generated-sources/groovy-stubs/main</sourcepath>
+                        </configuration>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                    </reportSet>
+                    <reportSet>
+                        <id>test-html</id>
+                        <configuration>
+                            <sourcepath>src/test/java;target/generated-sources/groovy-stubs/test</sourcepath>
+                        </configuration>
+                        <reports>
+                            <report>test-javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
         </plugins>
     </reporting>
