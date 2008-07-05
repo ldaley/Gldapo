@@ -229,7 +229,7 @@ class Gldapo {
      * Looks in the config for a {@link Map} under the key indicated by {@link #CONFIG_KEY_DIRECTORIES}.
      * <p>
      * Each key/value pair in the directories config is turned into an instance of {@link GldapoDirectory} by using the
-     * {@link GldapoDirectory#constructor(String,Map)} constructor where the key is the {@link String} and the value is the
+     * {@link GldapoDirectory#GldapoDirectory(String,Map)} constructor where the key is the {@link String} and the value is the
      * {@link Map}.
      * <p>
      * An example config map for this method might look like this ...
@@ -245,7 +245,7 @@ class Gldapo {
      *  ]
      * ]
      * </pre>
-     * See {@link GldapoDirectory#constructor(String,Map)} for the format of the directory map.
+     * See {@link GldapoDirectory#GldapoDirectory(String,Map)} for the format of the directory map.
      * 
      * @return A list of {@link GldapoDirectory} objects
      * @throws GldapoInvalidConfigException if the relevant item in the config is not a {@link Map}
