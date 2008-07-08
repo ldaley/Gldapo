@@ -22,6 +22,6 @@ import gldapo.*;
  * Schema classes do <strong>not</strong> extend this class
  * (i.e. {@code schemaObject instanceof GldapoEntry} will return false.)
  */
-abstract class GldapoEntry {
+public abstract class GldapoEntry {
     
 }
