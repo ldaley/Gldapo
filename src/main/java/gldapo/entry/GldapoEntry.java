@@ -15,6 +15,7 @@
 */
 package gldapo.entry;
 import gldapo.*;
+import gldapo.exception.*;
 
 /**
  * The API reference for schema classes.
@@ -23,5 +24,24 @@ import gldapo.*;
  * (i.e. {@code schemaObject instanceof GldapoEntry} will return false.)
  */
 public abstract class GldapoEntry {
+    
+    /**
+     * The connection to an actual LDAP directory.
+     * 
+     * @return The directory for this object, or {@code null} if not set yet.
+     */
+    public GldapoDirectory getDirectory() { return null; }
+    
+    /**
+     * Before an <em>operation</em> (create, update, delete etc.) can be performed on an object,
+     * it must have {@link GldapoDirectory directory} to perform the operation against.
+     * 
+     * @param directory If not an instance of {@link GldapoDirectory}, will be {@code toString()}'d
+     *        and treated as a directory name and the corresponding directory will be pulled
+     *        from the class's gldapo instance.
+     * @throws GldapoDirectoryNotFoundException If {@code directory} is used as a name, and no directory
+     *         is registered with that name.
+     */
+    public void setDirectory(Object directory) throws GldapoDirectoryNotFoundException {} 
     
 }
