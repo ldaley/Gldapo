@@ -76,18 +76,18 @@ class GldapoSchemaClassInjecto {
         delegate.setInjectoProperty("directory", directory)
     }
     
-    def setRdn = { rdn ->
+    def setBrdn = { brdn ->
         if (delegate.parent != null)
-            throw new GldapoException("Cannot change rdn/dn on object once set")
+            throw new GldapoException("Cannot change brdn/dn on object once set")
         
-        def rdnCopy = (rdn instanceof DistinguishedName) ? rdn.clone() : new DistinguishedName(rdn as String)
+        def brdnCopy = (brdn instanceof DistinguishedName) ? brdn.clone() : new DistinguishedName(brdn as String)
         
-        def namingRdn = rdnCopy.removeLast()
+        def namingRdn = brdnCopy.removeLast()
         if (namingRdn.key != delegate.namingAttribute)
-            throw new GldapoException("Attempt to set rdn of object with a naming attribute of '${delegate.namingAttribute}' to '${rdn}'")
+            throw new GldapoException("Attempt to set brdn of object with a naming attribute of '${delegate.namingAttribute}' to '${brdn}'")
 
         delegate.namingValue = namingRdn.value
-        delegate.setInjectoProperty('parent', rdnCopy)
+        delegate.setInjectoProperty('parent', brdnCopy)
     }
 
     def setParent = { parent ->
@@ -97,19 +97,19 @@ class GldapoSchemaClassInjecto {
         delegate.setInjectoProperty('parent', parent)
     }
 
-    def getRdn = { -> 
-        def rdn = new DistinguishedName()
+    def getBrdn = { -> 
+        def brdn = new DistinguishedName()
 
         def namingValue = delegate.namingValue
         if (namingValue == null)
             throw new GldapoException("getRdn() called on entry object with no naming value (naming attribute is '${delegate.namingAttribute}')")
         
         def parent = delegate.parent
-        if (parent != null) rdn.append(delegate.parent)
+        if (parent != null) brdn.append(delegate.parent)
         
-        rdn.append(delegate.namingAttribute, delegate.namingValue)
+        brdn.append(delegate.namingAttribute, delegate.namingValue)
         
-        rdn
+        brdn
     }
     
     def getNamingAttribute = { ->
@@ -215,7 +215,7 @@ class GldapoSchemaClassInjecto {
         }
     }
     /**
-     * Ensures that the object has an rdn and a directory.
+     * Ensures that the object has an brdn and a directory.
      * 
      * @throws GldapoException
      */
@@ -246,7 +246,7 @@ class GldapoSchemaClassInjecto {
     def create = { ->
         assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasNamingValueAndDirectoryForOperation('create')
-        delegate.directory.createEntry(delegate.rdn, delegate.attributes)
+        delegate.directory.createEntry(delegate.brdn, delegate.attributes)
         delegate.exists = true
         delegate.snapshotStateAsClean()
     }
@@ -261,7 +261,7 @@ class GldapoSchemaClassInjecto {
         assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasNamingValueAndDirectoryForOperation('update')
         def modificationItems = delegate.modificationItems
-        if (!modificationItems.empty) delegate.directory.updateEntry(delegate.rdn, modificationItems)
+        if (!modificationItems.empty) delegate.directory.updateEntry(delegate.brdn, modificationItems)
         delegate.snapshotStateAsClean()
     }
     
@@ -285,10 +285,10 @@ class GldapoSchemaClassInjecto {
         } else {
             throw new GldapoException("'move' attempted on an object that does not exist")
         }
-        delegate.directory.moveEntry(delegate.rdn, newrdn)
+        delegate.directory.moveEntry(delegate.brdn, newrdn)
         delegate.parent = null
         delegate.namingValue = null
-        delegate.rdn = newrdn
+        delegate.brdn = newrdn
     }
 
     @InjectAs("move")
@@ -298,12 +298,12 @@ class GldapoSchemaClassInjecto {
     
     @InjectAs("move")
     def moveByNamingAndParent = { String namingValue, parent ->
-        def rdn = new DistinguishedName()
+        def brdn = new DistinguishedName()
         
         if (parent != null) {
             if (!(parent instanceof DistinguishedName)) 
                 parent = new DistinguishedName(parent as String)
-            rdn.append(parent)
+            brdn.append(parent)
         }
         
         if (namingValue == null) {
@@ -311,9 +311,9 @@ class GldapoSchemaClassInjecto {
                 throw new GldapoException("First argument to move(String,Object) cannot be null if object has no naming value")
             namingValue = delegate.namingValue
         }
-        rdn.append(delegate.namingAttribute, namingValue)
+        brdn.append(delegate.namingAttribute, namingValue)
 
-        delegate.move(rdn)
+        delegate.move(brdn)
     }
     
     /**
@@ -325,7 +325,7 @@ class GldapoSchemaClassInjecto {
         delegate.directory.replaceEntry(target, delegate.attributes)
         delegate.parent = null
         delegate.namingValue = null
-        delegate.rdn = target
+        delegate.brdn = target
         delegate.snapshotStateAsClean()
     }
     
@@ -336,12 +336,12 @@ class GldapoSchemaClassInjecto {
 
     @InjectAs("replace")
     def replaceByNamingAndParent = { String namingValue, parent ->
-        def rdn = new DistinguishedName()
+        def brdn = new DistinguishedName()
         
         if (parent != null) {
             if (!(parent instanceof DistinguishedName)) 
                 parent = new DistinguishedName(parent as String)
-            rdn.append(parent)
+            brdn.append(parent)
         }
         
         if (namingValue == null) {
@@ -349,27 +349,27 @@ class GldapoSchemaClassInjecto {
                 throw new GldapoException("First argument to replace(String,Object) cannot be null if object has no naming value")
             namingValue = delegate.namingValue
         }
-        rdn.append(delegate.namingAttribute, namingValue)
+        brdn.append(delegate.namingAttribute, namingValue)
 
-        delegate.replace(rdn)
+        delegate.replace(brdn)
     }
 
     @InjectAs("replace")
     def replaceNoParams = { ->
-        delegate.replace(delegate.rdn)
+        delegate.replace(delegate.brdn)
     }
 
     def delete = {
         assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasNamingValueAndDirectoryForOperation('delete')
-        delegate.directory.deleteEntry(delegate.rdn)
+        delegate.directory.deleteEntry(delegate.brdn)
         delegate.exists = false
     }
 
     def deleteRecursively = {
         assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasNamingValueAndDirectoryForOperation('delete')
-        delegate.directory.deleteEntryRecursively(delegate.rdn)
+        delegate.directory.deleteEntryRecursively(delegate.brdn)
         delegate.exists = false
     }
     
@@ -397,7 +397,7 @@ class GldapoSchemaClassInjecto {
     
     def authenticate = { password ->
         delegate.assertHasNamingValueAndDirectoryForOperation('authenticate')
-        def contextSource = delegate.directory.getSubContextSource(delegate.rdn)
+        def contextSource = delegate.directory.getSubContextSource(delegate.brdn)
         contextSource.password = password
         
         def success = false

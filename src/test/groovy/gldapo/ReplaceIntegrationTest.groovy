@@ -101,7 +101,7 @@ public class ReplaceIntegrationTest extends AbstractGldapoIntegrationTest
             sn: replacedBelow
         """)
         
-        assertEquals("cn=replaceusingnaming, ou=replaceSub", p.rdn as String)
+        assertEquals("cn=replaceusingnaming, ou=replaceSub", p.brdn as String)
     }
     
     void testReplaceUsingParent() {
@@ -136,7 +136,7 @@ public class ReplaceIntegrationTest extends AbstractGldapoIntegrationTest
             sn: replacedBelow
         """)
         
-        assertEquals("cn=replaceusingparent, ou=replaceSub2", p.rdn as String)
+        assertEquals("cn=replaceusingparent, ou=replaceSub2", p.brdn as String)
     }
     
 }

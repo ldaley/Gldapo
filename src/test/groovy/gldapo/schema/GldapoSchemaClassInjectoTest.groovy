@@ -77,32 +77,32 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
     
     void testRdn() {
         def o = new DummySchema()
-        o.rdn = new DistinguishedName("name=test")
-        assertEquals(new DistinguishedName("name=test"), o.rdn)
+        o.brdn = new DistinguishedName("name=test")
+        assertEquals(new DistinguishedName("name=test"), o.brdn)
 
         shouldFail(gldapo.exception.GldapoException) {
-        o.rdn = new DistinguishedName("name=test")
+        o.brdn = new DistinguishedName("name=test")
         }
 
         shouldFail(gldapo.exception.GldapoException) {
             o = new DummySchema()
-            o.rdn = "notname=blah,dc=com"
+            o.brdn = "notname=blah,dc=com"
         }
         
         o = new DummySchema()
         o.name = "name"
-        assertEquals(new DistinguishedName("name=name"), o.rdn)
+        assertEquals(new DistinguishedName("name=name"), o.brdn)
         
         o = new DummySchema()
         shouldFail(gldapo.exception.GldapoException) {
-            o.rdn
+            o.brdn
         }
     }
     
     void testDn() {
         def o = new DummySchema()
         o.directory = [base: new DistinguishedName("dc=example, dc=com")]
-        o.rdn = new DistinguishedName("name=people")
+        o.brdn = new DistinguishedName("name=people")
         assertEquals(new DistinguishedName("name=people, dc=example, dc=com"), o.dn)
     }
     
@@ -134,7 +134,7 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         assertEquals(mods[0].attribute.get(), "2")
         
 
-        e.directory = [updateEntry: { DistinguishedName rdn, List modificationItems ->
+        e.directory = [updateEntry: { DistinguishedName brdn, List modificationItems ->
             assertEquals(1, modificationItems.size())
             assertEquals(modificationItems[0].modificationOp, REM)
             assertEquals(modificationItems[0].attribute.iD, "b")
@@ -150,7 +150,7 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         e.b = ["1", "2"] as Set
         e.name = "example"
         e.parent = "dc=com"
-        e.directory = [createEntry: { DistinguishedName rdn, Attributes attributes ->
+        e.directory = [createEntry: { DistinguishedName brdn, Attributes attributes ->
             assertEquals(2, attributes.size())
             assertEquals("clean", attributes.get("a").get())
             
@@ -197,7 +197,7 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         e.name = "example"
         e.parent = "dc=com"
         e.directory = [moveEntry: { from, to -> 
-            assertEquals(from, e.rdn)
+            assertEquals(from, e.brdn)
             assertEquals(to, moveto)
         }]
         
@@ -207,7 +207,7 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         }
         e.move(moveto)
         assertTrue(called)
-        assertEquals(e.rdn, moveto)
+        assertEquals(e.brdn, moveto)
         
         def e2 = new DummySchema()
         e2.exists = false
@@ -225,7 +225,7 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
             assertEquals(replaced, target)
         }]
         e.replace(replaced)
-        assertEquals(replaced, e.rdn)
+        assertEquals(replaced, e.brdn)
     }
     
     void installSearchResult(result)
@@ -257,11 +257,11 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
 
     void testDelete() {
         def e = new DummySchema()
-        def rdn = new DistinguishedName("name=example,dc=com")
-        e.rdn = rdn
+        def brdn = new DistinguishedName("name=example,dc=com")
+        e.brdn = brdn
         def deleted = false
         e.directory = [deleteEntry: {
-            assertEquals(rdn, it)
+            assertEquals(brdn, it)
             deleted = true
         }]
         e.delete()
@@ -271,11 +271,11 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
     
     void testDeleteRecursively() {
         def e = new DummySchema()
-        def rdn = new DistinguishedName("name=example,dc=com")
-        e.rdn = rdn
+        def brdn = new DistinguishedName("name=example,dc=com")
+        e.brdn = brdn
         def deleted = false
         e.directory = [deleteEntryRecursively: {
-            assertEquals(rdn, it)
+            assertEquals(brdn, it)
             deleted = true
         }]
         e.deleteRecursively()

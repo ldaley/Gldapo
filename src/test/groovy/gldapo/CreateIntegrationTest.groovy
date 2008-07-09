@@ -7,9 +7,9 @@ public class CreateIntegrationTest extends AbstractGldapoIntegrationTest
     def schemaClasses = [CreateIntegrationTestPerson]
     
     void testCreateWithAllAttributes() {
-        def rdn = "cn=allattributes"
+        def brdn = "cn=allattributes"
         def p = new CreateIntegrationTestPerson(
-            rdn: rdn,
+            brdn: brdn,
             objectClass: ["top", "person", "organizationalPerson"],
             cn: "allattributes",
             lastName: "surname",
@@ -17,7 +17,7 @@ public class CreateIntegrationTest extends AbstractGldapoIntegrationTest
         )
         p.save()
         
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             cn: allattributes
             sn: surname
             objectClass: organizationalPerson
@@ -29,16 +29,16 @@ public class CreateIntegrationTest extends AbstractGldapoIntegrationTest
     }
     
     void testCreateWithSomeAttributes() {
-        def rdn = "cn=someattributes"
+        def brdn = "cn=someattributes"
         def p = new CreateIntegrationTestPerson(
             cn: "someattributes",
-            rdn: rdn,
+            brdn: brdn,
             objectClass: ["top", "person", "organizationalPerson"],
             lastName: "sn"
         )
         p.save()
         
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             cn: someattributes
             sn: sn
             objectClass: organizationalPerson

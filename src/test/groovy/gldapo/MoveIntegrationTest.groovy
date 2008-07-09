@@ -10,7 +10,7 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
         def p = new MoveIntegrationTestPerson()
         def cn = "move"
         def sn = "sn"
-        def rdn = "cn=$cn"
+        def brdn = "cn=$cn"
 
         def constantLdif = """
             sn: $sn
@@ -18,25 +18,25 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
             objectClass: top
         """
 
-        p.rdn = rdn
+        p.brdn = brdn
         p.objectClass = ["top", "person"]
         p.cn = cn
         p.sn = sn
         p.create()
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             cn: $cn
             $constantLdif
         """)
 
-        def oldRdn = rdn
+        def oldRdn = brdn
         cn = "moved"
-        rdn = "cn=$cn"
-        p.move(rdn)
+        brdn = "cn=$cn"
+        p.move(brdn)
 
         assertNull(getEntry(oldRdn))
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             cn: moved
         """)
@@ -47,36 +47,36 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
         def p = new MoveIntegrationTestPerson()
         def cn = "move"
         def sn = "sn"
-        def rdn = "cn=$cn"
+        def brdn = "cn=$cn"
 
         def constantLdif = """
             objectClass: person
             objectClass: top
         """
 
-        p.rdn = rdn
+        p.brdn = brdn
         p.objectClass = ["top", "person"]
         p.cn = cn
         p.sn = sn
         p.create()
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             cn: $cn
             sn: $sn
         """)
 
-        def oldRdn = rdn
+        def oldRdn = brdn
         cn = "moved"
         sn = "sn_changed"
-        rdn = "cn=$cn"
+        brdn = "cn=$cn"
 
         p.sn = sn
-        p.move(rdn)
+        p.move(brdn)
 
         assertNull(getEntry(oldRdn))
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             cn: $cn
             sn: $sn
@@ -86,7 +86,7 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
     void testMoveUsingNamingAttribute() {
         def cn = "moveByNaming"
         def sn = "sn"
-        def rdn = "cn=$cn"
+        def brdn = "cn=$cn"
         def objectClass = ["top", "person"]
         
         def constantLdif = """
@@ -102,21 +102,21 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
 
         p.create()
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             cn: $cn
             sn: $sn
         """)
 
-        def oldRdn = rdn
+        def oldRdn = brdn
         cn = "movedByNaming"
-        rdn = "cn=$cn"
+        brdn = "cn=$cn"
 
         p.move(cn, null)
 
         assertNull(getEntry(oldRdn))
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             cn: $cn
             sn: $sn
@@ -126,7 +126,7 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
     void testMoveUsingNamingAttributeAndParent() {
         def cn = "moveByNamingAndParent"
         def sn = "sn"
-        def rdn = "cn=$cn"
+        def brdn = "cn=$cn"
         def objectClass = ["top", "person"]
         def constantLdif = """
             objectClass: person
@@ -163,7 +163,7 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
     void testMoveUsingParent() {
         def cn = "moveByParent"
         def sn = "sn"
-        def rdn = "cn=$cn"
+        def brdn = "cn=$cn"
         def objectClass = ["top", "person"]
         def constantLdif = """
             objectClass: person

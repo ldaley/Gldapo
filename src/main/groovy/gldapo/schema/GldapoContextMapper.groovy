@@ -28,7 +28,7 @@ class GldapoContextMapper implements ContextMapper
         def entry = schemaRegistration.schema.newInstance()
         
         entry.directory = directory
-        entry.rdn = context.dn
+        entry.brdn = context.dn
         entry.exists = true
         
         schemaRegistration.attributeMappings.each { name, mapping ->

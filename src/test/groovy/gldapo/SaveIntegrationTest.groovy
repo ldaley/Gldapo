@@ -12,7 +12,7 @@ public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
         def sn = "sn"
         def title = "original"
         def titleChanged = "changed"
-        def rdn = "cn=$cn"
+        def brdn = "cn=$cn"
         
         def constantLdif = """
             cn: $cn
@@ -22,14 +22,14 @@ public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
             objectClass: organizationalPerson
         """
         
-        p.rdn = rdn
+        p.brdn = brdn
         p.objectClass = ["top", "person", "organizationalPerson"]
         p.cn = cn
         p.sn = sn
         p.title = title
         p.create()
         
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             title: $title
         """)
@@ -37,7 +37,7 @@ public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
         p.title = titleChanged
         p.update()
         
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             title: $titleChanged
         """)
@@ -45,14 +45,14 @@ public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
         p.title = null
         p.update()
         
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
         """)
         
         p.title = titleChanged
         p.update()
         
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             title: $titleChanged
         """)
@@ -63,7 +63,7 @@ public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
         def cn = "modify_multi_value"
         def sn = "sn"
         def telephoneNumber = ["123"]
-        def rdn = "cn=$cn"
+        def brdn = "cn=$cn"
         
         def constantLdif = """
             cn: $cn
@@ -73,14 +73,14 @@ public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
             objectClass: organizationalPerson
         """
         
-        p.rdn = rdn
+        p.brdn = brdn
         p.objectClass = ["top", "person", "organizationalPerson"]
         p.cn = cn
         p.sn = sn
         p.telephoneNumber = telephoneNumber
         p.create()
         
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             telephonenumber: 123
         """)
@@ -88,7 +88,7 @@ public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
         p.telephoneNumber << "456"
         p.update()
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             telephonenumber: 123
             telephonenumber: 456
@@ -97,7 +97,7 @@ public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
         p.telephoneNumber.remove("123")
         p.update()
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             telephonenumber: 456
         """)
@@ -105,21 +105,21 @@ public class SaveIntegrationTest extends AbstractGldapoIntegrationTest
         p.telephoneNumber = null
         p.update()
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
         """)
         
         p.telephoneNumber = [] as Set
         p.update()
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
         """)
         
         p.telephoneNumber << "789"
         p.update()
 
-        assertEqualsLdif(rdn, """
+        assertEqualsLdif(brdn, """
             $constantLdif
             telephonenumber: 789
         """)

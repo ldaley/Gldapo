@@ -240,10 +240,10 @@ class GldapoDirectory implements SearchProvider {
          this.template.unbind(dn, true)
      }
      
-     def getSubContextSource(DistinguishedName rdn) {
+     def getSubContextSource(DistinguishedName brdn) {
         def context = template.contextSource
         def contextDnCopy = new DistinguishedName(context.baseLdapPath)
-        def subContextDn = contextDnCopy.append(rdn)
+        def subContextDn = contextDnCopy.append(brdn)
         return context.class.newInstance(
             urls: context.urls,
             userDn: subContextDn as String,
