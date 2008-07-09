@@ -16,6 +16,8 @@
 package gldapo.entry;
 import gldapo.*;
 import gldapo.exception.*;
+import org.springframework.ldap.core.DistinguishedName;
+import org.springframework.ldap.core.LdapRdn;
 
 /**
  * The API reference for schema classes.
@@ -42,6 +44,32 @@ public abstract class GldapoEntry {
      * @throws GldapoDirectoryNotFoundException If {@code directory} is used as a name, and no directory
      *         is registered with that name.
      */
-    public void setDirectory(Object directory) throws GldapoDirectoryNotFoundException {} 
+    public void setDirectory(Object directory) throws GldapoDirectoryNotFoundException {}
+    
+    /**
+     * The <em>Base Relative Distinguished Name</em> for this entry.
+     * 
+     * The 'brdn' denotes the location of the entry in the directory, relative to the {@link GldapoDirectory#getBase() base}
+     * of the object's directory. It is a combination of the {@link #getParent() parent}, and 
+     * {@link #getNamingAttribute() namingAttribute}/{@link #getNamingValue() namingValue} properties.
+     * 
+     * @return The brdn, or null if not set yet
+     * @throws GldapoException if the {@link #getNamingValue() naming value} for this object is {@code null}
+     */
+    public DistinguishedName getBrdn() throws GldapoException { return null; }
+    
+    /**
+     * Set the location of this entry, with a dn relative to the entry's directory base.
+     * 
+     * The {@code brdn} is converted to a string, and then a {@link DistinguishedName}. 
+     * The leading (leftmost) {@link LdapRdn rdn} is seperated from the dn and the value
+     * passed to {@link #setNamingValue(String)}. Any remaining rdns are passed as a single string
+     * to {@link #setParent(String)}.
+     * 
+     * @param brdn An object whose string representation will be the brdn
+     * @throws GldapoException if the leading rdn of {@code brdn} has a different attribute name
+     *         to the defined {@link #getNamingAttribute() naming attribute} for this class
+     */
+    public void setBrdn(Object brdn) throws GldapoException {} 
     
 }
