@@ -63,13 +63,28 @@ public abstract class GldapoEntry {
      * 
      * The {@code brdn} is converted to a string, and then a {@link DistinguishedName}. 
      * The leading (leftmost) {@link LdapRdn rdn} is seperated from the dn and the value
-     * passed to {@link #setNamingValue(String)}. Any remaining rdns are passed as a single string
-     * to {@link #setParent(String)}.
+     * passed to {@link #setNamingValue(String)}. Any remaining rdns are passed as a single value
+     * to {@link #setParent(Object)}.
      * 
      * @param brdn An object whose string representation will be the brdn
      * @throws GldapoException if the leading rdn of {@code brdn} has a different attribute name
      *         to the defined {@link #getNamingAttribute() naming attribute} for this class
      */
-    public void setBrdn(Object brdn) throws GldapoException {} 
+    public void setBrdn(Object brdn) throws GldapoException {}
+    
+    /**
+     * The dn for the entry in the directory that contains this entry.
+     * 
+     * A value of both {@code null} and a dn of {@code ""} indicate that the
+     * entry's parent is the base of it's directory.
+     */
+    public DistinguishedName getParent() { return null; }
+    
+    /**
+     * Defines the location for this entry by defining it's parent container.
+     * 
+     * @param parent the string representation of this object will form the parent {@link DistinguishedName dn}
+     */
+    public void setParent(Object parent) {} 
     
 }
