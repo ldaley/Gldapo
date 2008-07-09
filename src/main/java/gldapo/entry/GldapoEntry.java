@@ -16,6 +16,7 @@
 package gldapo.entry;
 import gldapo.*;
 import gldapo.exception.*;
+import gldapo.schema.annotation.GldapoNamingAttribute;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapRdn;
 
@@ -86,5 +87,35 @@ public abstract class GldapoEntry {
      * @param parent the string representation of this object will form the parent {@link DistinguishedName dn}
      */
     public void setParent(Object parent) {} 
+
+    /**
+     * The value for the {@link #getNamingAttribute() naming attribute}.
+     * 
+     * This defines part of the location/{@link #getBrdn() brdn} of this entry.
+     * 
+     * @return the naming value, or {@code null} if not yet set
+     */
+    public String getNamingValue() { return null; }
+    
+    /**
+     * Sets the value of the {@link #getNamingAttribute() naming attribute}.
+     * 
+     * This value cannot be changed once set. See {@link #move(String,Object)} if you need
+     * to move an entry (i.e. change it's naming value)
+     * 
+     * @param value the naming value
+     * @throws GldapoException if this object already has a naming value
+     */
+    public void setNamingValue(String value) throws GldapoException {} 
+    
+    /**
+     * The <em>name</em> of the property that is used to define this entry's name.
+     * 
+     * The naming attribute is defined by annotating a property with {@link GldapoNamingAttribute @GldapoNamingAttribute}
+     * and is mandatory for schema classes.
+     * 
+     * @return the attribute name, never {@code null}
+     */
+    public String getNamingAttribute() { return null; }
     
 }
