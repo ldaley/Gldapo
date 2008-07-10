@@ -131,4 +131,26 @@ public abstract class GldapoEntry {
      */
     public String getNamingAttribute() { return null; }
     
+    /**
+     * Fetches the entry at {@code dn} from {@code directory}.
+     * 
+     * If {@code directory} is {@code null}, the {@link GldapoDirectoryRegistry#getDefaultDirectory() default directory} will
+     * be used.
+     * 
+     * @param dn an object's whose string representation is the dn of the target entry
+     * @param directory if not a {@link GldapoDirectory directory}, an objects whose string representation
+     *        is the name of a registered directory
+     * @return an entry object, or {@code null} if there is no entry at {@code dn}
+     * @throws GldapoException if dn or directory are invalid, or an LDAP error occurs.
+     * 
+     */
+    public static GldapoEntry getByDn(Object dn, Object directory) throws GldapoException { return null; }
+    
+    /**
+     * Fetches the entry at {@code dn} from the the {@link GldapoDirectoryRegistry#getDefaultDirectory() default directory}.
+     * 
+     * Calls {@link #getByDn(Object,Object) getByDn(dn,null)}.
+     */
+    public static GldapoEntry getByDn(Object dn) throws GldapoException { return null; }
+    
 }
