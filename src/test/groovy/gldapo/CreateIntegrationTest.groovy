@@ -29,16 +29,14 @@ public class CreateIntegrationTest extends AbstractGldapoIntegrationTest
     }
     
     void testCreateWithSomeAttributes() {
-        def brdn = "cn=someattributes"
         def p = new CreateIntegrationTestPerson(
             cn: "someattributes",
-            brdn: brdn,
             objectClass: ["top", "person", "organizationalPerson"],
             lastName: "sn"
         )
         p.save()
         
-        assertEqualsLdif(brdn, """
+        assertEqualsLdif("cn=someattributes", """
             cn: someattributes
             sn: sn
             objectClass: organizationalPerson

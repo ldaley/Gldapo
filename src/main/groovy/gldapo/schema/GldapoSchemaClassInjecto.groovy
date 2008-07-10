@@ -77,7 +77,7 @@ class GldapoSchemaClassInjecto {
     }
     
     def setBrdn = { brdn ->
-        if (delegate.parent != null)
+        if (delegate.namingValue != null)
             throw new GldapoException("Cannot change brdn/dn on object once set")
         
         def brdnCopy = (brdn instanceof DistinguishedName) ? brdn.clone() : new DistinguishedName(brdn as String)

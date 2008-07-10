@@ -9,7 +9,6 @@ public class PasswordOperationsIntegrationTest extends AbstractGldapoIntegration
     def newPerson(name, password) {
         new PasswordOperationsIntegrationTestPerson(
             cn: name,
-            brdn: "cn=${name}",
             password: password
         )
     }
