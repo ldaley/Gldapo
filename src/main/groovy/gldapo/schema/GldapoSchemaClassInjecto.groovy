@@ -154,37 +154,15 @@ class GldapoSchemaClassInjecto {
         dn
     }
     
-    static getByDn = { DistinguishedName dn, GldapoDirectory directory ->
+    static getByDn = { Object dn, Object directory ->
         delegate.find(absoluteBase: dn, searchScope: "object", directory: directory)
     }
 
     @InjectAs("getByDn")
-    static getByStringDn = { String dn, GldapoDirectory directory ->
-        delegate.find(absoluteBase: dn, searchScope: "object", directory: directory)
-    }
-    
-    @InjectAs("getByDn")
-    static getUsingDirectoryName = { DistinguishedName dn, String directoryName ->
-        delegate.find(absoluteBase: dn, searchScope: "object", directory: directoryName)
-    }
-    
-    @InjectAs("getByDn")
-    static getUsingDirectoryNameAndStringDn = { String dn, String directoryName ->
-        delegate.find(absoluteBase: dn, searchScope: "object", directory: directoryName)
+    static getUsingDefaultDirectory = { Object dn -> 
+        delegate.getByDn(dn, null)
     }
 
-    @InjectAs("getByDn")
-    static getUsingDefaultDirectory = { DistinguishedName dn -> 
-        delegate.getByDn(dn, (String)null)
-    }
-    
-    @InjectAs("getByDn")
-    static getUsingDefaultDirectoryAndStringDn = { String dn -> 
-        delegate.getByDn(dn, (String)null)
-    }
-    
-
-    
     /**
      * 
      */
