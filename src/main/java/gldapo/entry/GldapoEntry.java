@@ -74,6 +74,16 @@ public abstract class GldapoEntry {
     public void setBrdn(Object brdn) throws GldapoException {}
     
     /**
+     * The absolute location of this entry in it's directory.
+     * 
+     * The {@link #getBrdn() brdn}, plus the {@link GldapoDirectory#getBase() base} 
+     * of this object's directory.
+     * 
+     * @throws GldapoException if this object has no directory, or naming value set 
+     */
+    public DistinguishedName getDn() throws GldapoException { return null; }
+    
+    /**
      * The dn for the entry in the directory that contains this entry.
      * 
      * A dn of {@code ""} indicates that the entry's parent is the 

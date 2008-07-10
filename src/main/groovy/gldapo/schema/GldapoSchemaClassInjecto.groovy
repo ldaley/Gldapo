@@ -139,10 +139,18 @@ class GldapoSchemaClassInjecto {
     }
 
     def getDn = { ->
+        def directory = delegate.directory
+        if (directory == null)
+            throw new GldapoException("getDn() called on entry with no directory")
+            
+        def namingValue = delegate.namingValue
+        if (namingValue == null)
+            throw new GldapoException("getDn() called on entry with no naming value")
+            
         def dn = new DistinguishedName()
-        dn.append(delegate.directory.base)
+        dn.append(directory.base)
         dn.append(delegate.parent)
-        dn.append(delegate.namingAttribute, delegate.namingValue)
+        dn.append(delegate.namingAttribute, namingValue)
         dn
     }
     
