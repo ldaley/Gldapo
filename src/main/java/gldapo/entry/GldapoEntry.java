@@ -76,8 +76,11 @@ public abstract class GldapoEntry {
     /**
      * The dn for the entry in the directory that contains this entry.
      * 
-     * A value of both {@code null} and a dn of {@code ""} indicate that the
-     * entry's parent is the base of it's directory.
+     * A dn of {@code ""} indicates that the entry's parent is the 
+     * base of it's directory. If a parent has not been explicitly set,
+     * an empty dn will be returned.
+     * 
+     * @return A dn, never {@code null}
      */
     public DistinguishedName getParent() { return null; }
     

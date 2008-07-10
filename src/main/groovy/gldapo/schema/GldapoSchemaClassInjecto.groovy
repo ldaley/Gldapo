@@ -97,6 +97,15 @@ class GldapoSchemaClassInjecto {
         delegate.setInjectoProperty('parent', parent)
     }
 
+    def getParent = { ->
+        def parent = delegate.getInjectoProperty('parent')
+        if (parent == null) {
+            parent = new DistinguishedName()
+            delegate.parent = parent
+        }
+        return parent
+    }
+
     def getBrdn = { -> 
         def brdn = new DistinguishedName()
 
