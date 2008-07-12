@@ -159,7 +159,7 @@ class GldapoSchemaClassInjecto {
     }
 
     @InjectAs("getByDn")
-    static getUsingDefaultDirectory = { Object dn -> 
+    static getByDnUsingDefaultDirectory = { Object dn -> 
         delegate.getByDn(dn, null)
     }
 
