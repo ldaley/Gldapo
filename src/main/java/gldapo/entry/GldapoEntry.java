@@ -241,4 +241,12 @@ public abstract class GldapoEntry {
      * @throws GldapoException if this object has no directory, no valid brdn, or and LDAP error occurs.
      */
     public void deleteRecursively() throws GldapoException {}
+    
+    /**
+     * Test if {@code password} is this entry's password.
+     * 
+     * @throws GldapoException if this object has no location or directory defined, or an LDAP error occurs
+     */
+    public boolean authenticate(String password) throws GldapoException 
+    
 }
