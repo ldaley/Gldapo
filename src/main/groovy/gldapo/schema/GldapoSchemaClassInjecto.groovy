@@ -288,7 +288,7 @@ class GldapoSchemaClassInjecto {
     }
     
     @InjectAs("move")
-    def moveByNamingAndParent = { String namingValue, parent ->
+    def moveByNamingAndParent = { namingValue, parent ->
         def brdn = new DistinguishedName()
         
         if (parent != null) {
@@ -302,7 +302,7 @@ class GldapoSchemaClassInjecto {
                 throw new GldapoException("First argument to move(String,Object) cannot be null if object has no naming value")
             namingValue = delegate.namingValue
         }
-        brdn.append(delegate.namingAttribute, namingValue)
+        brdn.append(delegate.namingAttribute, namingValue.toString())
 
         delegate.move(brdn)
     }
