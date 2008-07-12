@@ -273,22 +273,18 @@ class GldapoSchemaClassInjecto {
     /**
      * 
      */
-    def move = { DistinguishedName newrdn ->
+    def move = { Object newbrdn ->
+        newbrdn = (newbrdn instanceof DistinguishedName) ? newbrdn : new DistinguishedName(newbrdn.toString())
         assumeDefaultDirectoryIfNoneSet()
         if (delegate.exists) {
             delegate.update()
         } else {
             throw new GldapoException("'move' attempted on an object that does not exist")
         }
-        delegate.directory.moveEntry(delegate.brdn, newrdn)
+        delegate.directory.moveEntry(delegate.brdn, newbrdn)
         delegate.parent = null
         delegate.namingValue = null
-        delegate.brdn = newrdn
-    }
-
-    @InjectAs("move")
-    def moveString = { String newrdn ->
-        delegate.move(new DistinguishedName(newrdn))
+        delegate.brdn = newbrdn
     }
     
     @InjectAs("move")
