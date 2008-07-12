@@ -273,7 +273,7 @@ class GldapoSchemaClassInjecto {
     /**
      * 
      */
-    def move = { Object newbrdn ->
+    def move = { newbrdn ->
         newbrdn = (newbrdn instanceof DistinguishedName) ? newbrdn : new DistinguishedName(newbrdn.toString())
         assumeDefaultDirectoryIfNoneSet()
         if (delegate.exists) {
