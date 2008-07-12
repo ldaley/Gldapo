@@ -382,7 +382,7 @@ class GldapoSchemaClassInjecto {
         delegate.find([:])
     }
     
-    def authenticate = { password ->
+    def authenticate = { String password ->
         delegate.assertHasNamingValueAndDirectoryForOperation('authenticate')
         def contextSource = delegate.directory.getSubContextSource(delegate.brdn)
         contextSource.password = password
