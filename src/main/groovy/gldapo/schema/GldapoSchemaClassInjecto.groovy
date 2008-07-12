@@ -291,6 +291,9 @@ class GldapoSchemaClassInjecto {
     def moveByNamingAndParent = { namingValue, parent ->
         def brdn = new DistinguishedName()
         
+        if (parent == null)
+            parent = delegate.parent
+        
         if (parent != null) {
             if (!(parent instanceof DistinguishedName)) 
                 parent = new DistinguishedName(parent as String)

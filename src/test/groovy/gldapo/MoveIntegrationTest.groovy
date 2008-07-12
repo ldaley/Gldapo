@@ -84,9 +84,16 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
     }
 
     void testMoveUsingNamingAttribute() {
+        
+        importEntry(ou: "moveByNaming", """
+            objectclass: top
+            objectclass: organizationalUnit
+        """)
+        
         def cn = "moveByNaming"
         def sn = "sn"
-        def brdn = "cn=$cn"
+        def parent = "ou=moveByNaming"
+        def brdn = "cn=$cn,${parent}"
         def objectClass = ["top", "person"]
         
         def constantLdif = """
@@ -97,7 +104,8 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
         def p = new MoveIntegrationTestPerson(
             cn: cn,
             sn: sn,
-            objectClass: objectClass
+            objectClass: objectClass,
+            parent: parent
         )
 
         p.create()
@@ -110,7 +118,7 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
 
         def oldRdn = brdn
         cn = "movedByNaming"
-        brdn = "cn=$cn"
+        brdn = "cn=$cn,${parent}"
 
         p.move(cn, null)
 
@@ -121,6 +129,20 @@ public class MoveIntegrationTest extends AbstractGldapoIntegrationTest
             cn: $cn
             sn: $sn
         """)
+        
+        oldRdn = brdn
+        brdn = "cn=$cn"
+
+        p.move(null, "")
+
+        assertNull(getEntry(oldRdn))
+
+        assertEqualsLdif(brdn, """
+            $constantLdif
+            cn: $cn
+            sn: $sn
+        """)
+        
     }
     
     void testMoveUsingNamingAttributeAndParent() {
