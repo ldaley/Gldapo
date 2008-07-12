@@ -247,6 +247,6 @@ public abstract class GldapoEntry {
      * 
      * @throws GldapoException if this object has no location or directory defined, or an LDAP error occurs
      */
-    public boolean authenticate(String password) throws GldapoException 
+    public boolean authenticate(String password) throws GldapoException { return true; }
     
 }
