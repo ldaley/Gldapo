@@ -151,6 +151,94 @@ public abstract class GldapoEntry {
      * 
      * Calls {@link #getByDn(Object,Object) getByDn(dn,null)}.
      */
-    public static GldapoEntry getByDn(Object dn) throws GldapoException { return null; }
+    public static GldapoEntry getByDn(Object dn) throws GldapoException { return null; }    
     
+    /**
+     * Writes the object in it's entirety to the directory.
+     * 
+     * Before an object can be written, it must have a location and a {@link #setDirectory(Object) directory}. To have
+     * a location, it must at least have a naming value.
+     * 
+     * @throws GldapoException If the object is in an invalid state for creating, or an LDAP error occurs.
+     */
+    public void create() throws GldapoException {} 
+    
+    /**
+     * Saves any modifications made to this object to the directory.
+     * 
+     * This will only send any changes made, so is not suitable for {@link #create() creating} new objects.
+     * If this object has no modifications, this is a no-op.
+     * 
+     * @throws GldapoException if the object is not in a suitable state for updating, or an LDAP error occurs.
+     */
+    public void update() throws GldapoException {} 
+    
+    /**
+     * {@link #create() Creates} of {@link #update() updates} the object depending on whether it is a new object or not.
+     * 
+     * @throws GldapoException if the object is not in a suitable state for saving, or an LDAP error occurs.
+     */
+    public void save() throws GldapoException {} 
+    
+    /**
+     * Relocate this object in the directory, after {@link #update() sending any updates}.
+     * 
+     * @param brdn the new {@link getBrdn() brdn} of the object (the string representation will be used).
+     * @throws GldapoException if {@code brdn} is invalid, this is not an existing entry, or an LDAP error occurs.
+     */
+    public void move(Object brdn) throws GldapoException {} 
+    
+    /**
+     * Relocate this object in the directory, after {@link #update() sending any updates}.
+     * 
+     * @param namingValue the new naming value (the string representation will be used). If {@code null},
+     *        the existing naming value will be used.
+     * @param parent the new parent container (the string representation will be used). If {@code null},
+     *        the existing parent value will be used. Use {@code ""} to specify no parent.
+     * @throws GldapoException if {@code brdn} is invalid, this is not an existing entry, or an LDAP error occurs.
+     */
+    public void move(Object namingValue, Object parent) throws GldapoException {} 
+    
+    /**
+     * Replaces the entry @ {@code brdn} with this object.
+     * 
+     * @param brdn the location of the entry to replace (the string representation will be used).
+     * @throws GldapoException if this object has no directory, or and LDAP error occurs.
+     */
+    public void replace(Object brdn) throws GldapoException {}
+    
+    /**
+     * Replaces the entry at the location specified by {@code namingValue} and {@code parent} with this
+     * object.
+     * 
+     * @param namingValue the replacee's naming value (the string representation will be used). If {@code null},
+     *        this object's naming value will be used.
+     * @param parent the replacee's parent container (the string representation will be used). If {@code null},
+     *        this object's parent value will be used. Use {@code ""} to specify no parent.
+     * @throws GldapoException if this object has no directory, or and LDAP error occurs.
+     */
+    public void replace(Object namingValue, Object parent) throws GldapoException {}
+    
+    /**
+     * Replaces the entry specified by this objects's {@link #getBrdn() brdn} with this object.
+     * 
+     * @throws GldapoException if this object has no directory, no valid brdn, or and LDAP error occurs.
+     */
+    public void replace() throws GldapoException {} 
+    
+    /**
+     * Removes the entry specified by this object's {@link #getBrdn() brdn} from the directory.
+     * 
+     * This <strong>will</strong> fail if the entry has children, use {@link #deleteRecursively()} in that case.
+     * 
+     * @throws GldapoException if this object has no directory, no valid brdn, or and LDAP error occurs.
+     */
+    public void delete() throws GldapoException {}
+    
+    /**
+     * Removes the entry specified by this object's {@link #getBrdn() brdn} from the directory, and all it's children.
+     * 
+     * @throws GldapoException if this object has no directory, no valid brdn, or and LDAP error occurs.
+     */
+    public void deleteRecursively() throws GldapoException {}
 }
