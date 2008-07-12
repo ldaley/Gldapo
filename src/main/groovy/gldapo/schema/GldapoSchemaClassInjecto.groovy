@@ -310,10 +310,8 @@ class GldapoSchemaClassInjecto {
         delegate.move(brdn)
     }
     
-    /**
-     * 
-     */
-    def replace = { DistinguishedName target ->
+    def replace = { target ->
+        target = (target instanceof DistinguishedName) ? target : new DistinguishedName(target.toString())
         assumeDefaultDirectoryIfNoneSet()
         assertHasDirectoryForOperation('replace')
         delegate.directory.replaceEntry(target, delegate.attributes)
@@ -323,11 +321,6 @@ class GldapoSchemaClassInjecto {
         delegate.snapshotStateAsClean()
     }
     
-    @InjectAs("replace")
-    def replaceString = { String target ->
-        delegate.replace(new DistinguishedName(target))
-    }
-
     @InjectAs("replace")
     def replaceByNamingAndParent = { String namingValue, parent ->
         def brdn = new DistinguishedName()
