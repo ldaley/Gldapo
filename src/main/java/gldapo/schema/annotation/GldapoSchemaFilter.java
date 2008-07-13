@@ -17,7 +17,7 @@ package gldapo.schema.annotation;
 import java.lang.annotation.*;
 
 /**
- * 
+ * An LDAP search filter to be anded to every search made for objects of this class. 
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

@@ -17,7 +17,7 @@ package gldapo.schema.annotation;
 import java.lang.annotation.*;
  
 /**
- * 
+ * Used to indicate that the name of the property is not the same as the source attribute name.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

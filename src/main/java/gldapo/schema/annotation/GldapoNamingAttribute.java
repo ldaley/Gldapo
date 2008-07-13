@@ -17,7 +17,10 @@ package gldapo.schema.annotation;
 import java.lang.annotation.*;
 
 /**
+ * Indicates which attribute forms the <em>name</em> of the entry.
  * 
+ * For example, if the entry has a dn of {@code "cn=bob,ou=people"}, the {@code cn} attribute is the naming attribute.
+ * All schema classes must define a naming attritube.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

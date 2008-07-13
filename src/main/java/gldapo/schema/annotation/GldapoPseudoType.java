@@ -3,7 +3,7 @@
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+* You may obtain a copy of the License at
 *
 *      http://www.apache.org/licenses/LICENSE-2.0
 *
@@ -17,7 +17,11 @@ package gldapo.schema.annotation;
 import java.lang.annotation.*;
 
 /**
+ * Indicates that the attribute requires custom type conversion.
  * 
+ * Useful, for example, when dealing with dates. Dates can be stored in different ways,
+ * so they need to be parsed differently. To handle this, you could specify the actual type
+ * of the attribute as {@link java.util.Date}, but use a psuedo type.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
