@@ -1,0 +1,25 @@
+    ---------------------------------
+    Schema Classes - Naming Attribute
+    ---------------------------------
+
+Naming Attribute
+
+    The <<<@GldapoNamingAttribute>>> is <<mandatory>> for schema classes. It defines which attribute defines the <name> of the object. THis is typically <<<cn>>>, <<<uid>>>, or <<<ou>>>. For example, the object <<<cn=daleyl,ou=people,dc=domain,dc=com>>> has a naming attribute of <<<cn>>>.
+
+    The annotation is applied directly to the field that is the naming attribute...
+    
++-------------------------------+
+import gldapo.schema.annotation.GldapoNamingAttribute
+
+class Person
+{
+    @GldapoNamingAttribute
+    String cn
+
+    String sn
+}
++-------------------------------+
+
+    As the naming attribute is used for defining the location of entry it is used when {{{../apidocs/gldapo/entry/GldapoEntry.html#move(java.lang.Object,%20java.lang.Object)}moving}} or {{{../apidocs/gldapo/entry/GldapoEntry.html#replacing(java.lang.Object,%20java.lang.Object)}replacing}} an entry.
+
+    The naming attribute obviously requires a value at all times, i.e. an object must have a value for the naming attribute before it can be {{{../apidocs/gldapo/entry/GldapoEntry.html#create()}created}}.

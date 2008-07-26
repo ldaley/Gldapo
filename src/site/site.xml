@@ -27,6 +27,7 @@
         </menu>
         <menu name="Schema Classes">
             <item name="About" href="/schemaclasses/index.html"/>
+            <item name="Naming Attribute" href="/schemaclasses/namingattribute.html"/>
             <item name="Attributes" href="/schemaclasses/attributes.html"/>
             <item name="Filters" href="/schemaclasses/filters.html"/>
             <item name="Searching" href="schemaclasses/searching.html"/>
