@@ -115,7 +115,7 @@ public abstract class GldapoEntry {
     /**
      * Sets the value of the {@link #getNamingAttribute() naming attribute}.
      * 
-     * This value cannot be changed once set. See {@link #move(String,Object)} if you need
+     * This value cannot be changed once set. See {@link #move(Object,Object)} if you need
      * to move an entry (i.e. change it's naming value)
      * 
      * @param value the naming value
@@ -185,7 +185,7 @@ public abstract class GldapoEntry {
     /**
      * Relocate this object in the directory, after {@link #update() sending any updates}.
      * 
-     * @param brdn the new {@link getBrdn() brdn} of the object (the string representation will be used).
+     * @param brdn the new {@link #getBrdn() brdn} of the object (the string representation will be used).
      * @throws GldapoException if {@code brdn} is invalid, this is not an existing entry, or an LDAP error occurs.
      */
     public void move(Object brdn) throws GldapoException {} 
