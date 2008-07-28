@@ -32,6 +32,12 @@ class FilterBuilderTest extends GroovyTestCase {
         assertEquals filter.encode(), expected
     }
     
+    void testSimpleLike() {
+        assertFilterEquals("(a=*b)") {
+            like "a", "*b"
+        }
+    }
+    
     void testEscaping() {
         assertFilterEquals("(a=${escapes['*']}b)") {
             eq("a","*b")
@@ -46,6 +52,18 @@ class FilterBuilderTest extends GroovyTestCase {
         assertFilterEquals("(a=b)") {
             eq("a","b")
         }
+    }
+    
+    void testSimpleLessThanOrEqual() {
+        assertFilterEquals("(a<=b)") {
+            lte "a","b"
+        }        
+    }
+    
+    void testSimpleGreaterThanOrEqual() {
+        assertFilterEquals("(a>=b)") {
+            gte "a","b"
+        }        
     }
     
     void testSimpleAnd() {
