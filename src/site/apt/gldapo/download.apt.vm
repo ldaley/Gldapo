@@ -34,26 +34,26 @@ Download Gldapo
     
         * Injecto 0.6
 
-* Stable Release (${stableVersion})
+* Stable Release (${releaseVersion})
 
 *-------------------------+----------+-----------+------------+
 ||                        || Mirrors || Checksum || Signature |
 *-------------------------+----------+-----------+------------+
-| Gldapo ${stableVersion} (tar.bz2)     | {{{${downloadUrlBase}/gldapo-${stableVersion}-${distAssembly}.tar.bz2} gldapo-${stableVersion}-${distAssembly}.tar.bz2}} | {{{${downloadUrlBase}/gldapo-${stableVersion}-${distAssembly}.tar.bz2.md5} gldapo-${stableVersion}-${distAssembly}.tar.bz2.md5}} | {{{${downloadUrlBase}/gldapo-${stableVersion}-${distAssembly}.tar.bz2.sha1} gldapo-${stableVersion}-${distAssembly}.tar.bz2.sha1}} |
+| Gldapo ${releaseVersion} (tar.bz2)     | {{{${downloadUrlBase}/gldapo-${releaseVersion}-${distAssembly}.tar.bz2} gldapo-${releaseVersion}-${distAssembly}.tar.bz2}} | {{{${downloadUrlBase}/gldapo-${releaseVersion}-${distAssembly}.tar.bz2.md5} gldapo-${releaseVersion}-${distAssembly}.tar.bz2.md5}} | {{{${downloadUrlBase}/gldapo-${releaseVersion}-${distAssembly}.tar.bz2.sha1} gldapo-${releaseVersion}-${distAssembly}.tar.bz2.sha1}} |
 *-------------------------+---------+----------+-----------+
-| Gldapo ${stableVersion} (tar.gz)      | {{{${downloadUrlBase}/gldapo-${stableVersion}-${distAssembly}.tar.gz} gldapo-${stableVersion}-${distAssembly}.tar.gz}} | {{{${downloadUrlBase}/gldapo-${stableVersion}-${distAssembly}.tar.gz.md5} gldapo-${stableVersion}-${distAssembly}.tar.gz.md5}} | {{{${downloadUrlBase}/gldapo-${stableVersion}-${distAssembly}.tar.gz.sha1} gldapo-${stableVersion}-${distAssembly}.tar.gz.sha1}} |
+| Gldapo ${releaseVersion} (tar.gz)      | {{{${downloadUrlBase}/gldapo-${releaseVersion}-${distAssembly}.tar.gz} gldapo-${releaseVersion}-${distAssembly}.tar.gz}} | {{{${downloadUrlBase}/gldapo-${releaseVersion}-${distAssembly}.tar.gz.md5} gldapo-${releaseVersion}-${distAssembly}.tar.gz.md5}} | {{{${downloadUrlBase}/gldapo-${releaseVersion}-${distAssembly}.tar.gz.sha1} gldapo-${releaseVersion}-${distAssembly}.tar.gz.sha1}} |
 *-------------------------+---------+----------+-----------+
-| Gldapo ${stableVersion} (zip)         | {{{${downloadUrlBase}/gldapo-${stableVersion}-${distAssembly}.zip} gldapo-${stableVersion}-${distAssembly}.zip}} | {{{${downloadUrlBase}/gldapo-${stableVersion}-${distAssembly}.zip.md5} gldapo-${stableVersion}-${distAssembly}.zip.md5}} | {{{${downloadUrlBase}/gldapo-${stableVersion}-${distAssembly}.zip.sha1} gldapo-${stableVersion}-${distAssembly}.zip.sha1}} |
+| Gldapo ${releaseVersion} (zip)         | {{{${downloadUrlBase}/gldapo-${releaseVersion}-${distAssembly}.zip} gldapo-${releaseVersion}-${distAssembly}.zip}} | {{{${downloadUrlBase}/gldapo-${releaseVersion}-${distAssembly}.zip.md5} gldapo-${releaseVersion}-${distAssembly}.zip.md5}} | {{{${downloadUrlBase}/gldapo-${releaseVersion}-${distAssembly}.zip.sha1} gldapo-${releaseVersion}-${distAssembly}.zip.sha1}} |
 *-------------------------+---------+----------+-----------+
 
-* Development Release (${project.version})
+* Development Snapshot (${project.version})
 
 *-------------------------+----------+-----------+------------+
 ||                        || Mirrors || Checksum || Signature |
 *-------------------------+----------+-----------+------------+
-| Gldapo ${project.version} (tar.bz2)     | {{{${downloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.bz2} gldapo-${project.version}-${distAssembly}.tar.bz2}} | {{{${downloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.bz2.md5} gldapo-${project.version}-${distAssembly}.tar.bz2.md5}} | {{{${downloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.bz2.sha1} gldapo-${project.version}-${distAssembly}.tar.bz2.sha1}} |
+| Gldapo ${project.version} (tar.bz2)     | {{{${snapshotDownloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.bz2} gldapo-${project.version}-${distAssembly}.tar.bz2}} | {{{${snapshotDownloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.bz2.md5} gldapo-${project.version}-${distAssembly}.tar.bz2.md5}} | {{{${snapshotDownloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.bz2.sha1} gldapo-${project.version}-${distAssembly}.tar.bz2.sha1}} |
 *-------------------------+---------+----------+-----------+
-| Gldapo ${project.version} (tar.gz)      | {{{${downloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.gz} gldapo-${project.version}-${distAssembly}.tar.gz}} | {{{${downloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.gz.md5} gldapo-${project.version}-${distAssembly}.tar.gz.md5}} | {{{${downloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.gz.sha1} gldapo-${project.version}-${distAssembly}.tar.gz.sha1}} |
+| Gldapo ${project.version} (tar.gz)      | {{{${snapshotDownloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.gz} gldapo-${project.version}-${distAssembly}.tar.gz}} | {{{${snapshotDownloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.gz.md5} gldapo-${project.version}-${distAssembly}.tar.gz.md5}} | {{{${snapshotDownloadUrlBase}/gldapo-${project.version}-${distAssembly}.tar.gz.sha1} gldapo-${project.version}-${distAssembly}.tar.gz.sha1}} |
 *-------------------------+---------+----------+-----------+
-| Gldapo ${project.version} (zip)         | {{{${downloadUrlBase}/gldapo-${project.version}-${distAssembly}.zip} gldapo-${project.version}-${distAssembly}.zip}} | {{{${downloadUrlBase}/gldapo-${project.version}-${distAssembly}.zip.md5} gldapo-${project.version}-${distAssembly}.zip.md5}} | {{{${downloadUrlBase}/gldapo-${project.version}-${distAssembly}.zip.sha1} gldapo-${project.version}-${distAssembly}.zip.sha1}} |
+| Gldapo ${project.version} (zip)         | {{{${snapshotDownloadUrlBase}/gldapo-${project.version}-${distAssembly}.zip} gldapo-${project.version}-${distAssembly}.zip}} | {{{${snapshotDownloadUrlBase}/gldapo-${project.version}-${distAssembly}.zip.md5} gldapo-${project.version}-${distAssembly}.zip.md5}} | {{{${snapshotDownloadUrlBase}/gldapo-${project.version}-${distAssembly}.zip.sha1} gldapo-${project.version}-${distAssembly}.zip.sha1}} |
 *-------------------------+---------+----------+-----------+

@@ -11,6 +11,8 @@ Working with Entries
 +-------------------------------+
 class MySchemaClass
 {
+    @GldapoNamingAttribute
+    String uid
     String cn
     String sn
 }
@@ -28,14 +30,15 @@ Gldapo.initialize(
          
 * Creating
 
-    Creating new entries involves creating a new object of a schema class and calling the <<<create()>>> or <<<save()>>> methods. You <<must>> associate the object to a directory and give it a dn first though...
+    Creating new entries involves creating a new object of a schema class and calling the <<<create()>>> or <<<save()>>> methods. You <<must>> associate the object to a directory and give it a naming value (and optionally a parent) first though...
 
 +-------------------------------+
 def newUser = new MySchemaClass()
 
 // Assign the object a directory and a place in it.
 newUser.directory = "example"
-newUser.rdn = "uid=newuser,ou=people"
+newUser.parent = "ou=people"
+newUser.uid = "newuser"
 
 // Set the attribute values
 newUser.cn = "New"
@@ -50,7 +53,11 @@ newUser.create()
     Updating an object involves fetching it from the store, changing some attributes and writing it back...
     
 +-------------------------------+
-def newUser = MySchemaClass.find(directory: "example", filter: "(&(cn=New)(sn=User))")
+def newUser = MySchemaClass.find(directory: "example") { 
+    eq "cn", "New"
+    eq "sn", "User
+}
+
 newUser.cn = "NotSoNew"
 newUser.update()
 +-------------------------------+
@@ -88,16 +95,21 @@ newUserReplacement.replace("uid=notsonew,ou=people")
     Deleting an entry involves either fetching an entry, or creating a skeleton object and calling <<<delete()>>>...
 
 +-------------------------------+
-def newUser = MySchemaClass.find(directory: "example", filter: "(&(cn=NotSoNew)(sn=Replacement))")
+def newUser = MySchemaClass.find(directory: "example") {
+    eq "cn", "NotSoNew"
+    eq "sn", "Replacement"
+}
 newUser.delete()
 +-------------------------------+
 
     Or...
 
 +-------------------------------+
-def newUserReplacement = new MySchemaClass()
-newUserReplacement.directory = "example"
-newUserReplacement.rdn = "uid=notsonew,ou=people"
+def newUserReplacement = new MySchemaClass(
+    directory: "example",
+    parent: "ou=example",
+    uid: "notsonew"
+)
 newUserReplacement.delete()
 +-------------------------------+
 

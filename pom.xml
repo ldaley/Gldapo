@@ -131,8 +131,9 @@
         </dependency>
     </dependencies>
     <properties>
-        <stableVersion>0.6</stableVersion>
+        <releaseVersion>0.6</releaseVersion>
         <downloadUrlBase>http://dist.codehaus.org/gldapo</downloadUrlBase>
+        <snapshotDownloadUrlBase>http://snapshots.dist.codehaus.org/gldapo</snapshotDownloadUrlBase>
         <distAssembly>dist</distAssembly>
         <distAssemblyName>${project.artifactId}-${project.version}-${distAssembly}</distAssemblyName>
         <distAssemblyFile>${project.build.directory}/${distAssemblyName}</distAssemblyFile>
