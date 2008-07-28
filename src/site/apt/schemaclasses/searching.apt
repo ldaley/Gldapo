@@ -23,3 +23,21 @@ MySchemaClass match = MySchemaClass.find(
 +-------------------------------+
 
     See the {{{methodreference.html}method reference}} for details.
+    
+Filter DSL
+
+    Gldapo 0.7 introduced a DSL to make constructing search filters easier. Here is an example...
+
++-------------------------------+
+def matches = Person.findAll(base: "ou=people") {
+    and {
+        or { 
+            like "cn", "foo*" 
+            like "cn", "bar*" 
+        }
+        eq "groupMembership", "cn=admingroup,ou=system,o=mycompany"
+    }
+}
++-------------------------------+
+
+    Usage of the filter DSL is highly recommended as it takes care of all escaping issues. Please see the {{{http://svn.gldapo.codehaus.org/browse/gldapo/trunk/src/test/groovy/gldapo/filter/FilterBuilderTest.groovy?r=HEAD}test cases}} for more usage examples.
