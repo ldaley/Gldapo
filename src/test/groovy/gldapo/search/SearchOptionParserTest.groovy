@@ -100,6 +100,22 @@ class SearchOptionParserTest extends GroovyTestCase {
         def withFilterAndSchemaFilter = getParser(filter: new EqualsFilter("a", "b"), SearchOptionParserTestSchemaWithFilter)
         assertEquals("(&(objectclass=person)(a=b))", withFilterAndSchemaFilter.filter)
     }
+    
+    void testFilterWithFilterBuilder() {
+        
+        def filter = { 
+            and { 
+                eq "a", "b"
+                eq "c", "d"
+            } 
+        }
+        
+        def withFilter = getParser(filter: filter)
+        assertEquals("(&(a=b)(c=d))", withFilter.filter)
+
+        def withFilterAndSchemaFilter = getParser(filter: filter, SearchOptionParserTestSchemaWithFilter)
+        assertEquals("(&(objectclass=person)(&(a=b)(c=d)))", withFilterAndSchemaFilter.filter)
+    }
 }
 
 class SearchOptionParserTestSchema{

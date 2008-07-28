@@ -17,10 +17,12 @@ package gldapo.entry;
 import gldapo.*;
 import gldapo.exception.*;
 import gldapo.schema.annotation.*;
+import gldapo.filter.FilterBuilder;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapRdn;
 import java.util.Map;
 import java.util.List;
+import groovy.lang.Closure;
 
 /**
  * The API reference for schema classes.
@@ -259,7 +261,7 @@ public abstract class GldapoEntry {
      * <table border="1" cellspacing="0" cellpadding="2">
      * <tr><th>Key</th><th>Value Description</th></tr>
      * <tr><td>{@code directory}</td><td>The directory to use. Either by name or instance. If {@code null}, the default directory will be used</td></tr> 
-     * <tr><td>{@code filter}</td><td>The filter used to restrict the search (string value will be used). Will be anded with the {@link GldapoSchemaFilter schema filter} if present.</td></tr>
+     * <tr><td>{@code filter}</td><td>The filter used to restrict the search (string value will be used, or passed to filter builder if {@link Closure}). Will be anded with the {@link GldapoSchemaFilter schema filter} if present.</td></tr>
      * <tr><td>{@code base}</td><td>The dn (relative to the base of the directory) to start the search at. If {@code null}, the directory base will be used.</td></tr> 
      * <tr><td>{@code absoluteBase}</td><td>The dn to start the search at, but absolutely, not relative to the directory base.</td></tr> 
      * <tr><td>{@code searchScope}</td><td>A string indicating the scope of the search (either {@code "object"}, {@code "onelevel"} or {@code "subtree"})</td></tr> 
@@ -271,11 +273,23 @@ public abstract class GldapoEntry {
      * <p>
      * Values override the default search options defined by the target directory. Where an option is omitted from {@code options},
      * the value from the directory's set options.
+     * <p>
+     * If the {@code filter} option is a closure, it will be used with {@link FilterBuilder} to build the filter string.
      * 
      * @return the found objects, or an empty list if none were found.
      * @throws GldapoException if the proposed options are invalid in anyway, or an LDAP error occurs.
      */
     static public List<GldapoEntry> findAll(Map options) throws GldapoException { return null; } 
+    
+    /**
+     * Calls {@link #findAll(Map)}, after setting {@code filter} in {@code options} to {@code closure}
+     */
+    static public List<GldapoEntry> findAll(Map options, Closure closure) throws GldapoException { return null; } 
+
+    /**
+     * Calls {@link #findAll(Map)}, with a {@code filter} option of {@code closure}.
+     */
+    static public List<GldapoEntry> findAll(Closure closure) throws GldapoException { return null; } 
     
     /**
      * Peforms a search using all default options.
@@ -296,11 +310,20 @@ public abstract class GldapoEntry {
     static public GldapoEntry find(Map options) throws GldapoException { return null; } 
 
     /**
+     * Calls {@link #find(Map)}, after setting {@code filter} in {@code options} to {@code closure}
+     */
+    static public List<GldapoEntry> find(Map options, Closure closure) throws GldapoException { return null; } 
+
+    /**
+     * Calls {@link #find(Map)}, with a {@code filter} option of {@code closure}.
+     */
+    static public List<GldapoEntry> find(Closure closure) throws GldapoException { return null; }
+    
+    /**
      * Peform a search (using default options), returning the first object found.
      * 
      * @return the entry, or {@code null} if not found
      * @throws GldapoException if the proposed options are invalid in anyway, or an LDAP error occurs.
      */    
     static public GldapoEntry find() throws GldapoException { return null; } 
-    
 }

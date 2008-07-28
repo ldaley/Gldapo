@@ -367,6 +367,17 @@ class GldapoSchemaClassInjecto {
     }
     
     @InjectAs("findAll")
+    static findAllWithOptionsAndClosure = { Map options, Closure filter ->
+        options.filter = filter
+        delegate.findAll(options)
+    }
+    
+    @InjectAs("findAll")
+    static findAllWithClosure = { Closure filter ->
+        delegate.findAll(filter: filter)
+    }
+    
+    @InjectAs("findAll")
     static findAllNoArgs = { -> 
         delegate.findAll([:])
     }
@@ -375,6 +386,17 @@ class GldapoSchemaClassInjecto {
         options.countLimit = 1
         def r = delegate.findAll(options)
         (r.size() > 0) ? r[0] : null
+    }
+    
+    @InjectAs("find")
+    static findWithOptionsAndClosure = { Map options, Closure filter ->
+        options.filter = filter
+        delegate.find(options)
+    }
+    
+    @InjectAs("find")
+    static findWithClosure = { Closure filter ->
+        delegate.find(filter: filter)
     }
     
     @InjectAs("find")

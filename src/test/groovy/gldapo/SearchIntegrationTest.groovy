@@ -69,6 +69,17 @@ public class SearchIntegrationTest extends AbstractGldapoIntegrationTest
         def half = SearchIntegrationTestPerson.findAll(countLimit: halfNumEntries)
         assertEquals(halfNumEntries, half.size())
     }
+    
+    void testFilterBuilder() {
+        def firstTwo = SearchIntegrationTestPerson.findAll { 
+            or {
+                eq "cn", "search1"
+                eq "cn", "search2"
+            }
+        }
+        
+        assertEquals(2, firstTwo.size())
+    }
 }
 
 @GldapoSchemaFilter("(objectclass=person)")

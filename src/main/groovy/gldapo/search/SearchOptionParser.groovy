@@ -15,8 +15,10 @@
  */
 package gldapo.search
 import gldapo.Gldapo
+import gldapo.filter.FilterUtil
 import gldapo.schema.annotation.GldapoSchemaFilter
 import org.springframework.ldap.core.DistinguishedName
+import org.springframework.ldap.filter.*
 
 /**
  * Given a map of search options, calculates what the actual search parameters should be.
@@ -45,6 +47,7 @@ class SearchOptionParser
         
         this.directory = calculateDirectory()
         this.filter = calculateFilter()
+        println this.filter
         this.controls = calculateSearchControls()
         this.base = calculateBase()
     }
@@ -84,10 +87,15 @@ class SearchOptionParser
     def calculateFilter()
     {
         def schemaFilter = this.schema.getAnnotation(GldapoSchemaFilter)?.value()
-        def optionFilter = this.options.filter as String
-        
+        def optionFilter = this.options.filter
+            
         if (optionFilter) 
         {
+            if (optionFilter instanceof Closure)
+                optionFilter = FilterUtil.build(optionFilter)
+            
+            optionFilter = optionFilter as String
+            
             return (schemaFilter) ? "(&${schemaFilter}${optionFilter})" : optionFilter
         } 
         else 
