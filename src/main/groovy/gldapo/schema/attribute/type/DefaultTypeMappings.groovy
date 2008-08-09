@@ -158,4 +158,12 @@ class DefaultTypeMappings
     static mapFromDistinguishedNameType(value) {
         value.toString()
     }
+    
+    static mapToBooleanType(value) {
+        new Boolean(value)
+    }
+    
+    static mapFromBooleanType(value) {
+        value.toString()
+    }
 }

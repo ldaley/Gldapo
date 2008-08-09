@@ -70,4 +70,16 @@ class DefaultTypeMappingsTest extends GroovyTestCase
         assertEquals(Short, m.class)
         assertEquals(new Short("123"), m)
     }
+    
+    void testBooleanMapping() {
+        def m1 = DefaultTypeMappings.mapToBooleanType(true)
+        assertEquals(Boolean, m1.class)
+        assertEquals(new Boolean("TRUE"), m1)
+        assertEquals(new Boolean("true"), m1)
+        
+        def m2 = DefaultTypeMappings.mapToBooleanType(false)
+        assertEquals(Boolean, m2.class)
+        assertEquals(new Boolean("FALSE"), m2)
+        assertEquals(new Boolean("false"), m2)
+    }
 }
