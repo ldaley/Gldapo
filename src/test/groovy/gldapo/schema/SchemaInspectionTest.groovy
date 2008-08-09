@@ -16,6 +16,7 @@
 package gldapo.schema
 import gldapo.schema.attribute.*
 import gldapo.schema.annotation.GldapoNamingAttribute
+import gldapo.schema.annotation.GldapoSynonymFor
 import gldapo.exception.GldapoNoNamingAttributeException
 import gldapo.Gldapo
 
@@ -78,6 +79,12 @@ class SchemaInspectionTest extends GroovyTestCase
             new SchemaInspection(SchemaInspectionTestBadNamingAttributeTypeSubject, new Gldapo())
         }
     }
+    
+    void testSynonymNamingAttribute() {
+        def i = new SchemaInspection(SchemaInspectionTestSubjectSynonymNamingAttribute, new Gldapo())
+        assertEquals("attributeName", i.namingAttributeName)
+        assertEquals("fieldName", i.namingAttributeFieldName)
+    }
 }
 
 class SchemaInspectionTestNoNamingAttributeSubject{}
@@ -88,6 +95,12 @@ class SchemaInspectionTestBadNamingAttributeTypeSubject
     Integer name
 }
 
+class SchemaInspectionTestSubjectSynonymNamingAttribute {
+    @GldapoSynonymFor("attributeName")
+    @GldapoNamingAttribute
+    String fieldName
+    
+}
 class SchemaInspectionTestSubject
 {
     @GldapoNamingAttribute

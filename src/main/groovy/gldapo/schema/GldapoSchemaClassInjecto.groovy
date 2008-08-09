@@ -122,6 +122,10 @@ class GldapoSchemaClassInjecto {
     }
     
     def getNamingAttribute = { ->
+        delegate.class.schemaRegistration.namingAttributeName
+    }
+    
+    def getNamingField = { ->
         delegate.class.schemaRegistration.namingAttributeFieldName
     }
     
@@ -130,12 +134,12 @@ class GldapoSchemaClassInjecto {
         if (value != null && delegate.namingValue != null && delegate.namingValue != value)
             throw new GldapoException("Cannot set value for naming attribute ('${delegate.namingAttribute}') once set, see move() or replace()")
 
-        def property = delegate.class.metaClass.getMetaProperty(delegate.namingAttribute)
+        def property = delegate.class.metaClass.getMetaProperty(delegate.namingField)
         property.setProperty(delegate, value)
     }
     
     def getNamingValue = { ->
-        delegate."${delegate.namingAttribute}"
+        delegate."${delegate.namingField}"
     }
 
     def getDn = { ->

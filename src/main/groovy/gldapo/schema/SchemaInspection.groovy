@@ -16,6 +16,7 @@
 package gldapo.schema
 import gldapo.schema.attribute.*
 import gldapo.schema.annotation.GldapoNamingAttribute
+import gldapo.schema.annotation.GldapoSynonymFor
 import gldapo.exception.GldapoNoNamingAttributeException
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
@@ -30,6 +31,7 @@ class SchemaInspection
     def gldapo
     def attributeMappings = [:]
     def namingAttributeFieldName
+    def namingAttributeName
     
     SchemaInspection(Class schema, Gldapo gldapo) {
         this.schema = schema
@@ -41,8 +43,11 @@ class SchemaInspection
                 attributeMappings[it.name] = mapping
             
             if (it.getAnnotation(GldapoNamingAttribute)) {
-                if (String.isAssignableFrom(it.type))
+                if (String.isAssignableFrom(it.type)) {
                     this.namingAttributeFieldName = it.name
+                    def synonymAnnotation = it.getAnnotation(GldapoSynonymFor)
+                    this.namingAttributeName = (synonymAnnotation) ? synonymAnnotation.value() : it.name
+                }
                 else
                     throw new gldapo.exception.GldapoException("${schema} has a naming attribute of ${it.type}, must be of ${String}")
             }

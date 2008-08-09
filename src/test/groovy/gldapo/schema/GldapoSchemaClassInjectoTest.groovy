@@ -23,10 +23,11 @@ import javax.naming.directory.BasicAttributes
 import gldapo.search.SearchProvider
 import gldapo.search.SearchControlProvider
 import gldapo.schema.annotation.GldapoNamingAttribute
+import gldapo.schema.annotation.GldapoSynonymFor
 
 class GldapoSchemaClassInjectoTest extends GroovyTestCase {
 
-    static gldapo = new Gldapo(schemas: [DummySchema])
+    static gldapo = new Gldapo(schemas: [DummySchema, DummySchemaWithSynonymNamingAttribute])
     
     static REP = DirContext.REPLACE_ATTRIBUTE
     static REM = DirContext.REMOVE_ATTRIBUTE 
@@ -341,6 +342,14 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
             o.name = "othername"
         }
     }
+    
+    void testSynonymNamingAttribute() {
+        def o = new DummySchemaWithSynonymNamingAttribute()
+        o.brdn = "attribute=value"
+        assertEquals("attribute=value", o.brdn as String)
+        assertEquals("value", o.namingValue)
+        assertEquals("value", o.field)
+    }
 }
 
 class DummyDirectory extends GldapoDirectory {
@@ -363,4 +372,11 @@ class DummySchema {
     String name
     String a
     Set<String> b
+}
+
+class DummySchemaWithSynonymNamingAttribute {
+    @GldapoNamingAttribute
+    @GldapoSynonymFor("attribute")
+    String field
+    String a
 }
