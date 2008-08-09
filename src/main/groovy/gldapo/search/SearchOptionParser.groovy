@@ -47,7 +47,6 @@ class SearchOptionParser
         
         this.directory = calculateDirectory()
         this.filter = calculateFilter()
-        println this.filter
         this.controls = calculateSearchControls()
         this.base = calculateBase()
     }
