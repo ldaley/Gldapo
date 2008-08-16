@@ -164,6 +164,6 @@ class DefaultTypeMappings
     }
     
     static mapFromBooleanType(value) {
-        value.toString()
+        value.toString().toUpperCase()
     }
 }
