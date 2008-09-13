@@ -19,7 +19,7 @@
     <groupId>org.codehaus</groupId>
     <artifactId>gldapo</artifactId>
     <packaging>jar</packaging>
-    <version>0.8-SNAPSHOT</version>
+    <version>0.7.1-SNAPSHOT</version>
     <name>Gldapo</name>
     <description>An Object Oriented LDAP interface for the Groovy programming language</description>
     <url>http://gldapo.codehaus.org</url>
