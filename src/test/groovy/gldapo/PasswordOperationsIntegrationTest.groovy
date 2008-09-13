@@ -48,4 +48,8 @@ class PasswordOperationsIntegrationTestPerson {
     @GldapoNamingAttribute String cn
     @GldapoSynonymFor("userPassword")
     String password
+    
+    static mapToPasswordField(password) {
+        return new String(password as byte[], "utf-8")
+    }
 }
