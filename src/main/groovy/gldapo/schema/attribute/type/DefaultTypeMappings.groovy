@@ -28,7 +28,11 @@ class DefaultTypeMappings
      * @return The exact same value that was passed in
      */
     static mapToStringType(value) {
-        value as String
+        if (value instanceof byte[] || value instanceof Byte[]) {
+            return new String(value)
+        } else {
+            return value as String
+        }
     }
 
     /**
@@ -38,6 +42,22 @@ class DefaultTypeMappings
         value as String
     }
 
+    static mapTobyteArrayType(value) {
+        value as byte[]
+    }
+
+    static mapFrombyteArrayType(value) {
+        value as byte[]
+    }
+
+    static mapToByteArrayType(value) {
+        value as Byte[]
+    }
+
+    static mapFromByteArrayType(value) {
+        value as Byte[]
+    }
+    
     /**
      * Default type mapping for <strong>Integer<strong> type
      * 

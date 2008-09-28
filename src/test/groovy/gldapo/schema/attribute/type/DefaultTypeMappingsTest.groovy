@@ -25,6 +25,23 @@ class DefaultTypeMappingsTest extends GroovyTestCase
         def m = DefaultTypeMappings.mapToStringType("s")
         assertEquals(String, m.class)
         assertEquals("s", m)
+        
+        assertEquals("123", DefaultTypeMappings.mapToStringType(["1","2","3"] as byte[]))
+        assertEquals("123", DefaultTypeMappings.mapToStringType(["1","2","3"] as Byte[]))
+    }
+    
+    void testPrimitiveByteArrayMapping()
+    {
+        def m = DefaultTypeMappings.mapTobyteArrayType("123")
+        assertEquals(byte[], m.class)
+        assertEquals(["1","2","3"] as byte[], m)
+    }
+
+    void testByteArrayMapping()
+    {
+        def m = DefaultTypeMappings.mapToByteArrayType("123")
+        assertEquals(Byte[], m.class)
+        assertEquals(["1","2","3"] as Byte[], m)
     }
     
     void testIntegerMapping()

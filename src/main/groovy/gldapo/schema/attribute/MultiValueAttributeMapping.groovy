@@ -58,15 +58,7 @@ class MultiValueAttributeMapping extends AbstractAttributeMapping
     def calculateTypeMappingFromFieldType()
     {
         def t = this.field.genericType
-        
-        if (t instanceof ParameterizedType) 
-        {
-            return t.actualTypeArguments[0].simpleName
-        }
-        else
-        {
-            return DEFAULT_COLLECTION_ELEMENT_TYPE.simpleName
-        }
+        typeNameFromClass((t instanceof ParameterizedType) ? t.actualTypeArguments[0] : DEFAULT_COLLECTION_ELEMENT_TYPE)
     }
     
     def getGroovyValueFromContext(Object context)

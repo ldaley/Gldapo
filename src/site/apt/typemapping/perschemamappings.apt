@@ -19,7 +19,7 @@ class mySchemaClass {
         value.toUpperCase() 
     }
 
-    static mapToGivenNameProperty(value) { // Called when converting from LDAP type to 'givenName' only
+    static mapToGivenNameField(value) { // Called when converting from LDAP type to 'givenName' only
         value.toLowerCase()
     }
 }
@@ -52,9 +52,9 @@ class MySchemaClass {
 }
 +-------------------------------+
 
-* {Per Attribute/Property}
+* {Per Attribute/Field}
 
-    Per attribute/property type mapping methods have the same signature as per type methods, except the method name must be 'mapTo' + <capitalized property name> + 'Property' ...
+    Per attribute/field type mapping methods have the same signature as per type methods, except the method name must be 'mapTo' + <capitalized field name> + 'Field' ...
 
 +-------------------------------+
 import gldapo.schema.annotation.GldapoSynonymFor
@@ -64,10 +64,10 @@ class MySchemaClass {
     @GldapoSynonymFor("uid")
     String username
 
-    static mapToUsernameProperty(value) {
+    static mapToUsernameField(value) {
         value.toUpperCase()
     }
 }
 +-------------------------------+
 
-    If the property is a synonym for an attribute, the <<property>> name is used for the mapper.
+    If the field is a synonym for an attribute, the <<field>> name is used for the mapper.

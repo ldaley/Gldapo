@@ -21,6 +21,7 @@ import gldapo.exception.GldapoException
 import gldapo.schema.annotation.GldapoSynonymFor
 import gldapo.schema.annotation.GldapoPseudoType
 import gldapo.GldapoTypeMappingRegistry
+import org.apache.commons.lang.StringUtils
 
 /**
  * Represents the bridging between the data of the LDAP world and the Groovy world
@@ -112,15 +113,15 @@ abstract class AbstractAttributeMapping
      * 
      */    
     protected calculateToGroovyTypeMapper(GldapoTypeMappingRegistry typemappings) {
-        Class[] p = [String] as Class[]
+        Class[] p = [Object] as Class[]
         
         def byFieldMapperName = toGroovyByFieldMapperName(this.field.name)
         def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
-        if (classByFieldMapper) return { classByFieldMapper.invoke(schema, (it.class.array) ? [it] : it) }
+        if (classByFieldMapper) return { classByFieldMapper.invoke(schema, (it.class.array) ? [it] as Object[] : it) }
         
         def byTypeMapperName = toGroovyByTypeMapperName(this.typeMapping)
         def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
-        if (classByTypeMapper) return { classByTypeMapper.invoke(schema, (it.class.array) ? [it] : it) }
+        if (classByTypeMapper) return { classByTypeMapper.invoke(schema, (it.class.array) ? [it] as Object[] : it) }
         
         def defaultByTypeMapper = typemappings.getToGroovyMapperForType(this.typeMapping)
         if (defaultByTypeMapper) return defaultByTypeMapper
@@ -136,11 +137,11 @@ abstract class AbstractAttributeMapping
         
         def byFieldMapperName = toLdapByTypeMapperName(this.field.name)
         def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
-        if (classByFieldMapper) return { classByFieldMapper.invoke(schema, (it.class.array) ? [it] : it) }
+        if (classByFieldMapper) return { classByFieldMapper.invoke(schema, (it.class.array) ? [it] as Object[] : it) }
         
         def byTypeMapperName = toGroovyByTypeMapperName(this.typeMapping)
         def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
-        if (classByTypeMapper) return { classByTypeMapper.invoke(schema, (it.class.array) ? [it] : it) }
+        if (classByTypeMapper) return { classByTypeMapper.invoke(schema, (it.class.array) ? [it] as Object[] : it) }
         
         def defaultByTypeMapper = typemappings.getToLdapMapperForType(this.typeMapping)
         if (defaultByTypeMapper) return defaultByTypeMapper
@@ -184,7 +185,7 @@ abstract class AbstractAttributeMapping
      * 
      */
     static toGroovyByTypeMapperName(String typeName) {
-        "mapTo" + WordUtils.capitalize(typeName) + "Type"
+        "mapTo" + typeName + "Type"
     }
 
     /**
@@ -198,7 +199,14 @@ abstract class AbstractAttributeMapping
      * 
      */
     static toLdapByTypeMapperName(String typeName) {
-        "mapFrom" + WordUtils.capitalize(typeName) + "Type"
+        "mapFrom" + typeName + "Type"
     }
 
+    protected typeNameFromClass(Class clazz) {
+        def name = clazz.simpleName
+        if (clazz.array) {
+            name = name.substring(0, name.size() - 2) + "Array" 
+        }
+        return name
+    }
 }

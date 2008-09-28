@@ -19,7 +19,7 @@
     <groupId>org.codehaus</groupId>
     <artifactId>gldapo</artifactId>
     <packaging>jar</packaging>
-    <version>0.7</version>
+    <version>0.8</version>
     <name>Gldapo</name>
     <description>An Object Oriented LDAP interface for the Groovy programming language</description>
     <url>http://gldapo.codehaus.org</url>
@@ -29,9 +29,9 @@
         <url>http://codehaus.org</url>
     </organization>
     <scm>
-        <connection>scm:svn:http://svn.codehaus.org/gldapo/tags/gldapo-0.7</connection>
-        <developerConnection>scm:svn:https://svn.codehaus.org/gldapo/tags/gldapo-0.7</developerConnection>
-        <url>http://svn.gldapo.codehaus.org/browse/gldapo/tags/gldapo-0.7</url>
+        <connection>scm:svn:http://svn.codehaus.org/gldapo/tags/gldapo-0.8</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/gldapo/tags/gldapo-0.8</developerConnection>
+        <url>http://svn.gldapo.codehaus.org/browse/gldapo/tags/gldapo-0.8</url>
     </scm>
     <issueManagement>
         <system>jira</system>
@@ -131,7 +131,7 @@
         </dependency>
     </dependencies>
     <properties>
-        <releaseVersion>0.7</releaseVersion>
+        <releaseVersion>0.7.1</releaseVersion>
         <downloadUrlBase>http://dist.codehaus.org/gldapo</downloadUrlBase>
         <snapshotDownloadUrlBase>http://snapshots.dist.codehaus.org/gldapo</snapshotDownloadUrlBase>
         <distAssembly>dist</distAssembly>
