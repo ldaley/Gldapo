@@ -29,7 +29,7 @@ class SingleValueAttributeMapping extends AbstractAttributeMapping
     }
     
     protected calculateTypeMappingFromFieldType() {
-         return this.field.type.simpleName
+         return typeNameFromClass(this.field.type)
     }
     
     protected getGroovyValueFromContext(context) {

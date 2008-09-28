@@ -42,6 +42,22 @@ class DefaultTypeMappings
         value as String
     }
 
+    static mapTobyteArrayType(value) {
+        value as byte[]
+    }
+
+    static mapFrombyteArrayType(value) {
+        value as byte[]
+    }
+
+    static mapToByteArrayType(value) {
+        value as Byte[]
+    }
+
+    static mapFromByteArrayType(value) {
+        value as Byte[]
+    }
+    
     /**
      * Default type mapping for <strong>Integer<strong> type
      * 
