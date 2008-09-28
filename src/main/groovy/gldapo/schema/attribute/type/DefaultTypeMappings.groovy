@@ -28,7 +28,11 @@ class DefaultTypeMappings
      * @return The exact same value that was passed in
      */
     static mapToStringType(value) {
-        value as String
+        if (value instanceof byte[] || value instanceof Byte[]) {
+            return new String(value)
+        } else {
+            return value as String
+        }
     }
 
     /**
