@@ -60,6 +60,21 @@ class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
         verifyMapFromContext(mapping, ["3", "1", "2"], [1, 2, 3] as Set)
     }
     
+    void testByteArrays() {
+        def mapping = mappingForField("byteArrays")
+        verifyProperties(mapping, "byteArrays", "ByteArray", Set)
+        
+        def b1 = "1" as Byte[]
+        def b2 = "2" as Byte[]
+        def b3 = "3" as Byte[]
+        
+        //verifyMapFromContext(mapping, [b1,b2,b3], [b1,b2,b3] as Set)
+        verifyCalculateModificationItems(mapping, [b1], [b1], [])
+        verifyCalculateModificationItems(mapping, [b1], [b1, b2], [[ADD, [b2]]])
+        verifyCalculateModificationItems(mapping, [b1, b2], [b1], [[REM, [b2]]])
+        verifyCalculateModificationItems(mapping, null, [b1], [[ADD, [b1]]])
+    }
+    
     void testPseudoTypeSet() {
         def mapping = mappingForField("pseudoTypeSet")
         verifyProperties(mapping, "pseudoTypeSet", "Integer", Set)
@@ -132,4 +147,5 @@ class MultiValueAttributeMappingTestSubject {
         value.toString().toLowerCase()
     }
     
+    Set<Byte[]> byteArrays
 }
