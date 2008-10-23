@@ -84,8 +84,8 @@ class MultiValueAttributeMapping extends AbstractAttributeMapping
         } else {
             
             def removeMod = new ModificationItem(DirContext.REMOVE_ATTRIBUTE, new BasicAttribute(this.attributeName))
-            clean.each { obj ->                
-                if (dirty.contains(obj) == false) {
+            clean.each { obj ->
+                if ((obj.class.array) ? ((dirty.find { Arrays.deepEquals(it, obj) }) == null) : (dirty.contains(obj) == false))  {
                     removeMod.attribute.add(this.mapToLdapType(obj))
                 }
             }
@@ -95,7 +95,7 @@ class MultiValueAttributeMapping extends AbstractAttributeMapping
             
             def addMod = new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute(this.attributeName))
             dirty.each { obj ->
-                if (clean == null || clean.contains(obj) == false) {
+                if (clean == null || (obj.class.array) ? ((clean.find { Arrays.deepEquals(it, obj) }) == null) : (clean.contains(obj) == false)) {
                     addMod.attribute.add(this.mapToLdapType(obj))
                 }
             }
