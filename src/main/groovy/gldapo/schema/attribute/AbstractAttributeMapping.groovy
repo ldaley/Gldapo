@@ -16,6 +16,7 @@
 package gldapo.schema.attribute
 import org.apache.commons.lang.WordUtils
 import java.lang.reflect.Field
+import java.lang.reflect.GenericArrayType
 import gldapo.exception.GldapoTypeMappingException
 import gldapo.exception.GldapoException
 import gldapo.schema.annotation.GldapoSynonymFor
@@ -202,11 +203,16 @@ abstract class AbstractAttributeMapping
         "mapFrom" + typeName + "Type"
     }
 
-    protected typeNameFromClass(Class clazz) {
-        def name = clazz.simpleName
-        if (clazz.array) {
-            name = name.substring(0, name.size() - 2) + "Array" 
+    protected typeNameFromClass(clazz) {
+        def name 
+        if (clazz instanceof GenericArrayType) {
+            name = clazz.genericComponentType.simpleName + "Array"
+        } else {
+            name = clazz.simpleName
+            if (clazz.array) {
+                name = name.substring(0, name.size() - 2) + "Array" 
+            }
         }
-        return name
+        name
     }
 }
