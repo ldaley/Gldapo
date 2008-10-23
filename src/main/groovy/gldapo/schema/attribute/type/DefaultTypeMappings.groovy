@@ -55,7 +55,7 @@ class DefaultTypeMappings
     }
 
     static mapFromByteArrayType(value) {
-        value as Byte[]
+        value as byte[]
     }
     
     /**
