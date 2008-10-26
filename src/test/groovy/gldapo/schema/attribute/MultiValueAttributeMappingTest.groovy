@@ -30,6 +30,17 @@ class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
     static REM = DirContext.REMOVE_ATTRIBUTE 
     static ADD = DirContext.ADD_ATTRIBUTE
     
+    static {
+        HashSet.metaClass.equals = { Collection rhs ->
+            def lhs = delegate 
+            lhs.every { target ->
+                rhs.find { target == it }
+            } && rhs.every { target ->
+                lhs.find { target == it }
+            }
+        }
+    }
+    
     def getFakeContext(values) {
         new Expando(getAttributes: { name, String[] attribNames ->
             def attribs = new BasicAttributes()
@@ -71,7 +82,7 @@ class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
         def bp2 = "2" as byte[]
         def bp3 = "3" as byte[]
         
-        //verifyMapFromContext(mapping, [b1,b2,b3], [b1,b2,b3] as Set)
+        verifyMapFromContext(mapping, [bp1,bp2,bp3], [bo1,bo2,bo3] as Set)
         verifyCalculateModificationItems(mapping, [bo1], [bo1], [])
         verifyCalculateModificationItems(mapping, [bo1], [bo1, bo2], [[ADD, [bp2]]])
         verifyCalculateModificationItems(mapping, [bo1, bo2], [bo1], [[REM, [bp2]]])
