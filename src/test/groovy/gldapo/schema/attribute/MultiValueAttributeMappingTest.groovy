@@ -64,15 +64,18 @@ class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
         def mapping = mappingForField("byteArrays")
         verifyProperties(mapping, "byteArrays", "ByteArray", Set)
         
-        def b1 = "1" as Byte[]
-        def b2 = "2" as Byte[]
-        def b3 = "3" as Byte[]
+        def bo1 = "1" as Byte[]
+        def bo2 = "2" as Byte[]
+        def bo3 = "3" as Byte[]
+        def bp1 = "1" as byte[]
+        def bp2 = "2" as byte[]
+        def bp3 = "3" as byte[]
         
         //verifyMapFromContext(mapping, [b1,b2,b3], [b1,b2,b3] as Set)
-        verifyCalculateModificationItems(mapping, [b1], [b1], [])
-        verifyCalculateModificationItems(mapping, [b1], [b1, b2], [[ADD, [b2]]])
-        verifyCalculateModificationItems(mapping, [b1, b2], [b1], [[REM, [b2]]])
-        verifyCalculateModificationItems(mapping, null, [b1], [[ADD, [b1]]])
+        verifyCalculateModificationItems(mapping, [bo1], [bo1], [])
+        verifyCalculateModificationItems(mapping, [bo1], [bo1, bo2], [[ADD, [bp2]]])
+        verifyCalculateModificationItems(mapping, [bo1, bo2], [bo1], [[REM, [bp2]]])
+        verifyCalculateModificationItems(mapping, null, [bo1], [[ADD, [bp1]]])
     }
     
     void testPseudoTypeSet() {
