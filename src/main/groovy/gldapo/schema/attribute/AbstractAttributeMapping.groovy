@@ -22,6 +22,7 @@ import gldapo.exception.GldapoException
 import gldapo.schema.annotation.GldapoSynonymFor
 import gldapo.schema.annotation.GldapoPseudoType
 import gldapo.GldapoTypeMappingRegistry
+import gldapo.Gldapo
 import org.apache.commons.lang.StringUtils
 
 /**
@@ -63,6 +64,8 @@ abstract class AbstractAttributeMapping
      */
      Closure toLdapTypeMapper
      
+     final validators
+     
     /**
      * 
      */
@@ -86,14 +89,15 @@ abstract class AbstractAttributeMapping
     /**
      * 
      */
-    AbstractAttributeMapping(Class schema, Field field, GldapoTypeMappingRegistry typemappings) {
+    AbstractAttributeMapping(Class schema, Field field, Gldapo gldapo) {
         this.schema = schema
         this.field = field
         
         this.attributeName = this.calculateAttributeName()
         this.typeMapping = this.calculateTypeMapping()
-        this.toGroovyTypeMapper = this.calculateToGroovyTypeMapper(typemappings)
-        this.toLdapTypeMapper = this.calculateToLdapTypeMapper(typemappings)
+        this.toGroovyTypeMapper = this.calculateToGroovyTypeMapper(gldapo.typemappings)
+        this.toLdapTypeMapper = this.calculateToLdapTypeMapper(gldapo.typemappings)
+        this.validators = this.calculateValidators(gldapo.constraintTypes)
     }
     
     protected calculateAttributeName() {
@@ -150,6 +154,18 @@ abstract class AbstractAttributeMapping
         throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_FROM_FIELD, "No available type mapping")
     }
 
+    def calculateValidators(constraintTypes) {
+        def validators = []
+        Field
+        this.field.annotations.each {
+            def validatorType = constraintTypes[it.annotationType()]
+            if (validatorType) {
+                validators << validatorType.newInstance(constraint: it)
+            }
+        }
+        validators
+    }
+    
     /**
      * 
      */

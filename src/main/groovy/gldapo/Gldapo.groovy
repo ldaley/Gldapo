@@ -16,6 +16,8 @@
 package gldapo
 import gldapo.exception.GldapoInitializationException
 import gldapo.exception.GldapoInvalidConfigException
+import org.springframework.validation.Validator
+import gldapo.schema.EntryValidator
 
 /**
  * The singleton instance of this class provides access to the various registries and settings at runtime. 
@@ -73,7 +75,9 @@ class Gldapo {
      * Holds classes that implement type mappings
      */
     GldapoTypeMappingRegistry typemappings = new GldapoTypeMappingRegistry()
-
+    
+    ConstraintTypeRegistry constraintTypes = new ConstraintTypeRegistry()
+    
     /**
      * Create a Gldapo instance with only defaults.
      */
@@ -116,6 +120,7 @@ class Gldapo {
                 this.directories.defaultDirectoryName = config."$CONFIG_KEY_DEFAULT_DIRECTORY"
 
             extractTypeMappingsFromConfig(config).each { this.typemappings << it }
+            extractConstraintTypesFromConfig(config).each { this.constraintTypes << it }
             extractSchemasFromConfig(config).each { this.schemas << it }
         }
     }
@@ -264,5 +269,17 @@ class Gldapo {
                 throw new GldapoInvalidConfigException("Key '${CONFIG_KEY_DIRECTORIES}' in config is not a map")
             }
         }   
+    }
+    
+    static List extractConstraintTypesFromConfig(Map config) throws GldapoInvalidConfigException {
+        def constraintTypes = config.constraintTypes
+        if (constraintTypes) {
+            if (constraintTypes instanceof Collection)
+                return constraintTypes
+            else
+                throw new GldapoInvalidConfigException("'constraintTypes' is not a Collection")
+        } else {
+            return []
+        }
     }
 }

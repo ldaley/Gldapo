@@ -24,10 +24,14 @@ import gldapo.search.SearchProvider
 import gldapo.search.SearchControlProvider
 import gldapo.schema.annotation.GldapoNamingAttribute
 import gldapo.schema.annotation.GldapoSynonymFor
+import gldapo.schema.annotation.NullOnly
+import org.springframework.validation.Validator
+import org.springframework.validation.Errors
+import gldapo.schema.attribute.validator.AbstractFieldValidator
 
 class GldapoSchemaClassInjectoTest extends GroovyTestCase {
 
-    static gldapo = new Gldapo(schemas: [DummySchema, DummySchemaWithSynonymNamingAttribute])
+    static gldapo = new Gldapo(schemas: [DummySchema, DummySchemaWithSynonymNamingAttribute], constraintTypes: [NullOnly])
     
     static REP = DirContext.REPLACE_ATTRIBUTE
     static REM = DirContext.REMOVE_ATTRIBUTE 
@@ -142,7 +146,11 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
             assertEquals(modificationItems[0].attribute.get(), "2")
         }]
         
-        e.update()
+        e.validatee = 1
+        assertFalse(e.update())
+        e.clearErrors()
+        e.validatee = null
+        assertTrue(e.update())
     }
 
     void testCreate() {
@@ -160,7 +168,11 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
             assertTrue(b.contains("2"))
         }]
         
-        e.create()
+        e.validatee = 1
+        assertFalse(e.create())
+        e.clearErrors()
+        e.validatee = null
+        assertTrue(e.create())
         
     }
     
@@ -225,7 +237,13 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         e.directory = [replaceEntry: { target, attributes ->
             assertEquals(replaced, target)
         }]
-        e.replace(replaced)
+        
+        e.validatee = 1
+        assertFalse(e.replace(replaced))
+        e.clearErrors()
+        e.validatee = null
+        assertTrue(e.replace(replaced))
+        
         assertEquals(replaced, e.brdn)
     }
     
@@ -350,6 +368,15 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         assertEquals("value", o.namingValue)
         assertEquals("value", o.field)
     }
+    
+    void testValidate() {
+        def e = new DummySchema()
+        e.namingValue = "test"
+        assertTrue(e.validate())
+        e.validatee = 1
+        assertFalse(e.validate())
+
+    }
 }
 
 class DummyDirectory extends GldapoDirectory {
@@ -372,6 +399,7 @@ class DummySchema {
     String name
     String a
     Set<String> b
+    @NullOnly Integer validatee
 }
 
 class DummySchemaWithSynonymNamingAttribute {
@@ -380,3 +408,4 @@ class DummySchemaWithSynonymNamingAttribute {
     String field
     String a
 }
+
