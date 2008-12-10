@@ -276,7 +276,7 @@
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>validate</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>cobertura</goal>
                         </goals>
