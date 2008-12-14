@@ -139,6 +139,13 @@ class GldapoTest extends GroovyTestCase
         assertTrue(gldapo.typemappings.contains(String))
         assertNotNull(gldapo.schemas.find { it == GldapoTestSchema1 })
     }
+    
+    void testDefaultConstraintTypesGetRegistered() {
+        def g = new Gldapo()
+        Gldapo.defaultConstraintTypes.each {
+            assertNotNull("default constraint type $it should be registered", g.constraintTypes[it])
+        }
+    }
 }
 
 class GldapoTestSchema1 {

@@ -18,6 +18,7 @@ import gldapo.exception.GldapoInitializationException
 import gldapo.exception.GldapoInvalidConfigException
 import org.springframework.validation.Validator
 import gldapo.schema.EntryValidator
+import gldapo.schema.annotation.*
 
 /**
  * The singleton instance of this class provides access to the various registries and settings at runtime. 
@@ -76,7 +77,8 @@ class Gldapo {
      */
     GldapoTypeMappingRegistry typemappings = new GldapoTypeMappingRegistry()
     
-    ConstraintTypeRegistry constraintTypes = new ConstraintTypeRegistry()
+    ConstraintTypeRegistry constraintTypes = new ConstraintTypeRegistry(*defaultConstraintTypes)
+    static final defaultConstraintTypes = []
     
     /**
      * Create a Gldapo instance with only defaults.
