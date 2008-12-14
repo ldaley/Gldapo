@@ -165,7 +165,7 @@ public abstract class GldapoEntry {
      * 
      * @return {@code true} if all constraints are satisfied, {@code false} if not
      */
-    public boolean validate() {}
+    public boolean validate() { return true; }
     
     /**
      * The {@link Errors} object that contains the validation errors.
@@ -174,7 +174,7 @@ public abstract class GldapoEntry {
      * 
      * @return the validation errors.
      */
-    public Errors getErrors() {}
+    public Errors getErrors() { return null; }
     
     /**
      * Discards any previously recorded validation errors.
@@ -192,7 +192,7 @@ public abstract class GldapoEntry {
      * @return {@code true} if the entry was created, {@code false} if it failed validation.
      * @throws GldapoException If the object is in an invalid state for creating, or an LDAP error occurs.
      */
-    public boolean create() throws GldapoException {} 
+    public boolean create() throws GldapoException { return true; } 
     
     /**
      * Saves any modifications made to this object to the directory after {@link #validate() validating} it.
@@ -203,7 +203,7 @@ public abstract class GldapoEntry {
      * @return {@code true} if the entry was updated, {@code false} if it failed validation.
      * @throws GldapoException if the object is not in a suitable state for updating, or an LDAP error occurs.
      */
-    public boolean update() throws GldapoException {} 
+    public boolean update() throws GldapoException { return true; } 
     
     /**
      * {@link #create() Creates} or {@link #update() updates} the object depending on whether it is a new object or not,
@@ -212,7 +212,7 @@ public abstract class GldapoEntry {
      * @return {@code true} if the entry was saved, {@code false} if it failed validation.
      * @throws GldapoException if the object is not in a suitable state for saving, or an LDAP error occurs.
      */
-    public boolean save() throws GldapoException {} 
+    public boolean save() throws GldapoException { return true; } 
     
     /**
      * Relocate this object in the directory, after {@link #update() sending any updates}.
@@ -221,7 +221,7 @@ public abstract class GldapoEntry {
      * @return {@code true} if the entry was moved, {@code false} if it failed validation.
      * @throws GldapoException if {@code brdn} is invalid, this is not an existing entry, or an LDAP error occurs.
      */
-    public boolean move(Object brdn) throws GldapoException {} 
+    public boolean move(Object brdn) throws GldapoException { return true; } 
     
     /**
      * Relocate this object in the directory, after {@link #update() sending any updates}.
@@ -233,7 +233,7 @@ public abstract class GldapoEntry {
      * @return {@code true} if the entry was moved, {@code false} if it failed validation.
      * @throws GldapoException if {@code brdn} is invalid, this is not an existing entry, or an LDAP error occurs.
      */
-    public boolean move(Object namingValue, Object parent) throws GldapoException {} 
+    public boolean move(Object namingValue, Object parent) throws GldapoException { return true; } 
     
     /**
      * Replaces the entry @ {@code brdn} with this object, after {@link #validate() validating} it.
@@ -242,7 +242,7 @@ public abstract class GldapoEntry {
      * @return {@code true} if the entry was replaced, {@code false} if it failed validation.
      * @throws GldapoException if this object has no directory, or and LDAP error occurs.
      */
-    public boolean replace(Object brdn) throws GldapoException {}
+    public boolean replace(Object brdn) throws GldapoException { return true; }
     
     /**
      * Replaces the entry at the location specified by {@code namingValue} and {@code parent} with this
@@ -255,7 +255,7 @@ public abstract class GldapoEntry {
      * @return {@code true} if the entry was created, {@code false} if it failed validation.
      * @throws GldapoException if this object has no directory, or and LDAP error occurs.
      */
-    public boolean replace(Object namingValue, Object parent) throws GldapoException {}
+    public boolean replace(Object namingValue, Object parent) throws GldapoException { return true; }
     
     /**
      * Replaces the entry specified by this objects's {@link #getBrdn() brdn} with this object, 
@@ -264,7 +264,7 @@ public abstract class GldapoEntry {
      * @return {@code true} if the entry was replaced, {@code false} if it failed validation.
      * @throws GldapoException if this object has no directory, no valid brdn, or and LDAP error occurs.
      */
-    public boolean replace() throws GldapoException {} 
+    public boolean replace() throws GldapoException { return true; } 
     
     /**
      * Removes the entry specified by this object's {@link #getBrdn() brdn} from the directory.
