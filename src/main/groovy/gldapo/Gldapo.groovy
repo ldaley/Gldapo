@@ -78,7 +78,7 @@ class Gldapo {
     GldapoTypeMappingRegistry typemappings = new GldapoTypeMappingRegistry()
     
     ConstraintTypeRegistry constraintTypes = new ConstraintTypeRegistry(*defaultConstraintTypes)
-    static final defaultConstraintTypes = []
+    static final defaultConstraintTypes = [Required]
     
     /**
      * Create a Gldapo instance with only defaults.
