@@ -15,15 +15,56 @@
  */
 package gldapo.schema.attribute.validator
 import org.springframework.beans.factory.InitializingBean
+import java.lang.reflect.Field
+import java.lang.annotation.Annotation
+import gldapo.schema.constraint.InvalidConstraintException
 
+/**
+ * Base class for field validators. Each constraint annotation creates a new instance of it's
+ * associated validator which is bound specifically to the field under constraint.
+ * 
+ * Subclasses must at least implement {@link #validate(Object)}. The instance of the constraint
+ * that instanciated this validator is available via the {@link #getConstraint() constraint} property.
+ * The {@link Field field} that this validator is going to be validating is available as the {@link #getField() field} property. 
+ * 
+ * After instanciation, the {@link #afterPropertiesSet()} will be called. If the constraint values are invalid, or this
+ * validator is not valid for the type of field it is applied to or if any other kind of problem exists, a 
+ * {@link InvalidConstraintException} should be thrown.
+ */
 abstract class AbstractFieldValidator implements InitializingBean {
     
-    def constraint
-    def field 
+    Annotation constraint
+    Field field 
     
-    void afterPropertiesSet() {
-        
+    /**
+     * The instance of the constraint annotation that created this validator.
+     */
+    Annotation getConstraint() {
+        this.constraint
     }
     
+    /**
+     * The underlying field that we will be validating values of.
+     */
+    Field getField() {
+        this.field
+    }
+    
+    /**
+     * If the constraint values are invalid or the type of field is invalid, a 
+     * {@link InvalidConstraintException} should be thrown.
+     * 
+     * The implementation in this class does nothing.
+     */
+    void afterPropertiesSet() throws InvalidConstraintException {}
+    
+    /**
+     * Will be called with a field value to validate.
+     * 
+     * If the value is valid, {@code null} MUST be returned. If the value is invalid, either return a 
+     * single string error code or a list of string error codes.
+     * 
+     * @return {@code null} if {@code obj} is valid, otherwise 1 or a list of error codes.
+     */
     abstract validate(obj)
 }
