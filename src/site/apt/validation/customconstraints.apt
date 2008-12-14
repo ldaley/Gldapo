@@ -1,0 +1,57 @@
+    --------------
+    Custom Constraints
+    --------------
+
+Custom Constraints
+
+    Gldapo ships with some {{{constraints.html}standard constraints}}. But if they don't meet your needs it is easy to roll your own.
+    
+    Let's create a completely useless constraint that enforces a value to be <<<null>>>.
+
+* The Validator
+
+    The first part is the validator. It's responsible for taking a value and deciding whether it's valid or not...
+    
++-------------------------------+
+import gldapo.schema.attribute.validator.AbstractFieldValidator
+
+class NullOnlyValidator extends AbstractFieldValidator {
+    def validate(obj) {
+        if (obj) return "notnull"
+    }
+}
++-------------------------------+
+
+    See {{{../apidocs/gldapo/schema/attribute/validator/AbstractFieldValidator.html}AbstractFieldValidator}} docs for details on writing a validator.
+    
+* The constraint (annotation)
+
+    The second part is the constraint annotation...
+    
++-------------------------------+
+import java.lang.annotation.*;
+import gldapo.schema.constraint.annotation.Validator;
+import gldapo.schema.attribute.validator.NullOnlyValidator;
+
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+@Validator(NullOnlyValidator.class)
+public @interface NullOnly
+{
+}
++-------------------------------+
+
+    This is a standard Java annotation with the addition of the <<<@Validator>>> <meta annotation> that links our constraint to our validator.
+    
+* Registering your constraint type
+
+    To use your constraint type, you must register it with the {{{file:///Users/daleyl/Projects/gldapo/target/site/apidocs/gldapo/Gldapo.html#getConstraintTypes()}constraint type registry}} which can be done during initialisation of the Gldapo instance...
+
++-------------------------------+
+Gldapo.initialize(
+    constraintTypes: [NullOnly]
+)
++-------------------------------+
+
+    Any constraint types registered this way will be available to any schema class registered with the same Gldapo instance.

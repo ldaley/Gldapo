@@ -1,0 +1,89 @@
+    --------------
+    Validation
+    --------------
+
+Validation
+
+    Gldapo validation allows you to perform integrity checks on your entry objects <<before>> writing them to the directory. This heavily relies on {{{http://static.springframework.org/spring/docs/2.0.x/reference/validation.html}Spring's validation}} features. But as a user of Gldapo, all you need to know about is the {{{http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/validation/Errors.html}Errors}} interface.
+
+    The inspiration for validation in Gldapo comes very much from Grails. To get a good overview of how it works, it might pay to read the {{{http://grails.org/doc/1.0.x/guide/7.%20Validation.html}chapter on validation in the Grails reference documentation}}. Keep in mind that <declaring constraints> is different in Gldapo.
+        
+* Declaring Constraints
+
+    You declare constraints by annotating fields...
+    
++-------------------------------+
+import gldapo.schema.annotation.*
+
+class Person {
+    Set<String> objectClasses = ["top", "person"]
+
+    @GldapoNamingAttribute
+    String uid
+    
+    @Required
+    String givenName
+    
+    @Required
+    String sn
+}
++-------------------------------+
+
+    We are using the <<<@Required>>> constraint to enforce that <<<Person>>> objects have a value for <<<givenName>>> and <<<sn>>>. For the full list of out of the box constraints, see {{{constraints.html}constraints}}.
+
+* Performing validation
+
+    All of the methods that potentially write to the directory perform validation before attempting the write. If validation fails, they will return <<<false>>>...
+        
++-------------------------------+
+def p = new Person(uid: "daleyl")
+if (!p.save()) {
+    // validation failed!
+}
++-------------------------------+
+
+    You can also explicitly validate at any time by using the {{{../apidocs/gldapo/entry/GldapoEntry.html#validate()}validate()}} method...
+
++-------------------------------+
+def p = new Person(uid: "daleyl")
+if (!p.validate()) {
+    // validation failed!
+}
++-------------------------------+
+
+* Working out what went wrong
+
+    If an entry fails validation, it's {{{../apidocs/gldapo/entry/GldapoEntry.html#getErrors()}errors}} property will contain a {{{http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/validation/Errors.html#getFieldErrors()}field error}} for each field that failed validation...
+    
++-------------------------------+
+def p = new Person(uid: "daleyl")
+if (!p.save()) {
+    p.errors.fieldErrors.each {
+        println it.code
+    }
+}
++-------------------------------+
+
+    If you haven't worked with validation in Spring and you are wondering what the story is with error codes, I recommend you read the {{{http://static.springframework.org/spring/docs/2.0.x/reference/validation.html#validation-conversion}chapter on resolving error codes to messages in the Spring documentation}}. If you are using Gldapo from within Grails, you can take take advantage of it's {{{http://grails.org/doc/1.0.x/guide/7.%20Validation.html#7.3%20Validation%20on%20the%20Client}built in mechanisms for this}} for free.
+
+** What error codes are registered by Gldapo?
+
+    A constraint validator can return 1..N error codes when a validation error occurs. For each returned code, three actual codes are registered. 
+    
+    Consider the <<<@Required>>> constraint. If a field fails this constraint, the following codes will be registered...
+    
++-------------------------------+
+required
+<<class simple name>>.required
+<<class simple name>>.<<field name>>.required
++-------------------------------+
+
+    So if the <<<sn>>> field of our <<<Person>>> class from above failed this constraint we would have...
+        
++-------------------------------+
+required
+Person.required
+Person.sn.required
++-------------------------------+
+
+    Check the documentation for each constraint validator to see what error codes it registers.

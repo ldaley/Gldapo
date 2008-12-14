@@ -40,6 +40,11 @@
             <item name="Per Schema Mappings" href="/typemapping/perschemamappings.html"/>
             <item name="Default Mappings" href="/typemapping/defaultmappings.html"/>
         </menu>
+        <menu name="Validation">
+            <item name="About" href="/validation/index.html"/>
+            <item name="Constraints" href="/validation/constraints.html"/>
+            <item name="Custom Constraints" href="/validation/customconstraints.html"/>
+        </menu>
         ${reports}
     </body>
     <skin>
