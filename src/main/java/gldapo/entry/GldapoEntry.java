@@ -23,6 +23,7 @@ import org.springframework.ldap.core.LdapRdn;
 import java.util.Map;
 import java.util.List;
 import groovy.lang.Closure;
+import org.springframework.validation.Errors;
 
 /**
  * The API reference for schema classes.
@@ -158,39 +159,69 @@ public abstract class GldapoEntry {
     public static GldapoEntry getByDn(Object dn) throws GldapoException { return null; }    
     
     /**
-     * Writes the object in it's entirety to the directory.
+     * Test attribute values to make sure they satisfy any specified constraints.
+     * 
+     * See http://gldapo.codehaus.org/validation.
+     * 
+     * @return {@code true} if all constraints are satisfied, {@code false} if not
+     */
+    public boolean validate() {}
+    
+    /**
+     * The {@link Errors} object that contains the validation errors.
+     * 
+     * See http://gldapo.codehaus.org/validation.
+     * 
+     * @return the validation errors.
+     */
+    public Errors getErrors() {}
+    
+    /**
+     * Discards any previously recorded validation errors.
+     * 
+     * See http://gldapo.codehaus.org/validation.
+     */
+    public void clearErrors() {}
+    
+    /**
+     * Writes the object in it's entirety to the directory after {@link #validate() validating} it.
      * 
      * Before an object can be written, it must have a location and a {@link #setDirectory(Object) directory}. To have
      * a location, it must at least have a naming value.
      * 
+     * @return {@code true} if the entry was created, {@code false} if it failed validation.
      * @throws GldapoException If the object is in an invalid state for creating, or an LDAP error occurs.
      */
-    public void create() throws GldapoException {} 
+    public boolean create() throws GldapoException {} 
     
     /**
-     * Saves any modifications made to this object to the directory.
+     * Saves any modifications made to this object to the directory after {@link #validate() validating} it.
      * 
      * This will only send any changes made, so is not suitable for {@link #create() creating} new objects.
      * If this object has no modifications, this is a no-op.
      * 
+     * @return {@code true} if the entry was updated, {@code false} if it failed validation.
      * @throws GldapoException if the object is not in a suitable state for updating, or an LDAP error occurs.
      */
-    public void update() throws GldapoException {} 
+    public boolean update() throws GldapoException {} 
     
     /**
-     * {@link #create() Creates} of {@link #update() updates} the object depending on whether it is a new object or not.
+     * {@link #create() Creates} or {@link #update() updates} the object depending on whether it is a new object or not,
+     * after {@link #validate() validating} it.
      * 
+     * @return {@code true} if the entry was saved, {@code false} if it failed validation.
      * @throws GldapoException if the object is not in a suitable state for saving, or an LDAP error occurs.
      */
-    public void save() throws GldapoException {} 
+    public boolean save() throws GldapoException {} 
     
     /**
      * Relocate this object in the directory, after {@link #update() sending any updates}.
      * 
      * @param brdn the new {@link #getBrdn() brdn} of the object (the string representation will be used).
+     * @return {@code true} if the entry was moved, {@code false} if it failed validation.
      * @throws GldapoException if {@code brdn} is invalid, this is not an existing entry, or an LDAP error occurs.
      */
-    public void move(Object brdn) throws GldapoException {} 
+    public boolean move(Object brdn) throws GldapoException {} 
     
     /**
      * Relocate this object in the directory, after {@link #update() sending any updates}.
@@ -199,36 +230,41 @@ public abstract class GldapoEntry {
      *        the existing naming value will be used.
      * @param parent the new parent container (the string representation will be used). If {@code null},
      *        the existing parent value will be used. Use {@code ""} to specify no parent.
+     * @return {@code true} if the entry was moved, {@code false} if it failed validation.
      * @throws GldapoException if {@code brdn} is invalid, this is not an existing entry, or an LDAP error occurs.
      */
-    public void move(Object namingValue, Object parent) throws GldapoException {} 
+    public boolean move(Object namingValue, Object parent) throws GldapoException {} 
     
     /**
-     * Replaces the entry @ {@code brdn} with this object.
+     * Replaces the entry @ {@code brdn} with this object, after {@link #validate() validating} it.
      * 
      * @param brdn the location of the entry to replace (the string representation will be used).
+     * @return {@code true} if the entry was replaced, {@code false} if it failed validation.
      * @throws GldapoException if this object has no directory, or and LDAP error occurs.
      */
-    public void replace(Object brdn) throws GldapoException {}
+    public boolean replace(Object brdn) throws GldapoException {}
     
     /**
      * Replaces the entry at the location specified by {@code namingValue} and {@code parent} with this
-     * object.
+     * object, after {@link #validate() validating} it.
      * 
      * @param namingValue the replacee's naming value (the string representation will be used). If {@code null},
      *        this object's naming value will be used.
      * @param parent the replacee's parent container (the string representation will be used). If {@code null},
      *        this object's parent value will be used. Use {@code ""} to specify no parent.
+     * @return {@code true} if the entry was created, {@code false} if it failed validation.
      * @throws GldapoException if this object has no directory, or and LDAP error occurs.
      */
-    public void replace(Object namingValue, Object parent) throws GldapoException {}
+    public boolean replace(Object namingValue, Object parent) throws GldapoException {}
     
     /**
-     * Replaces the entry specified by this objects's {@link #getBrdn() brdn} with this object.
+     * Replaces the entry specified by this objects's {@link #getBrdn() brdn} with this object, 
+     * after {@link #validate() validating} it.
      * 
+     * @return {@code true} if the entry was replaced, {@code false} if it failed validation.
      * @throws GldapoException if this object has no directory, no valid brdn, or and LDAP error occurs.
      */
-    public void replace() throws GldapoException {} 
+    public boolean replace() throws GldapoException {} 
     
     /**
      * Removes the entry specified by this object's {@link #getBrdn() brdn} from the directory.
