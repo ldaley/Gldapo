@@ -64,7 +64,7 @@ abstract class AbstractFieldValidator implements InitializingBean {
      * If the value is valid, {@code null} MUST be returned. If the value is invalid, either return a 
      * single string error code or a list of string error codes.
      * 
-     * @return {@code null} if {@code obj} is valid, otherwise 1 or a list of error codes.
+     * @return {@code null} if {@code obj} is valid, otherwise a single or list of error codes.
      */
     abstract validate(obj)
 }
