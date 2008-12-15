@@ -82,7 +82,8 @@ abstract class AbstractAttributeValidator implements AttributeValidator {
         def codes = []
         obj.each {
             def c = validateValue(it)
-            (c instanceof Collection) ? c.each { codes << it } : c << it
+            if (c != null)
+                (c instanceof Collection) ? c.each { codes << it } : codes << it
         }
         (codes) ?: null
     }
