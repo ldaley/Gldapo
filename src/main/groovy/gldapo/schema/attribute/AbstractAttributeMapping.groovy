@@ -25,6 +25,8 @@ import gldapo.GldapoTypeMappingRegistry
 import gldapo.Gldapo
 import org.apache.commons.lang.StringUtils
 import gldapo.schema.attribute.validator.AttributeValidator
+import gldapo.schema.constraint.ConstraintAnnotationPropertyInspector
+import gldapo.schema.constraint.InvalidConstraintException
 
 /**
  * Represents the bridging between the data of the LDAP world and the Groovy world
@@ -160,11 +162,17 @@ abstract class AbstractAttributeMapping implements AttributeMapping
 
     def calculateValidators(constraintTypes) {
         def validators = []
-        Field
         this.field.annotations.each {
             def validatorType = constraintTypes[it.annotationType()]
             if (validatorType) {
-                validators << validatorType.newInstance(constraint: it)
+                try {
+                    def validator = validatorType.newInstance(config: ConstraintAnnotationPropertyInspector.inspect(it), attributeMapping: this)
+                    validator.init()
+                    validators << validator
+                }
+                catch(Exception e) {
+                    throw new InvalidConstraintException("Constraint '${it.annotationType().simpleName}' of attribute '${field.name}' of class '${schema.simpleName}' is invalid", e)
+                }
             }
         }
         validators

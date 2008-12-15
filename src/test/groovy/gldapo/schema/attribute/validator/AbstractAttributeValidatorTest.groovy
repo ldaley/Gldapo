@@ -14,20 +14,27 @@
  * limitations under the License.
  */
 package gldapo.schema.attribute.validator
+import gldapo.schema.attribute.AttributeMapping
+import java.lang.annotation.Annotation
 
-class RequiredValidatorTest extends AbstractAttributeValidatorTest {
+abstract class AbstractAttributeValidatorTest extends GroovyTestCase {
     
-    def validator = RequiredValidator
-    def v = createValidator(null, null)
+    abstract getValidator()
     
-    void testValidateSingleValue() {
-        assertNull(v.validate("1"))
-        assertEquals("required", v.validate(null))
+    def createValidator(config, attributeMapping) {
+        def v = this.validator.newInstance(
+            config: config,
+            attributeMapping: createAttributeMapping(attributeMapping)
+        )
+        v.init()
+        v
     }
     
-    void testValidateMultiValue() {
-        assertNull(v.validate([1]))
-        assertEquals("required", v.validate([]))
+    def createAttributeMapping(values) {
+        def attributeMapping = [:]
+        values.each { k,v ->
+            attributeMapping[k] = v 
+        }
+        attributeMapping as AttributeMapping
     }
-    
 }

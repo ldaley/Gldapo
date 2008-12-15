@@ -14,32 +14,30 @@
  * limitations under the License.
  */
 package gldapo.schema.attribute.validator
-import java.lang.annotation.Annotation
 import gldapo.schema.attribute.AttributeMapping
-import gldapo.schema.constraint.InvalidConstraintException
 
 /**
- * Validates a value, given an attribute mapping and a constraint instance.
+ * Validates a value, given an attribute mapping and a config map.
  */
 interface AttributeValidator {
     
     /**
-     * Will be called with constraint annotation instance declared on the attribute
+     * Will be called with the properties of the constraint as a map.
      */
-    void setConstraint(Annotation constraint)
+    void setConfig(Map config)
     
     /**
-     * Will be called with the underlying attribute mapping for the field
+     * Will be called with the underlying attribute mapping for the field.
      */
     void setAttributeMapping(AttributeMapping field)
         
     /**
-     * If the constraint values are invalid or the type of field is invalid, a 
-     * {@link InvalidConstraintException} should be thrown.
+     * If the config values are invalid or the type of field is invalid, an 
+     * exception should be thrown.
      * 
      * The implementation in this class does nothing.
      */
-    void init() throws InvalidConstraintException {}
+    void init() throws Exception {}
     
     /**
      * Will be called with a value to validate.

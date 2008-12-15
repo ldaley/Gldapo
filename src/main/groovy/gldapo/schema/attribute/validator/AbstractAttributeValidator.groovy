@@ -16,21 +16,20 @@
 package gldapo.schema.attribute.validator
 import gldapo.schema.attribute.AttributeMapping
 import java.lang.annotation.Annotation
-import gldapo.schema.constraint.InvalidConstraintException
 
 /**
+ * The base for validators.
  * 
- * Subclasses must at least implement {@link #validate(Object)}. The instance of the constraint
- * that instanciated this validator is available via the {@link #getConstraint() constraint} property.
- * The {@link Field field} that this validator is going to be validating is available as the {@link #getField() field} property. 
+ * If this validator was instanciated as the result of a constraint annotation, the 
+ * properties of that annotation instance will be contained in the config map.
  * 
- * After instanciation, the {@link #afterPropertiesSet()} will be called. If the constraint values are invalid, or this
- * validator is not valid for the type of field it is applied to or if any other kind of problem exists, a 
- * {@link InvalidConstraintException} should be thrown.
+ * @see #getConfig()
+ * @see #getAttributeMapping()
+ * @see #validate(Object)
  */
 abstract class AbstractAttributeValidator implements AttributeValidator {
     
-    Annotation constraint
+    Map config
     AttributeMapping attributeMapping 
     
     /**
@@ -50,7 +49,7 @@ abstract class AbstractAttributeValidator implements AttributeValidator {
     /**
      * The implementation in this class does nothing.
      */
-    void init() throws InvalidConstraintException {}
+    void init() throws Exception {}
     
     /**
      * Validate an attribute.

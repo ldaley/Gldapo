@@ -13,21 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package gldapo.schema.attribute.validator
 
-class RequiredValidatorTest extends AbstractAttributeValidatorTest {
-    
-    def validator = RequiredValidator
-    def v = createValidator(null, null)
-    
-    void testValidateSingleValue() {
-        assertNull(v.validate("1"))
-        assertEquals("required", v.validate(null))
+package gldapo.schema.constraint
+import java.lang.annotation.Annotation
+
+class ConstraintAnnotationPropertyInspector {
+
+    static inspect(Annotation annotation) {
+        def properties = [:]
+        annotation.annotationType().declaredMethods.each {
+            properties[it.name] = it.invoke(annotation)
+        }
+        properties
     }
-    
-    void testValidateMultiValue() {
-        assertNull(v.validate([1]))
-        assertEquals("required", v.validate([]))
-    }
-    
 }
