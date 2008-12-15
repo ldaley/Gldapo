@@ -59,7 +59,8 @@ abstract class AbstractAttributeValidator implements AttributeValidator {
      * single string error code or a list of string error codes.
      * 
      * This implementation calls {@link #validateMultiValue(Collection)} if {@code obj} is a {@link Collection},
-     * otherwise {@link #validateSingleValue(Object)}
+     * otherwise {@link #validateSingleValue(Object)}, unless {@link getSkipNull()} returns {@code true} and {@code obj}
+     * is {@code null} in which case {@code null} is returned immediately.
      * 
      * @return {@code null} if {@code obj} is valid, otherwise a single or list of error codes.
      */
@@ -72,7 +73,8 @@ abstract class AbstractAttributeValidator implements AttributeValidator {
      * Validate a multi value attribute.
      * 
      * This implementation calls {@link validateValue(Object)} for each value in the collection
-     * and returns all the error codes returned.
+     * and returns all the error codes returned, unless {@link getSkipEmpty()} returns {@code true} and {@code obj}
+     * is empty in which case {@code null} is returned immediately.
      * 
      * @return {@code null} if {@code obj} is valid, otherwise a single or list of error codes.
      */
