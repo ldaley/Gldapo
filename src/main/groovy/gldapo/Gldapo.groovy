@@ -19,6 +19,9 @@ import gldapo.exception.GldapoInvalidConfigException
 import org.springframework.validation.Validator
 import gldapo.schema.EntryValidator
 import gldapo.schema.annotation.*
+import gldapo.schema.constraint.ConstraintValidatorFactory
+import gldapo.schema.constraint.DelegatingConstraintValidatorFactory
+import gldapo.schema.constraint.InvalidConstraintTypeException
 
 /**
  * The singleton instance of this class provides access to the various registries and settings at runtime. 
@@ -77,7 +80,8 @@ class Gldapo {
      */
     GldapoTypeMappingRegistry typemappings = new GldapoTypeMappingRegistry()
     
-    ConstraintTypeRegistry constraintTypes = new ConstraintTypeRegistry(*defaultConstraintTypes)
+    ConstraintValidatorFactory constraintValidatorFactory = new DelegatingConstraintValidatorFactory()
+
     static final defaultConstraintTypes = [Required, Matches]
     
     /**
@@ -116,13 +120,23 @@ class Gldapo {
      * @see #extractSchemasFromConfig(Map)
      */
     void consumeConfig(Map config) {
-        if (config) {
+        if (config != null) {
             extractDirectoriesFromConfig(config).each { this.directories << it }
             if (config.containsKey(CONFIG_KEY_DEFAULT_DIRECTORY)) 
                 this.directories.defaultDirectoryName = config."$CONFIG_KEY_DEFAULT_DIRECTORY"
 
             extractTypeMappingsFromConfig(config).each { this.typemappings << it }
-            extractConstraintTypesFromConfig(config).each { this.constraintTypes << it }
+            
+            [defaultConstraintTypes,extractConstraintTypesFromConfig(config)].each {
+                it.each {
+                    if (constraintValidatorFactory.registers(it)) {
+                        constraintValidatorFactory.register(it)
+                    } else {
+                        throw new InvalidConstraintTypeException("Constraint type $it is unregisterable")
+                    }
+                }
+            }
+            
             extractSchemasFromConfig(config).each { this.schemas << it }
         }
     }

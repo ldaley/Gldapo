@@ -103,7 +103,7 @@ abstract class AbstractAttributeMapping implements AttributeMapping
         this.typeMapping = this.calculateTypeMapping()
         this.toGroovyTypeMapper = this.calculateToGroovyTypeMapper(gldapo.typemappings)
         this.toLdapTypeMapper = this.calculateToLdapTypeMapper(gldapo.typemappings)
-        this.validators = this.calculateValidators(gldapo.constraintTypes)
+        this.validators = this.calculateValidators(gldapo.constraintValidatorFactory)
     }
     
     protected calculateAttributeName() {
@@ -160,22 +160,8 @@ abstract class AbstractAttributeMapping implements AttributeMapping
         throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_FROM_FIELD, "No available type mapping")
     }
 
-    def calculateValidators(constraintTypes) {
-        def validators = []
-        this.field.annotations.each {
-            def validatorType = constraintTypes[it.annotationType()]
-            if (validatorType) {
-                try {
-                    def validator = validatorType.newInstance(config: ConstraintAnnotationPropertyInspector.inspect(it), attributeMapping: this)
-                    validator.init()
-                    validators << validator
-                }
-                catch(Exception e) {
-                    throw new InvalidConstraintException("Constraint '${it.annotationType().simpleName}' of attribute '${field.name}' of class '${schema.simpleName}' is invalid", e)
-                }
-            }
-        }
-        validators
+    def calculateValidators(constraintValidatorFactory) {
+        constraintValidatorFactory.createAttributeValidators(this)
     }
     
     /**

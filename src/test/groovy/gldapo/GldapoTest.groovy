@@ -143,7 +143,7 @@ class GldapoTest extends GroovyTestCase
     void testDefaultConstraintTypesGetRegistered() {
         def g = new Gldapo()
         Gldapo.defaultConstraintTypes.each {
-            assertNotNull("default constraint type $it should be registered", g.constraintTypes[it])
+            assertTrue("default constraint type $it should be registered", g.constraintValidatorFactory.registered(it))
         }
     }
 }
