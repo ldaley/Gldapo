@@ -5,6 +5,9 @@ package gldapo.schema.attribute.validator
  */
 class RequiredValidator extends AbstractAttributeValidator {
     
+    final skipNull = false
+    final skipEmpty = false
+    
     /**
      * @return {@code null} if {@code obj} is non {@code null} and non empty, otherwise an error code of "required".
      */

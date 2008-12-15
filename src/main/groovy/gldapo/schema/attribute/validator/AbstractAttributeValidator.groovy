@@ -34,6 +34,20 @@ abstract class AbstractAttributeValidator implements AttributeValidator {
     AttributeMapping attributeMapping 
     
     /**
+     * Whether or not to treat null values as valid.
+     * 
+     * @return {@code true}
+     */
+    def getSkipNull() { true }
+    
+    /**
+     * Whether or not to treat empty collections (multivalue attributes) as valid.
+     * 
+     * @return {@code true}
+     */
+    def getSkipEmpty() { true }
+    
+    /**
      * The implementation in this class does nothing.
      */
     void init() throws InvalidConstraintException {}
@@ -50,6 +64,7 @@ abstract class AbstractAttributeValidator implements AttributeValidator {
      * @return {@code null} if {@code obj} is valid, otherwise a single or list of error codes.
      */
     def validate(obj) {
+        if (this.skipNull && obj == null) return null
         (obj instanceof Collection) ? validateMultiValue(obj) : validateSingleValue(obj)
     }
     
@@ -62,6 +77,7 @@ abstract class AbstractAttributeValidator implements AttributeValidator {
      * @return {@code null} if {@code obj} is valid, otherwise a single or list of error codes.
      */
     protected validateMultiValue(Collection obj) {
+        if (this.skipEmpty && obj.empty) return null
         def codes = []
         obj.each {
             def c = validateValue(it)
