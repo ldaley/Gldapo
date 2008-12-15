@@ -27,7 +27,6 @@ import gldapo.schema.annotation.GldapoSynonymFor
 import gldapo.schema.annotation.NullOnly
 import org.springframework.validation.Validator
 import org.springframework.validation.Errors
-import gldapo.schema.attribute.validator.AbstractFieldValidator
 
 class GldapoSchemaClassInjectoTest extends GroovyTestCase {
 

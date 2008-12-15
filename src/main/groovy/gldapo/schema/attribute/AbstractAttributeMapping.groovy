@@ -24,6 +24,7 @@ import gldapo.schema.annotation.GldapoPseudoType
 import gldapo.GldapoTypeMappingRegistry
 import gldapo.Gldapo
 import org.apache.commons.lang.StringUtils
+import gldapo.schema.attribute.validator.AttributeValidator
 
 /**
  * Represents the bridging between the data of the LDAP world and the Groovy world
@@ -31,7 +32,7 @@ import org.apache.commons.lang.StringUtils
  * property - Groovy side
  * attribute - LDAP side
  */
-abstract class AbstractAttributeMapping
+abstract class AbstractAttributeMapping implements AttributeMapping
 {
     
     /**
@@ -64,7 +65,10 @@ abstract class AbstractAttributeMapping
      */
      Closure toLdapTypeMapper
      
-     final validators
+     /**
+      * 
+      */
+     Collection<AttributeValidator> validators
      
     /**
      * 

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package gldapo
-import gldapo.schema.attribute.validator.AbstractFieldValidator
 import gldapo.schema.constraint.annotation.Validator
 import gldapo.schema.constraint.InvalidConstraintTypeException
 

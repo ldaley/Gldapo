@@ -15,9 +15,9 @@
  */
 package gldapo.schema.attribute.validator
 
-class NullOnlyValidator extends AbstractFieldValidator {
+class NullOnlyValidator extends AbstractAttributeValidator {
     
     def validate(obj) {
-        if (obj) return "notnull"
+        (obj != null) ? "notnull" : null
     }
 }

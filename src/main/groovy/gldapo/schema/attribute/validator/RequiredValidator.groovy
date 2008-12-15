@@ -1,21 +1,22 @@
 package gldapo.schema.attribute.validator
 
 /**
- * Ensures that a field has a value.
- * 
- * @see #validate(Object)
+ * Ensures that an attribute has at least one value.
  */
-class RequiredValidator extends AbstractFieldValidator {
+class RequiredValidator extends AbstractAttributeValidator {
     
     /**
-     * Validates that single value attributes are not {@code null} and that
-     * multi-value attributes have at least one value.
-     * 
-     * The error code on failure is '{@code required}'.
+     * @return {@code null} if {@code obj} is non {@code null} and non empty, otherwise an error code of "required".
      */
-    def validate(obj) {
-        if (obj == null || (obj instanceof Collection && obj.empty))
-            return "required"
+    protected validateMultiValue(Collection obj) {
+        (obj == null || obj.empty) ? "required" : null
+    }
+    
+    /**
+     * @return {@code null} if {@code obj} is non {@code null}, otherwise an error code of "required".
+     */
+    protected validateSingleValue(obj) {
+        (obj == null) ? "required" : null
     }
     
 }
