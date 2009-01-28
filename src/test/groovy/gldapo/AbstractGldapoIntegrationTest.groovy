@@ -138,7 +138,7 @@ abstract public class AbstractGldapoIntegrationTest extends AbstractServerTest
         assertEquals(
             "$dn did not match expected ldif",
             cleanedExpectedLdifBuffer.toString().readLines().sort().join("\n"),
-            actualLdif.readLines().sort().join("\n")
+            actualLdif.readLines().collect { it.trim() }.findAll { it.size() > 0 }.sort().join("\n")
         )
     }
 
