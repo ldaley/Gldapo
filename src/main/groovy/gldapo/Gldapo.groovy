@@ -51,7 +51,7 @@ class Gldapo {
     /**
      * The config item that holds the name of the default directory ({@value})
      */
-    static final CONFIG_KEY_DEFAULT_DIRECTORY = 'defaultdirectory'
+    static final CONFIG_KEY_DEFAULT_DIRECTORY = 'defaultDirectory'
 
     /**
     * The key that the array of schema classes is expected to be under in the config ({@value})
@@ -121,9 +121,12 @@ class Gldapo {
      */
     void consumeConfig(Map config) {
         if (config != null) {
-            extractDirectoriesFromConfig(config).each { this.directories << it }
-            if (config.containsKey(CONFIG_KEY_DEFAULT_DIRECTORY)) 
-                this.directories.defaultDirectoryName = config."$CONFIG_KEY_DEFAULT_DIRECTORY"
+            extractDirectoriesFromConfig(config).each {
+				this.directories << it
+				if (config[CONFIG_KEY_DIRECTORIES][it.name][CONFIG_KEY_DEFAULT_DIRECTORY])
+					this.directories.defaultDirectoryName = it.name
+			}
+                
 
             extractTypeMappingsFromConfig(config).each { this.typemappings << it }
             

@@ -52,7 +52,6 @@ class GldapoTest extends GroovyTestCase
                     ]
                 ]
             ],
-            defaultDirectory: "d2"
         )
         
         assertTrue(directories instanceof List)
@@ -109,7 +108,8 @@ class GldapoTest extends GroovyTestCase
                     ]
                 ],
                 d2: [
-                    url: "ldap://example2.com",
+                    defaultDirectory: true,
+					url: "ldap://example2.com",
                     base: "dc=example2,dc=com",
                     ignorePartialResultException: true,
                     searchControls: [
@@ -117,7 +117,6 @@ class GldapoTest extends GroovyTestCase
                     ]
                 ]
             ],
-            defaultdirectory: "d2",
             typemappings: [
                 String
             ],
