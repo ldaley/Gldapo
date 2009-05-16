@@ -27,9 +27,6 @@ import javax.naming.directory.DirContext
 import javax.naming.directory.Attributes
 import javax.naming.directory.BasicAttributes
 import org.springframework.ldap.AuthenticationException
-import org.springframework.validation.BeanPropertyBindingResult
-import org.springframework.validation.Errors
-import org.springframework.validation.Validator
 
 class GldapoSchemaClassInjecto {
 
@@ -50,45 +47,6 @@ class GldapoSchemaClassInjecto {
     
     @InjectoProperty
     Boolean exists = false
-    
-    @InjectoProperty
-    Errors errors
-    
-    @InjectoProperty
-    static validator
-    
-    def getErrors = { ->
-        def errors = delegate.getInjectoProperty('errors')
-        if (errors == null) {
-            errors = delegate.createErrors()
-            delegate.errors = errors
-        }
-        errors
-    }
-    
-    def createErrors = { ->
-        new BeanPropertyBindingResult(delegate, delegate.class.name)
-    }
-    
-    def clearErrors = { ->
-        delegate.errors = delegate.createErrors()
-    }
-    
-    def validate = { ->
-        def validator = delegate.class.validator
-        if (validator) {
-            def localErrors = delegate.createErrors()
-            validator.validate(delegate, localErrors)
-            if (localErrors.hasErrors()) delegate.errors.addAllErrors(localErrors)
-            return !delegate.errors.hasErrors()
-        } else {
-            return true
-        }
-    }
-    
-    def getAttributeMappings = { ->
-        delegate.class.schemaRegistration.attributeMappings
-    }
     
     def setCleanValue = { String name, Object value ->
         delegate.cleanValues[name] = value
@@ -287,14 +245,9 @@ class GldapoSchemaClassInjecto {
     def create = { ->
         assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasNamingValueAndDirectoryForOperation('create')
-        if (delegate.validate()) {
-            delegate.directory.createEntry(delegate.brdn, delegate.attributes)
-            delegate.exists = true
-            delegate.snapshotStateAsClean()
-            return true
-        } else {
-            return false
-        }
+        delegate.directory.createEntry(delegate.brdn, delegate.attributes)
+        delegate.exists = true
+        delegate.snapshotStateAsClean()
     }
 
     /**
@@ -306,14 +259,9 @@ class GldapoSchemaClassInjecto {
     def update = { ->
         assumeDefaultDirectoryIfNoneSet()
         delegate.assertHasNamingValueAndDirectoryForOperation('update')
-        if (delegate.validate()) {
-            def modificationItems = delegate.modificationItems
-            if (!modificationItems.empty) delegate.directory.updateEntry(delegate.brdn, modificationItems)
-            delegate.snapshotStateAsClean()
-            return true
-        } else {
-            return false
-        }
+        def modificationItems = delegate.modificationItems
+        if (!modificationItems.empty) delegate.directory.updateEntry(delegate.brdn, modificationItems)
+        delegate.snapshotStateAsClean()
     }
     
     /**
@@ -322,7 +270,7 @@ class GldapoSchemaClassInjecto {
      * @see getCreate()
      * @see getSave()
      */
-    def save = { ->
+    def save = { ->                
         (delegate.exists) ? delegate.update() : delegate.create()
     }
 
@@ -333,8 +281,7 @@ class GldapoSchemaClassInjecto {
         newbrdn = (newbrdn instanceof DistinguishedName) ? newbrdn : new DistinguishedName(newbrdn.toString())
         assumeDefaultDirectoryIfNoneSet()
         if (delegate.exists) {
-            if (!delegate.update())
-                return false
+            delegate.update()
         } else {
             throw new GldapoException("'move' attempted on an object that does not exist")
         }
@@ -342,7 +289,6 @@ class GldapoSchemaClassInjecto {
         delegate.parent = null
         delegate.namingValue = null
         delegate.brdn = newbrdn
-        return true
     }
     
     @InjectAs("move")
@@ -372,16 +318,11 @@ class GldapoSchemaClassInjecto {
         target = (target instanceof DistinguishedName) ? target : new DistinguishedName(target.toString())
         assumeDefaultDirectoryIfNoneSet()
         assertHasDirectoryForOperation('replace')
-        if (delegate.validate()) { 
-            delegate.directory.replaceEntry(target, delegate.attributes)
-            delegate.parent = null
-            delegate.namingValue = null
-            delegate.brdn = target
-            delegate.snapshotStateAsClean()
-            return true 
-        } else {
-            return false
-        }
+        delegate.directory.replaceEntry(target, delegate.attributes)
+        delegate.parent = null
+        delegate.namingValue = null
+        delegate.brdn = target
+        delegate.snapshotStateAsClean()
     }
     
     @InjectAs("replace")
