@@ -24,6 +24,7 @@ import gldapo.search.SearchProvider
 import gldapo.search.SearchControlProvider
 import gldapo.schema.annotation.GldapoNamingAttribute
 import gldapo.schema.annotation.GldapoSynonymFor
+import gldapo.exception.GldapoDirectoryNotFoundException
 
 class GldapoSchemaClassInjectoTest extends GroovyTestCase {
 
@@ -293,6 +294,20 @@ class GldapoSchemaClassInjectoTest extends GroovyTestCase {
         assertNull(e.directory)
         e.assumeDefaultDirectoryIfNoneSet()
         assertEquals(directory, e.directory)
+    }
+    
+    void testSetDirectoryByName() {
+        def directoryRegistryMock = new GldapoDirectoryRegistry()
+        def directory = new GldapoDirectory("d", [url: "ldap://example.com"])
+        directoryRegistryMock << directory
+        DummySchema.gldapo.directories = directoryRegistryMock
+        def e = new DummySchema()
+        e.directory = "d"
+        assertEquals(directory, e.directory)
+        
+        shouldFail(GldapoDirectoryNotFoundException) {
+            new DummySchema().directory = "_______"
+        }
     }
     
     void testGetAttributesOnlyReturnsAttributesWhereAValueIsSet() {

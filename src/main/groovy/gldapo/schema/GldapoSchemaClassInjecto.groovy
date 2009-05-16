@@ -73,6 +73,10 @@ class GldapoSchemaClassInjecto {
         if (delegate.directory != null)
             throw new GldapoException("Cannot change directory on schema objects after it has been set")
         
+        if (directory instanceof String) {
+            directory = delegate.class.gldapo.directories[directory]
+        }
+        
         delegate.setInjectoProperty("directory", directory)
     }
     
