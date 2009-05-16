@@ -18,6 +18,7 @@ import gldapo.exception.GldapoInitializationException
 import gldapo.exception.GldapoInvalidConfigException
 import org.springframework.ldap.core.DistinguishedName
 import gldapo.schema.annotation.GldapoNamingAttribute
+import gldapo.schema.annotation.NullOnly
 
 class GldapoTest extends GroovyTestCase 
 {
@@ -88,6 +89,12 @@ class GldapoTest extends GroovyTestCase
         shouldFail(GldapoInvalidConfigException) { Gldapo.extractSchemasFromConfig(schemas: "blah") }
     }
     
+    void testExtractConstraintTypesFromConfig() {
+        def constraintTypes = [NullOnly] 
+        assertEquals(constraintTypes, Gldapo.extractConstraintTypesFromConfig(constraintTypes: constraintTypes))
+        assertEquals([], Gldapo.extractConstraintTypesFromConfig([:]))
+    }
+    
     void testConsumeConfig() {
         def gldapo = new Gldapo()
         
@@ -130,6 +137,13 @@ class GldapoTest extends GroovyTestCase
         
         assertTrue(gldapo.typemappings.contains(String))
         assertNotNull(gldapo.schemas.find { it == GldapoTestSchema1 })
+    }
+    
+    void testDefaultConstraintTypesGetRegistered() {
+        def g = new Gldapo()
+        Gldapo.defaultConstraintTypes.each {
+            assertTrue("default constraint type $it should be registered", g.constraintValidatorFactory.registered(it))
+        }
     }
 }
 

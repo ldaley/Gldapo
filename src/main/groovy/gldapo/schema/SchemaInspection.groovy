@@ -68,7 +68,7 @@ class SchemaInspection
             return null
         }
         
-        getAttributeMappingClassForField(field).newInstance(schema, field, gldapo.typemappings)
+        getAttributeMappingClassForField(field).newInstance(schema, field, gldapo)
     }
     
     private getAttributeMappingClassForField(field) {

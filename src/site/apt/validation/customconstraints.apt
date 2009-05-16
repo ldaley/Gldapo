@@ -13,16 +13,16 @@ Custom Constraints
     The first part is the validator. It's responsible for taking a value and deciding whether it's valid or not...
     
 +-------------------------------+
-import gldapo.schema.attribute.validator.AbstractFieldValidator
+import gldapo.schema.attribute.validator.AbstractAttributeValidator
 
-class NullOnlyValidator extends AbstractFieldValidator {
-    def validate(obj) {
-        if (obj) return "notnull"
+class NullOnlyValidator extends AbstractAttributeValidator {
+    def validateValue(obj) {
+        (obj != null) ? "notnull" : null
     }
 }
 +-------------------------------+
 
-    See {{{../apidocs/gldapo/schema/attribute/validator/AbstractFieldValidator.html}AbstractFieldValidator}} docs for details on writing a validator.
+    See {{{../apidocs/gldapo/schema/attribute/validator/AbstractAttributeValidator.html}AbstractAttributeValidator}} docs for details on writing a validator.
     
 * The constraint (annotation)
 

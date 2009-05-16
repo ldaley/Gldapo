@@ -5,3 +5,6 @@
 Constraints
 
     The following constraints are shipped with Gldapo:
+    
+    * {{{../apidocs/gldapo/schema/annotation/Required.html}Required}}
+    * {{{../apidocs/gldapo/schema/annotation/Matches.html}Matches}}

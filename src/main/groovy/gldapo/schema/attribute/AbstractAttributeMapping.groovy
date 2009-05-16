@@ -22,7 +22,11 @@ import gldapo.exception.GldapoException
 import gldapo.schema.annotation.GldapoSynonymFor
 import gldapo.schema.annotation.GldapoPseudoType
 import gldapo.GldapoTypeMappingRegistry
+import gldapo.Gldapo
 import org.apache.commons.lang.StringUtils
+import gldapo.schema.attribute.validator.AttributeValidator
+import gldapo.schema.constraint.ConstraintAnnotationPropertyInspector
+import gldapo.schema.constraint.InvalidConstraintException
 
 /**
  * Represents the bridging between the data of the LDAP world and the Groovy world
@@ -30,7 +34,7 @@ import org.apache.commons.lang.StringUtils
  * property - Groovy side
  * attribute - LDAP side
  */
-abstract class AbstractAttributeMapping
+abstract class AbstractAttributeMapping implements AttributeMapping
 {
     
     /**
@@ -63,6 +67,11 @@ abstract class AbstractAttributeMapping
      */
      Closure toLdapTypeMapper
      
+     /**
+      * 
+      */
+     Collection<AttributeValidator> validators
+     
     /**
      * 
      */
@@ -86,14 +95,15 @@ abstract class AbstractAttributeMapping
     /**
      * 
      */
-    AbstractAttributeMapping(Class schema, Field field, GldapoTypeMappingRegistry typemappings) {
+    AbstractAttributeMapping(Class schema, Field field, Gldapo gldapo) {
         this.schema = schema
         this.field = field
         
         this.attributeName = this.calculateAttributeName()
         this.typeMapping = this.calculateTypeMapping()
-        this.toGroovyTypeMapper = this.calculateToGroovyTypeMapper(typemappings)
-        this.toLdapTypeMapper = this.calculateToLdapTypeMapper(typemappings)
+        this.toGroovyTypeMapper = this.calculateToGroovyTypeMapper(gldapo.typemappings)
+        this.toLdapTypeMapper = this.calculateToLdapTypeMapper(gldapo.typemappings)
+        this.validators = this.calculateValidators(gldapo.constraintValidatorFactory)
     }
     
     protected calculateAttributeName() {
@@ -150,6 +160,10 @@ abstract class AbstractAttributeMapping
         throw new GldapoTypeMappingException(this.schema, this.field.name, this.typeMapping, GldapoTypeMappingException.MAPPING_FROM_FIELD, "No available type mapping")
     }
 
+    def calculateValidators(constraintValidatorFactory) {
+        constraintValidatorFactory.createAttributeValidators(this)
+    }
+    
     /**
      * 
      */
