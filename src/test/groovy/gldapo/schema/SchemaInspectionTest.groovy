@@ -27,7 +27,7 @@ class SchemaInspectionTest extends GroovyTestCase
 
     void testCorrectNumberOfMappings()
     {
-        assertEquals(3, mappings.size())
+        assertEquals(4, mappings.size())
     }
     
     void testSimpleSingleValue() 
@@ -123,4 +123,6 @@ class SchemaInspectionTestSubject
     void setPrivateReadWrite(String it) { }
     
     static staticAttribute
+    
+    String sTRANgeCase
 }

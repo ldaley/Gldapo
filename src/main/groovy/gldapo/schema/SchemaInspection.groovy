@@ -21,7 +21,7 @@ import gldapo.exception.GldapoNoNamingAttributeException
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 import gldapo.Gldapo
-import org.apache.commons.lang.StringUtils
+import org.codehaus.groovy.runtime.MetaClassHelper
 
 class SchemaInspection 
 {
@@ -57,7 +57,7 @@ class SchemaInspection
         if (namingAttributeFieldName == null)
             throw new GldapoNoNamingAttributeException(this.schema)
     }
-    
+
     private getMappingForField(Field field)
     {
         if (Modifier.isStatic(field.modifiers) || 
@@ -77,7 +77,7 @@ class SchemaInspection
 
     private fieldIsReadableAndWritable(Field field)
     {
-        def capitalisedFieldName = StringUtils.capitalize(field.name)
+        def capitalisedFieldName = MetaClassHelper.capitalize(field.name)
         def mc = this.schema.metaClass
         mc.hasMetaMethod("get${capitalisedFieldName}") && mc.hasMetaMethod("set${capitalisedFieldName}", field.type)
     }
