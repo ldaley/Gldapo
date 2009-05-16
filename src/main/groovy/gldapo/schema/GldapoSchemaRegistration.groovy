@@ -16,7 +16,6 @@
 package gldapo.schema
 import gldapo.Gldapo
 import gldapo.exception.GldapoSchemaInitializationException
-import gldapo.schema.EntryValidator
 import injecto.Injecto
 
 class GldapoSchemaRegistration 
@@ -35,7 +34,6 @@ class GldapoSchemaRegistration
         
         schema.gldapo = gldapo
         schema.schemaRegistration = this
-        schema.validator = new EntryValidator()
         
         this.schema = schema
         

@@ -35,10 +35,10 @@ abstract class AbstractAttributeMappingTest extends GroovyTestCase
     }
     
     def mappingForField(String fieldName) {
-        this.mappingClass.getConstructor(Class, Field, Gldapo).newInstance(
+        this.mappingClass.getConstructor(Class, Field, GldapoTypeMappingRegistry).newInstance(
             this.mappingSubjectClass, 
             this.mappingSubjectClass.getDeclaredField(fieldName), 
-            gldapo
+            gldapo.instance.typemappings
         )
     }
     

@@ -21,7 +21,6 @@ import java.lang.reflect.ParameterizedType
 import javax.naming.directory.ModificationItem
 import javax.naming.directory.BasicAttribute
 import javax.naming.directory.DirContext
-import gldapo.Gldapo
 
 class MultiValueAttributeMapping extends AbstractAttributeMapping
 {
@@ -40,8 +39,8 @@ class MultiValueAttributeMapping extends AbstractAttributeMapping
     /**
      * @todo Check that this is actually a collection type, maybe
      */
-    MultiValueAttributeMapping (Class schema, Field field, Gldapo gldapo) {
-        super(schema, field, gldapo)
+    MultiValueAttributeMapping (Class schema, Field field, GldapoTypeMappingRegistry typemappings) {
+        super(schema, field, typemappings)
         this.collectionType = this.calculateCollectionType()
     }
     

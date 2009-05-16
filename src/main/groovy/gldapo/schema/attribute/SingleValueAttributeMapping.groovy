@@ -19,14 +19,13 @@ import gldapo.GldapoTypeMappingRegistry
 import javax.naming.directory.ModificationItem
 import javax.naming.directory.BasicAttribute
 import javax.naming.directory.DirContext
-import gldapo.Gldapo
 
 
 class SingleValueAttributeMapping extends AbstractAttributeMapping
 {
     
-    SingleValueAttributeMapping(Class schema, Field field, Gldapo gldapo) {
-        super(schema, field, gldapo)
+    SingleValueAttributeMapping(Class schema, Field field, GldapoTypeMappingRegistry typemappings) {
+        super(schema, field, typemappings)
     }
     
     protected calculateTypeMappingFromFieldType() {
