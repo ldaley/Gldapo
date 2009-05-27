@@ -41,7 +41,16 @@ class SingleValueAttributeMappingTest extends AbstractAttributeMappingTest
         verifyCalculateModificationItems(mapping, "a", null, [[REM, null]])
         verifyCalculateModificationItems(mapping, null, "a", [[ADD, "a"]])
     }
-    
+
+    void testPlusTwo() {
+        def mapping = mappingForField("plusTwo")
+        verifyProperties(mapping, "plusTwo", "Integer")
+        verifyTypeConversion(mapping, "2", 4)
+        verifyMapFromContext(mapping, "2", 4)
+        verifyCalculateModificationItems(mapping, 2, 4, [[REP, "2"]])
+        verifyCalculateModificationItems(mapping, 2, 2, null)
+    }
+
     void testPseudoType() {
         def mapping = mappingForField("pseudoType")
         verifyProperties(mapping, "pseudoType", "Integer")
@@ -89,6 +98,10 @@ class SingleValueAttributeMappingTestSubject
     
     static mapToPlusTwoField(value) {
         new Integer(value) + 2
+    }
+
+    static mapFromPlusTwoField(value) {
+        value - 2 as String
     }
     
     @GldapoPseudoType("LowerCaseString")

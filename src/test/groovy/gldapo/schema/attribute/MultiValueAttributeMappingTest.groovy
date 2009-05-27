@@ -136,6 +136,33 @@ class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
             mappingForField("badCollectionType")
         }
     }
+
+    void testPlusTwo() {
+        def mapping = mappingForField("plusTwo")
+        verifyProperties(mapping, "plusTwo", "Integer")
+        verifyTypeConversion(mapping, "2", 4)
+        verifyMapFromContext(mapping, ["2", "4"], [4, 6] as Set)
+        verifyCalculateModificationItems(mapping, [1, 2, 3], [1, 2, 3], []) // same
+        
+        verifyCalculateModificationItems(mapping, null, [2, 4], [[ADD, ["0", "2"]]]) // from null
+        verifyCalculateModificationItems(mapping, [], [2, 4], [[ADD, ["0", "2"]]]) // from emptylist
+        
+        verifyCalculateModificationItems(mapping, [1, 2, 3], null, [[REM, null]]) // to null
+        verifyCalculateModificationItems(mapping, [1, 2, 3], [], [[REM, null]]) // to emptylist
+        
+        verifyCalculateModificationItems(mapping, [1, 2, 3], [1, 3], [[REM, "0"]]) // remove 1
+        verifyCalculateModificationItems(mapping, [1, 3], [1, 2, 3], [[ADD, "0"]]) // add 1
+
+        verifyCalculateModificationItems(mapping, [1, 2, 3], [1], [[REM, ["0", "1"]]]) // remove 2
+        verifyCalculateModificationItems(mapping, [1], [1, 2, 3], [[ADD, ["0", "1"]]]) // add 2
+        
+        verifyCalculateModificationItems(mapping, [], [1], [[ADD, ["-1"]]])
+        
+        verifyCalculateModificationItems(mapping, [1, 3], [1, 2], [[REM, "1"], [ADD, "0"]])
+        
+        verifyCalculateModificationItems(mapping, [1], [], [[REM, null]])
+    }
+
 }
 
 class MultiValueAttributeMappingTestSubject {
@@ -152,6 +179,10 @@ class MultiValueAttributeMappingTestSubject {
     
     static mapToPlusTwoField(value) {
         new Integer(value) + 2
+    }
+
+    static mapFromPlusTwoField(value) {
+        value - 2 as String
     }
     
     @GldapoPseudoType("LowerCaseString")

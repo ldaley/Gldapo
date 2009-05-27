@@ -136,7 +136,7 @@ abstract class AbstractAttributeMapping
     protected calculateToLdapTypeMapper(GldapoTypeMappingRegistry typemappings) {
         Class[] p = [Object] as Class[]
         
-        def byFieldMapperName = toLdapByTypeMapperName(this.field.name)
+        def byFieldMapperName = toLdapByFieldMapperName(this.field.name)
         def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
         if (classByFieldMapper) return { classByFieldMapper.invoke(schema, (it.class.array) ? [it] as Object[] : it) }
         
