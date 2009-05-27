@@ -139,6 +139,7 @@
         <distAssemblyName>${project.artifactId}-${project.version}-${distAssembly}</distAssemblyName>
         <distAssemblyFile>${project.build.directory}/${distAssemblyName}</distAssemblyFile>
         <springLdapApi>http://static.springframework.org/spring-ldap/docs/1.2.1/api/spring-ldap</springLdapApi>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <repositories>
         <repository>
