@@ -121,12 +121,6 @@ class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
         verifyMapFromContext(mapping, ["1", "2", "3"], [3, 4, 5] as Set)
     }
 
-    void testCustomToTypeTypeMapper() {
-        def mapping = mappingForField("lc")
-        verifyProperties(mapping, "lc", "LowerCaseString", Set)
-        verifyMapFromContext(mapping, ["A", "B", "C"], ["a", "b", "c"] as Set)
-    }
-
     void verifyCalculateModificationItems(mapping, clean, dirty, mods) {
         super.verifyCalculateModificationItems(mapping, clean as Set, dirty as Set, mods)
     }
@@ -163,6 +157,32 @@ class MultiValueAttributeMappingTest extends AbstractAttributeMappingTest {
         verifyCalculateModificationItems(mapping, [1], [], [[REM, null]])
     }
 
+    void testSpacePrefixedString() {
+        def mapping = mappingForField("sps")
+        verifyProperties(mapping, "sps", "SpacePrefixedString")
+        verifyTypeConversion(mapping, "2", " 2")
+        verifyMapFromContext(mapping, ["a", "b"], [" a", " b"] as Set)
+        verifyCalculateModificationItems(mapping, ["a ", " b", " c"], ["a ", " b", " c"], []) // same
+        
+        verifyCalculateModificationItems(mapping, null, [" a" , " b"], [[ADD, ["a", "b"]]]) // from null
+        verifyCalculateModificationItems(mapping, [], [" a" , " b"], [[ADD, ["a", "b"]]]) // from emptylist
+        
+        verifyCalculateModificationItems(mapping, [" a" , " b"], null, [[REM, null]]) // to null
+        verifyCalculateModificationItems(mapping, [" a" , " b"], [], [[REM, null]]) // to emptylist
+        
+        verifyCalculateModificationItems(mapping, [" a" , " b"], [" a"], [[REM, "b"]]) // remove 1
+        verifyCalculateModificationItems(mapping, [" a" , " b"], [" a" , " b", " c"], [[ADD, "c"]]) // add 1
+
+        verifyCalculateModificationItems(mapping, [" a" , " b", " c"], [" c"], [[REM, ["a" , "b"]]]) // remove 2
+        verifyCalculateModificationItems(mapping, [" a"], [" a" , " b", " c"], [[ADD, ["b", "c"]]]) // add 2
+        
+        verifyCalculateModificationItems(mapping, [], [" a"], [[ADD, ["a"]]])
+        
+        verifyCalculateModificationItems(mapping, [" a" , " b"], [" a" , " c"], [[REM, "b"], [ADD, "c"]])
+        
+        verifyCalculateModificationItems(mapping, [" a"], [], [[REM, null]])
+    }
+    
 }
 
 class MultiValueAttributeMappingTestSubject {
@@ -185,11 +205,15 @@ class MultiValueAttributeMappingTestSubject {
         value - 2 as String
     }
     
-    @GldapoPseudoType("LowerCaseString")
-    Set<String> lc
+    @GldapoPseudoType("SpacePrefixedString")
+    Set<String> sps
     
-    static mapToLowerCaseStringType(value) {
-        value.toString().toLowerCase()
+    static mapToSpacePrefixedStringType(value) {
+        (value == null) ? null : " $value"
+    }
+
+    static mapFromSpacePrefixedStringType(value) {
+        (value == null) ? null : value[1..-1]
     }
     
     Set<Byte[]> byteArrays

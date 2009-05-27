@@ -140,7 +140,7 @@ abstract class AbstractAttributeMapping
         def classByFieldMapper = schema.metaClass.getMetaMethod(byFieldMapperName, p)
         if (classByFieldMapper) return { classByFieldMapper.invoke(schema, [it] as Object[]) }
         
-        def byTypeMapperName = toGroovyByTypeMapperName(this.typeMapping)
+        def byTypeMapperName = toLdapByTypeMapperName(this.typeMapping)
         def classByTypeMapper = schema.metaClass.getMetaMethod(byTypeMapperName, p)
         if (classByTypeMapper) return { classByTypeMapper.invoke(schema, [it] as Object[]) }
         

@@ -52,6 +52,17 @@ class SingleValueAttributeMappingTest extends AbstractAttributeMappingTest
         verifyCalculateModificationItems(mapping, 2, null, [[REM, null]])
         verifyCalculateModificationItems(mapping, null, 4, [[ADD, "2"]])
     }
+    
+    void testSpacePrefixedString() {
+        def mapping = mappingForField("sps")
+        verifyProperties(mapping, "sps", "SpacePrefixedString")
+        verifyTypeConversion(mapping, "2", " 2")
+        verifyMapFromContext(mapping, "2", " 2")
+        verifyCalculateModificationItems(mapping, " a", " b", [[REP, "b"]])
+        verifyCalculateModificationItems(mapping, " a", " a", null)
+        verifyCalculateModificationItems(mapping, " a", null, [[REM, null]])
+        verifyCalculateModificationItems(mapping, null, " a", [[ADD, "a"]])
+    }
 
     void testPseudoType() {
         def mapping = mappingForField("pseudoType")
@@ -68,12 +79,6 @@ class SingleValueAttributeMappingTest extends AbstractAttributeMappingTest
         def mapping = mappingForField("plusTwo")
         verifyProperties(mapping, "plusTwo", "Integer")
         verifyMapFromContext(mapping, "1", 3)
-    }
-    
-    void testCustomToTypeTypeMapper() {
-        def mapping = mappingForField("lc")
-        verifyProperties(mapping, "lc", "LowerCaseString")
-        verifyMapFromContext(mapping, "A", "a")
     }
     
     void testBogusType() {
@@ -106,10 +111,15 @@ class SingleValueAttributeMappingTestSubject
         (value == null) ? null : value - 2 as String
     }
     
-    @GldapoPseudoType("LowerCaseString")
-    String lc
+    @GldapoPseudoType("SpacePrefixedString")
+    String sps
     
-    static mapToLowerCaseStringType(value) {
-        value.toString().toLowerCase()
+    static mapToSpacePrefixedStringType(value) {
+        (value == null) ? null : " $value"
     }
+
+    static mapFromSpacePrefixedStringType(value) {
+        (value == null) ? null : value[1..-1]
+    }
+
 }
