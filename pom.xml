@@ -133,8 +133,8 @@
     <properties>
         <releaseVersion>0.8.5</releaseVersion>
         <developmentVersion>0.8.6</developmentVersion>
-        <downloadUrlBase>http://dist.codehaus.org/gldapo</downloadUrlBase>
-        <snapshotDownloadUrlBase>http://snapshots.dist.codehaus.org/gldapo</snapshotDownloadUrlBase>
+        <downloadUrlBase>http://repository.codehaus.org/org/codehaus/gldapo/${releaseVersion}</downloadUrlBase>
+        <snapshotDownloadUrlBase>http://snapshots.repository.codehaus.org/org/codehaus/gldapo/${developmentVersion}</snapshotDownloadUrlBase>
         <distAssembly>dist</distAssembly>
         <distAssemblyName>${project.artifactId}-${project.version}-${distAssembly}</distAssemblyName>
         <distAssemblyFile>${project.build.directory}/${distAssemblyName}</distAssemblyFile>
@@ -199,57 +199,6 @@
                             <descriptors>
                                 <descriptor>src/assembly/dist.xml</descriptor>
                             </descriptors>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>checksum-dist</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <tasks>
-                                <checksum algorithm="SHA1" fileext=".sha1">
-                                    <fileset dir="${project.build.directory}">
-                                        <include name="${distAssemblyName}.zip" />
-                                        <include name="${distAssemblyName}.tar.bz2" />
-                                        <include name="${distAssemblyName}.tar.gz" />
-                                    </fileset>
-                                </checksum>
-                                <checksum algorithm="MD5" fileext=".md5">
-                                    <fileset dir="${project.build.directory}">
-                                        <include name="${distAssemblyName}.zip" />
-                                        <include name="${distAssemblyName}.tar.bz2" />
-                                        <include name="${distAssemblyName}.tar.gz" />
-                                    </fileset>
-                                </checksum>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>wagon-maven-plugin</artifactId>
-                <version>1.0-beta-2</version>
-                <executions>
-                    <execution>
-                        <id>upload-dist</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>upload</goal>
-                        </goals>
-                        <configuration>
-                            <serverId>codehaus.org</serverId>
-                            <url>https://dav.codehaus.org/dist</url>
-                            <snapshotUrl>https://dav.codehaus.org/snapshots.dist</snapshotUrl>
-                            <resourceSrc>${distAssemblyFile}.*</resourceSrc>
-                            <resourceDest>gldapo</resourceDest>
                         </configuration>
                     </execution>
                 </executions>
