@@ -77,6 +77,9 @@ class GldapoDirectory implements SearchProvider {
      * (see {@link #CONTEXT_SOURCE_PROPS}). The only mandatory attribute is {@code url} 
      * (or {@code urls}). The rest are optional.
      * <p>
+     * The config map can also contain a map under the key {@code env} which will be used as the environment
+     * properties for the connection (e.g java.naming.ldap.attributes.binary)
+     * <p>
      * It can also contain a map under the key denoted by {@link #CONFIG_SEARCH_CONTROLS_KEY} 
      * that is used to construct an instance of {@link SearchControls} using the 
      * {@link SearchControls#SearchControls(Map)} constructor. If it is omitted, a search controls
