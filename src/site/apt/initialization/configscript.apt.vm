@@ -45,6 +45,9 @@ directories {
             timeLimit = 600 
             searchScope = "subtree" 
         }
+        env {
+            'java.naming.ldap.attributes.binary' = 'networkAddress jpegPhoto'
+        }
     }
     directory2 {
         urls = [ 
