@@ -93,6 +93,9 @@ class GldapoDirectory implements SearchProvider {
                 contextSource."$it" = config."$it"
             }
         }
+        if (config.containsKey("env")) {
+            contextSource.baseEnvironmentProperties = config.env
+        }
         contextSource.afterPropertiesSet()
         
         this.template = new LdapTemplate(contextSource: contextSource)

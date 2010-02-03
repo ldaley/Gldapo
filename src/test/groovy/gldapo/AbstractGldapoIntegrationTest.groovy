@@ -54,8 +54,8 @@ abstract public class AbstractGldapoIntegrationTest extends AbstractServerTest
          initJldapConnection()
     }
 
-    def initGldapo() {
-        gldapo = new Gldapo(
+    protected createConfig() {
+        return [
             directories: [
                 local: [
                     url: "ldap://localhost:${configuration.ldapPort}",
@@ -66,7 +66,10 @@ abstract public class AbstractGldapoIntegrationTest extends AbstractServerTest
             ],
             schemas: getSchemaClasses(),
             typeMappings: getTypeMappings()
-        )
+        ]
+    }
+    def initGldapo() {
+        gldapo = new Gldapo(createConfig())
     }
 
     def getSchemaClasses() {
