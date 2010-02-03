@@ -131,8 +131,8 @@
         </dependency>
     </dependencies>
     <properties>
-        <releaseVersion>0.8.2</releaseVersion>
-        <developmentVersion>0.8.5</developmentVersion>
+        <releaseVersion>0.8.5</releaseVersion>
+        <developmentVersion>0.8.6</developmentVersion>
         <downloadUrlBase>http://dist.codehaus.org/gldapo</downloadUrlBase>
         <snapshotDownloadUrlBase>http://snapshots.dist.codehaus.org/gldapo</snapshotDownloadUrlBase>
         <distAssembly>dist</distAssembly>
