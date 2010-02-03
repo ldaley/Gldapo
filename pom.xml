@@ -29,9 +29,9 @@
         <url>http://codehaus.org</url>
     </organization>
     <scm>
-        <connection>scm:svn:http://svn.codehaus.org/gldapo/trunk</connection>
-        <developerConnection>scm:svn:https://svn.codehaus.org/gldapo/trunk</developerConnection>
-        <url>http://svn.gldapo.codehaus.org/browse/gldapo/trunk</url>
+        <connection>scm:git:git://git@github.com/alkemist/Gldapo.git</connection>
+        <developerConnection>scm:git:git@github.com:alkemist/Gldapo.git</developerConnection>
+        <url>http://github.com/alkemist/Gldapo</url>
     </scm>
     <issueManagement>
         <system>jira</system>
