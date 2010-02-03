@@ -4,7 +4,7 @@
 
 Directories
 
-    Directories in Gldapo are instances of the {{{${project.scm.url}/src/main/groovy/gldapo/directory/GldapoDirectory.groovy}GldapoDirectory}} class. They represent a particular connection to a particular directory.
+    Directories in Gldapo are instances of the {{{/apidocs/gldapo/GldapoDirectory.html}GldapoDirectory}} class. They represent a particular connection to a particular directory.
 
 * Spring LDAP - LdapTemplate
 

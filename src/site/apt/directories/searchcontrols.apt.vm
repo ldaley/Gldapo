@@ -4,4 +4,4 @@
 
 Search Controls
 
-    Each <<<GldapoDirectory>>> has an instance of the {{{${project.scm.url}/src/main/groovy/gldapo/search/SearchControls.groovy}SearchControls}} class that controls the default options to be used for {{{../schemaclasses/searching.html}searching}} operations.
+    Each <<<GldapoDirectory>>> has an instance of the {{{/apidocs/gldapo/search/SearchControls.html}SearchControls}} class that controls the default options to be used for {{{../schemaclasses/searching.html}searching}} operations.

@@ -69,7 +69,7 @@ typemappings = [
     
 ** Reference
 
-    The javadoc for the classes that make up the Gldapo config serve as the reference of config options. Javadoc is currently not available so I am afraid the source is the current reference. See the <<<initialize(Map)>>> method of the {{{${project.scm.url}/src/main/groovy/gldapo/Gldapo.groovy}Gldapo}} ...
+    The javadoc for the classes that make up the Gldapo config serve as the reference of config options. Javadoc is currently not available so I am afraid the source is the current reference. See the <<<initialize(Map)>>> method of the {{{/apidocs/gldapo/Gldapo.html}Gldapo}} ...
 
 * Environment Sensitivity 
 

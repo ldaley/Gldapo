@@ -4,9 +4,9 @@
 
 Directory Registry
 
-    Gldapo keeps a registry of {{{${project.scm.url}/src/main/groovy/gldapo/directory/GldapoDirectory.groovy}GldapoDirectory}} instances that can be referenced by name for operations.
+    Gldapo keeps a registry of {{{/apidocs/gldapo/directory/GldapoDirectory.html}GldapoDirectory}} instances that can be referenced by name for operations.
 
-    This registry is an instance of {{{${project.scm.url}/src/main/groovy/gldapo/GldapoDirectoryRegistry.groovy}GldapoDirectoryRegistry}}, and is available from the gldapo instance ...
+    This registry is an instance of {{{/apidocs/gldapo/GldapoDirectoryRegistry.html}GldapoDirectoryRegistry}}, and is available from the gldapo instance ...
 
 +-------------------------------+
 Gldapo.instance.directories

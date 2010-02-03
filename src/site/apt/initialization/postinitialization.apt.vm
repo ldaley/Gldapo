@@ -4,7 +4,7 @@
 
 Post Initialization
 
-    After initialization, the various registry classes and bits and pieces can be accessed via the singleton instance of the {{{${project.scm.url}/src/main/groovy/gldapo/Gldapo.groovy}Gldapo}} class.
+    After initialization, the various registry classes and bits and pieces can be accessed via the singleton instance of the {{{/apidocs/gldapo/Gldapo.html}Gldapo}} class.
 
 +-------------------------------+
 import gldapo.*
