@@ -143,30 +143,10 @@
     </properties>
     <repositories>
         <repository>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>ldaley.com</id>
-            <name>ldaley.com Releases</name>
-            <url>http://mvn.ldaley.com/release</url>
+          <id>sun.com</id>
+          <url>http://download.java.net/maven/2</url>
         </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>ldaley.com</id>
-            <name>ldaley.com Releases</name>
-            <url>http://mvn.ldaley.com/release</url>
-        </pluginRepository>
-    </pluginRepositories>
+      </repositories>
     <build>
         <plugins>
             <plugin>
@@ -254,8 +234,9 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.ldaley.maven.plugins</groupId>
-                <artifactId>maven-wagon-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <version>1.0-beta-2</version>
                 <executions>
                     <execution>
                         <id>upload-dist</id>
